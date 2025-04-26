@@ -1,0 +1,118 @@
+/* Fondo general */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-image: url('/bg.jpg');
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+}
+
+/* Contenedor principal */
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+}
+
+/* Título principal */
+.title {
+  font-family: 'Anton', sans-serif;
+  font-size: 5rem; /* 50% más grande que 3.8rem */
+  color: #ffd700;
+  text-shadow: 4px 11px 8px #000;
+  letter-spacing: 0.35rem; /* Un poco menos de separación para compensar */
+  width: 100%;
+  max-width: 540px;
+  text-align: center;
+  margin: 0 auto 1rem auto;
+}
+
+
+/* Caja de chat */
+.chat-box {
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  padding: 1rem;
+  width: 100%;
+  max-width: 540px;
+  height: 340px; /* Reducido */
+  overflow-y: auto;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+/* Mensajes */
+.message {
+  max-width: 75%;
+  padding: 0.6rem 1rem;
+  border-radius: 20px;
+  margin: 0.5rem 0;
+  word-wrap: break-word;
+  font-size: 0.95rem;
+}
+
+.message.user {
+  align-self: flex-end;
+  background-color: #00e0ff;
+  color: #000;
+}
+
+.message.assistant {
+  align-self: flex-start;
+  background-color: #00ff88;
+  color: #000;
+}
+
+/* Barra de entrada */
+.input-bar {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 540px;
+}
+
+input {
+  flex: 1;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  background-color: #1e1e1e;
+  color: #fff;
+}
+
+button {
+  background-color: #00ff88;
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  padding: 0.6rem 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #00e07a;
+}
+
+/* Scroll personalizado */
+.chat-box::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-box::-webkit-scrollbar-thumb {
+  background: #00ff88;
+  border-radius: 10px;
+}
+
+
+
+
+
+
