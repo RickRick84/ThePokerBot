@@ -18,8 +18,8 @@ function App() {
     setLoading(true);
 
     try {
-      const url = 'http://localhost:3001/chat';
-      console.log("Usando backend local en:", url);
+      const url = 'https://the-poker-bot-back-back.vercel.app/chat';
+      console.log("Usando backend en producción:", url);
 
       const payload = {
         model: 'gpt-4-turbo',
