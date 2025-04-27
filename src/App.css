@@ -12,27 +12,30 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
+  height: 100vh; /* Aseguramos que body tenga 100% altura para el elemento fijo */
+  overflow: hidden; /* Ocultamos el scroll del body */
 }
 
-/* Contenedor principal */
+/* Contenedor principal (El bloque completo del chat, fijo y centrado) */
 .app {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 1rem;
+  align-items: center; /* Centra los elementos internos */
+  padding: 1rem; /* Padding alrededor del contenido */
   width: 100%;
-  max-width: 600px;
+  max-width: 600px; /* Limita el ancho del bloque */
   box-sizing: border-box;
-  position: fixed;
+
+  /* --- Posicionamiento Fijo y Centrado --- */
+  position: fixed; /* ¡Esto lo mantiene fijo! */
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  /* --- AJUSTADO: Reducimos la altura máxima del contenedor fijo --- */
-  max-height: 88vh; /* <-- Reducido de 95vh. Ajusta si necesitas más espacio abajo */
-  /* --- FIN AJUSTADO --- */
-  overflow-y: auto;
+  transform: translate(-50%, -50%); /* Centrado */
+  /* --- Fin Posicionamiento Fijo y Centrado --- */
+
+  /* Altura máxima del contenedor fijo (asegura que no se salga de la pantalla) */
+  max-height: 95vh; /* Ajusta este valor si el bloque completo es muy alto */
+  overflow-y: auto; /* Scroll si el contenido de .app excede max-height (debería ser raro) */
 }
 
 /* Título principal - no cambiaron */
@@ -56,22 +59,21 @@ body {
   padding: 1rem;
   width: 100%;
   max-width: 540px;
-  /* --- REMOVIDO: flex-grow: 1; y min/max-height --- */
-  /* flex-grow: 1; */
-  flex-shrink: 0;
-  /* min-height: 350px; */
-  /* max-height: 60vh; */
-  /* --- AÑADIDO: Altura Fija usando vh --- */
-  height: 50vh; /* <-- Altura de la caja de chat = 50% de la altura de la vista. Ajusta este valor. */
-  /* --- FIN AÑADIDO --- */
-  overflow-y: auto; /* ¡Esto habilita el scroll interno! */
+  /* --- AHORA CON ALTURA FIJA EN PIXELES Y SIN FLEX-GROW --- */
+  /* flex-grow: 1; /* Removido */
+  /* flex-shrink: 0; /* Removido */
+  /* min-height: 350px; /* Removido */
+  /* max-height: 60vh; /* Removido */
+  /* height: auto; /* Removido */
+  height: 450px; /* <-- ¡Altura fija en píxeles! Ajusta este valor. */
+  overflow-y: auto; /* ¡Esto habilita el scroll interno cuando el contenido excede la altura fija! */
+  /* --- FIN ALTURA FIJA --- */
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-  display: flex;
-  flex-direction: column;
+  display: flex; /* Mantenemos flex para el layout interno de los mensajes */
+  flex-direction: column; /* Mantenemos flex direction para el layout interno de los mensajes */
   margin-bottom: 0.8rem;
   box-sizing: border-box;
-  height: auto; /* <-- Mantenemos height auto como base, pero height: 50vh lo sobrescribe */
 }
 
 /* Mensajes - no cambiaron */
