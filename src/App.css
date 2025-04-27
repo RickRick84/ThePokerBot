@@ -34,7 +34,8 @@ body {
   /* --- Fin Posicionamiento Fijo y Centrado --- */
 
   /* Altura máxima del contenedor fijo (asegura que no se salga de la pantalla) */
-  max-height: 95vh; /* Ajusta este valor si el bloque completo es muy alto */
+  /* AJUSTADO: Reducido para dar más espacio abajo */
+  max-height: 85vh; /* <-- AJUSTA ESTE VALOR. Prueba 80vh, 75vh si necesitas más margen */
   overflow-y: auto; /* Scroll si el contenido de .app excede max-height (debería ser raro) */
 }
 
@@ -61,15 +62,15 @@ body {
   max-width: 540px;
 
   /* --- ¡FORZANDO ALTURA FIJA Y SCROLL INTERNO DESDE EL PRINCIPIO! --- */
-  height: 450px !important; /* <-- Altura fija en píxeles. USA UN VALOR QUE TE GUSTE MUCHO. El !important intenta asegurar que se aplique. */
-  overflow-y: auto !important; /* <-- Habilita el scroll interno. El !important intenta asegurar que se aplique. */
-  /* Removimos todas las propiedades de flexbox de altura y min/max-height para evitar conflictos */
-  /* flex-grow: 1; */
-  /* flex-shrink: 0; */
-  /* min-height: 350px; */
-  /* max-height: 60vh; */
-  /* height: auto; */
-  /* flex-basis: auto; */
+  /* Usamos height con !important y eliminamos otras propiedades de altura/flex */
+  height: 450px !important; /* <-- Altura fija en píxeles. AJUSTA ESTE VALOR al que consideres el tamaño ideal. */
+  overflow-y: auto !important; /* <-- Habilita el scroll interno. */
+  /* flex-grow: 1; /* Removido */
+  /* flex-shrink: 0; /* Removido */
+  /* min-height: 350px; /* Removido */
+  /* max-height: 60vh; /* Removido */
+  /* height: auto; /* Removido */
+  /* flex-basis: auto; /* Removido */
   /* --- FIN FORZANDO --- */
 
   border-radius: 12px;
