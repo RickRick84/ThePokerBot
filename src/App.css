@@ -5,55 +5,71 @@ body {
   background-image: url('/bg.jpg');
   background-size: cover;
   background-position: center;
+  background-attachment: fixed; /* Opcional: fija el fondo */
   color: #fff;
+  min-height: 100vh; /* Asegura que el body ocupe al menos la altura completa */
+  display: flex; /* Lo hacemos flex para que el .app pueda crecer */
+  justify-content: center; /* Centra el contenido horizontalmente */
+  align-items: flex-start; /* Alinea el contenido al inicio verticalmente */
 }
 
 /* Contenedor principal */
 .app {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 2rem 1rem;
+  /* align-items: center; Removido, body ya centra */
+  padding: 1rem; /* Ajustamos el padding general */
+  width: 100%; /* Permite que crezca hasta el 100% */
+  max-width: 600px; /* Aumentamos un poco el ancho máximo si es necesario, ajusta a tu gusto */
+  min-height: 100vh; /* Asegura que el contenedor de la app ocupe toda la altura */
 }
 
 /* Título principal */
 .title {
   font-family: 'Anton', sans-serif;
-  font-size: 5rem; /* 50% más grande que 3.8rem */
-  color: #ffd700;
-  text-shadow: 4px 11px 8px #000;
-  letter-spacing: 0.35rem; /* Un poco menos de separación para compensar */
+  font-size: 4rem; /* Reducimos un poco el tamaño del título para ver si mejora */
+  /* Puedes experimentar con el color si el dorado no te convence */
+  /* color: #e0e0e0; /* Un gris claro */
+  /* color: #ff4136; /* Un rojo vibrante */
+  color: #ffd700; /* Mantenemos el dorado por ahora */
+
+  /* Ajustamos la sombra para que sea menos desplazada y más suave */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  letter-spacing: 0.15rem; /* Ajustamos el espaciado de letras */
   width: 100%;
-  max-width: 540px;
   text-align: center;
-  margin: 0 auto 1rem auto;
+  margin: 0 auto 1.5rem auto; /* Aumentamos un poco el margen inferior */
 }
 
 
 /* Caja de chat */
 .chat-box {
-  background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(6px);
+  background-color: rgba(0, 0, 0, 0.5); /* Aumentamos ligeramente la opacidad */
+  backdrop-filter: blur(8px); /* Aumentamos un poco el blur */
   padding: 1rem;
   width: 100%;
-  max-width: 540px;
-  height: 340px; /* Reducido */
+  /* Eliminamos max-width, el contenedor .app ya lo limita */
+  /* Eliminamos height fijo */
+  flex-grow: 1; /* Permite que la caja de chat crezca para ocupar el espacio disponible */
   overflow-y: auto;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem; /* Ajustamos el margen inferior */
+  min-height: 300px; /* Altura mínima para pantallas más grandes */
+  max-height: 70vh; /* Altura máxima para pantallas muy altas, usando viewport height */
 }
 
 /* Mensajes */
 .message {
-  max-width: 75%;
-  padding: 0.6rem 1rem;
+  max-width: 80%; /* Aumentamos un poco el ancho máximo de los mensajes */
+  padding: 0.7rem 1.2rem; /* Ajustamos padding de mensajes */
   border-radius: 20px;
-  margin: 0.5rem 0;
+  margin: 0.4rem 0; /* Ajustamos margen entre mensajes */
   word-wrap: break-word;
-  font-size: 0.95rem;
+  font-size: 1rem; /* Ajustamos tamaño de fuente */
+  line-height: 1.4; /* Añadimos espacio entre líneas */
 }
 
 .message.user {
@@ -71,19 +87,31 @@ body {
 /* Barra de entrada */
 .input-bar {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.8rem; /* Aumentamos el espacio entre el input y el botón */
   width: 100%;
-  max-width: 540px;
+  /* Eliminamos max-width, el contenedor .app ya lo limita */
+
+  /* Agregamos el fondo semi-transparente y blur */
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  padding: 0.8rem 1rem; /* Añadimos padding interno */
+  border-radius: 12px; /* Bordes redondeados */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Sombra suave */
+  align-items: center; /* Centra verticalmente input y button */
 }
 
 input {
   flex: 1;
-  padding: 0.6rem;
+  padding: 0.8rem; /* Aumentamos padding */
   border: none;
   border-radius: 10px;
   font-size: 1rem;
-  background-color: #1e1e1e;
+  background-color: #1e1e1e; /* Mantenemos fondo oscuro */
   color: #fff;
+  /* Puedes ajustar el color del placeholder si quieres */
+  /* &::placeholder {
+    color: #ccc;
+  } */
 }
 
 button {
@@ -91,10 +119,11 @@ button {
   color: #000;
   border: none;
   border-radius: 10px;
-  padding: 0.6rem 1rem;
+  padding: 0.8rem 1.2rem; /* Ajustamos padding */
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s ease-in-out; /* Añadimos transición suave */
+  flex-shrink: 0; /* Evita que el botón se encoja */
 }
 
 button:hover {
@@ -103,12 +132,17 @@ button:hover {
 
 /* Scroll personalizado */
 .chat-box::-webkit-scrollbar {
-  width: 6px;
+  width: 8px; /* Aumentamos un poco el ancho del scrollbar */
 }
 
 .chat-box::-webkit-scrollbar-thumb {
-  background: #00ff88;
+  background: #00e0ff; /* Cambiamos el color a uno de los colores de mensaje */
   border-radius: 10px;
+}
+
+.chat-box::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1); /* Fondo suave para el track del scroll */
+    border-radius: 10px;
 }
 
 
