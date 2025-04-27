@@ -10,22 +10,23 @@ body {
   min-height: 100vh;
   display: flex;
   justify-content: center; /* Centra el contenido horizontalmente */
-  align-items: flex-start; /* Alinea el contenido al inicio verticalmente */
-  /* Añadido: flex-direction para asegurar que body también es un contenedor flex column si .app necesita flex-grow en esa dirección */
-   flex-direction: column;
+  align-items: center; /* Centra el contenido verticalmente si es más corto que 100vh */
+  flex-direction: column; /* Apila los hijos verticalmente */
 }
 
 /* Contenedor principal */
 .app {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centra los elementos internos */
+  align-items: center; /* Centra los elementos internos (.title, .chat-box, .input-bar) */
   padding: 1rem; /* Padding alrededor del contenido */
-  width: 100%; /* Ocupa todo el ancho disponible */
+  width: 100%; /* Ocupa todo el ancho disponible hasta max-width */
   max-width: 600px; /* Limita el ancho máximo del contenedor principal */
-  min-height: 100vh; /* Asegura que el contenedor principal ocupe al menos la altura de la vista */
-  box-sizing: border-box; /* Incluye padding en el cálculo del width */
-  /* flex-grow: 1; /* Añadido: permite que .app crezca para llenar el body si es necesario */
+  /* Eliminamos las alturas explícitas aquí para que el contenido determine la altura */
+  /* height: 100%; */
+  /* min-height: 100vh; */
+  box-sizing: border-box;
+  /* flex-grow: 1; */ /* También removemos flex-grow de .app */
 }
 
 /* Título principal */
@@ -35,11 +36,12 @@ body {
   color: #ffd700;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
   letter-spacing: 0.15rem;
-  width: 100%; /* Ocupa el 100% del espacio disponible... */
-  max-width: 540px; /* ...pero limitado a este ancho máximo */
+  width: 100%;
+  max-width: 540px; /* Mantenemos el ancho máximo */
   text-align: center;
   margin: 0 auto 1.5rem auto;
-  flex-shrink: 0; /* Asegura que el título no se encoja si el espacio es limitado */
+  flex-shrink: 0; /* Evita que el título se encoja si hay poco espacio */
+  /* flex-basis: auto; /* Por defecto, toma el tamaño de su contenido */
 }
 
 /* Caja de chat */
@@ -47,12 +49,9 @@ body {
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
   padding: 1rem;
-  width: 100%; /* Ocupa el 100% del espacio disponible... */
-  max-width: 540px; /* ...pero limitado a este ancho máximo */
-  flex-grow: 1; /* Permite que la caja de chat crezca para ocupar el espacio disponible */
-  /* Eliminados: min-height y max-height para que flex-grow gestione la altura */
-  /* min-height: 300px; */
-  /* max-height: 70vh; */
+  width: 100%;
+  max-width: 540px; /* Mantenemos el ancho máximo */
+  flex-grow: 1; /* Permite que la caja de chat crezca para ocupar el espacio restante */
   overflow-y: auto;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
@@ -60,8 +59,8 @@ body {
   flex-direction: column;
   margin-bottom: 0.8rem;
   box-sizing: border-box;
-  /* Añadido: Altura inicial mínima para que no desaparezca si no hay mensajes */
-  min-height: 150px; /* Ajusta este valor si necesitas que sea más alto inicialmente */
+  /* flex-basis: auto; /* Permitimos que tome su tamaño inicial basado en contenido */
+  min-height: 0; /* ¡Importante! Permite que flex-grow funcione correctamente incluso si no hay mensajes */
 }
 
 /* Mensajes - no cambiaron */
@@ -91,8 +90,8 @@ body {
 .input-bar {
   display: flex;
   gap: 0.8rem;
-  width: 100%; /* Ocupa el 100% del espacio disponible... */
-  max-width: 540px; /* ...pero limitado a este ancho máximo */
+  width: 100%;
+  max-width: 540px; /* Mantenemos el ancho máximo */
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
   padding: 0.8rem 1rem;
@@ -100,35 +99,10 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   align-items: center;
   box-sizing: border-box;
-  /* Añadido: Asegura que no se encoja y tenga un margen superior */
-  flex-shrink: 0;
+  flex-shrink: 0; /* Evita que la barra de input se encoja */
   margin-top: 0.8rem;
-}
-
-input {
-  flex: 1;
-  padding: 0.8rem;
-  border: none;
-  border-radius: 10px;
-  font-size: 1rem;
-  background-color: #1e1e1e;
-  color: #fff;
-}
-
-button {
-  background-color: #00ff88;
-  color: #000;
-  border: none;
-  border-radius: 10px;
-  padding: 0.8rem 1.2rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-  flex-shrink: 0;
-}
-
-button:hover {
-  background-color: #00e07a;
+  height: auto; /* Asegura que su altura se base en el contenido */
+  /* flex-basis: auto; /* Por defecto, toma el tamaño de su contenido */
 }
 
 /* Scroll personalizado - no cambiaron */
