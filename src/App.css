@@ -33,11 +33,11 @@ body {
   transform: translate(-50%, -50%); /* Centrado */
   /* --- Fin Posicionamiento Fijo y Centrado --- */
 
-  /* Definimos la altura del CONTENEDOR FIJO */
-  /* AJUSTADO: Altura para dejar espacio suficiente */
-  height: 85vh; /* <-- AJUSTA ESTE VALOR. Puedes probar 80vh, 90vh, etc. */
+  /* --- Definimos la altura del CONTENEDOR FIJO --- */
+  /* Usamos una altura que se vea bien y permita espacio para título e input */
+  height: 85vh; /* <-- AJUSTA ESTE VALOR (por ejemplo, a 80vh, 90vh) si quieres que el bloque completo sea más alto/bajo. */
   max-height: 95vh; /* Mantenemos un max-height de seguridad */
-  overflow-y: hidden; /* Ocultamos el scroll de este contenedor */
+  overflow-y: hidden; /* Ocultamos el scroll de este contenedor (el scroll va en .chat-box) */
 }
 
 /* Título principal - no cambiaron */
@@ -64,13 +64,13 @@ body {
   max-width: 540px;
 
   /* --- COMPORTAMIENTO HÍBRIDO: EXPANDIR Y LUEGO SCROLL --- */
+  /* La caja empieza en min-height, se expande hasta max-height, y luego scrollea internamente */
   flex-grow: 1; /* Permite que crezca para llenar el espacio disponible en el contenedor fijo */
   flex-shrink: 1; /* Permite que se encoja */
   flex-basis: auto; /* Su tamaño base es automático */
 
-  /* Ajustamos min-height y max-height para el comportamiento híbrido */
-  min-height: 30vh; /* <-- Altura mínima inicial (ajusta este valor) */
-  max-height: 60vh; /* <-- Altura máxima antes del scroll interno (ajusta este valor) */
+  min-height: 30vh; /* <-- Altura mínima inicial (ajusta este valor si quieres que empiece más alto/bajo) */
+  max-height: 60vh; /* <-- Altura máxima antes del scroll interno (ajusta este valor si quieres que se expanda más/menos antes del scroll) */
 
   overflow-y: auto; /* <-- Habilita el scroll interno cuando el contenido excede el max-height */
 
