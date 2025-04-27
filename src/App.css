@@ -5,13 +5,16 @@ body {
   background-image: url('/bg.jpg');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
+  background-attachment: fixed; /* Esto ya fija el fondo de imagen */
   color: #fff;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  /* Añadido: Altura 100% para ayudar a centrar el contenido fijo si es necesario */
+  height: 100vh;
+  overflow: hidden; /* Oculta el scroll del body si el contenido fijo no lo necesita */
 }
 
 /* Contenedor principal */
@@ -21,11 +24,23 @@ body {
   align-items: center;
   padding: 1rem;
   width: 100%;
-  max-width: 600px;
+  max-width: 600px; /* Mantenemos el ancho máximo del bloque */
   box-sizing: border-box;
+
+  /* --- AÑADIDO: Posicionamiento Fijo y Centrado --- */
+  position: fixed; /* Fija el elemento respecto a la ventana de visualización */
+  top: 50%; /* Mueve el borde superior del elemento al 50% de la altura de la vista */
+  left: 50%; /* Mueve el borde izquierdo del elemento al 50% del ancho de la vista */
+  transform: translate(-50%, -50%); /* Ajusta la posición para centrar el elemento */
+  /* --- FIN AÑADIDO --- */
+
+  /* Ajustes de altura para el contenedor fijo */
+  max-height: 95vh; /* Limita la altura máxima del bloque fijo al 95% de la altura de la vista */
+  overflow-y: auto; /* Añade scroll a .app si su contenido excede el max-height (menos común) */
+  /* background-color: rgba(0, 0, 0, 0.2); /* Opcional: un fondo sutil para el contenedor .app si necesitas verlo */
 }
 
-/* Título principal */
+/* Título principal - no cambiaron */
 .title {
   font-family: 'Anton', sans-serif;
   font-size: 4rem;
@@ -46,19 +61,16 @@ body {
   padding: 1rem;
   width: 100%;
   max-width: 540px;
-  flex-grow: 1; /* Permite que crezca si hay espacio */
-  overflow-y: auto; /* ¡Esto ya habilita el scroll interno! */
+  flex-grow: 1;
+  overflow-y: auto; /* ¡Esto controla el scroll interno de los mensajes! */
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   margin-bottom: 0.8rem;
   box-sizing: border-box;
-  /* Eliminamos min-height: 0; y establecemos una altura mínima inicial */
-  /* min-height: 0; */
-  min-height: 350px; /* <-- Ajusta este valor (350px es un ejemplo, puedes probar otro) */
-  /* Opcional: Puedes añadir un max-height si no quieres que crezca indefinidamente en pantallas grandes */
-  /* max-height: 60vh; */
+  min-height: 350px; /* Altura mínima inicial */
+  max-height: 60vh; /* Altura máxima antes del scroll interno */
 }
 
 /* Mensajes - no cambiaron */
