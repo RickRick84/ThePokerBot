@@ -5,16 +5,15 @@ body {
   background-image: url('/bg.jpg');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed; /* Esto ya fija el fondo de imagen */
+  background-attachment: fixed;
   color: #fff;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  /* Añadido: Altura 100% para ayudar a centrar el contenido fijo si es necesario */
-  height: 100vh;
-  overflow: hidden; /* Oculta el scroll del body si el contenido fijo no lo necesita */
+  height: 100vh; /* Aseguramos que body tenga 100% altura para el elemento fijo */
+  overflow: hidden; /* Ocultamos el scroll del body */
 }
 
 /* Contenedor principal */
@@ -24,20 +23,14 @@ body {
   align-items: center;
   padding: 1rem;
   width: 100%;
-  max-width: 600px; /* Mantenemos el ancho máximo del bloque */
+  max-width: 600px;
   box-sizing: border-box;
-
-  /* --- AÑADIDO: Posicionamiento Fijo y Centrado --- */
-  position: fixed; /* Fija el elemento respecto a la ventana de visualización */
-  top: 50%; /* Mueve el borde superior del elemento al 50% de la altura de la vista */
-  left: 50%; /* Mueve el borde izquierdo del elemento al 50% del ancho de la vista */
-  transform: translate(-50%, -50%); /* Ajusta la posición para centrar el elemento */
-  /* --- FIN AÑADIDO --- */
-
-  /* Ajustes de altura para el contenedor fijo */
-  max-height: 95vh; /* Limita la altura máxima del bloque fijo al 95% de la altura de la vista */
-  overflow-y: auto; /* Añade scroll a .app si su contenido excede el max-height (menos común) */
-  /* background-color: rgba(0, 0, 0, 0.2); /* Opcional: un fondo sutil para el contenedor .app si necesitas verlo */
+  position: fixed; /* Fijo en la pantalla */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centrado */
+  max-height: 95vh; /* Altura máxima del contenedor fijo */
+  overflow-y: auto; /* Scroll si el contenido de .app excede max-height */
 }
 
 /* Título principal - no cambiaron */
@@ -61,8 +54,9 @@ body {
   padding: 1rem;
   width: 100%;
   max-width: 540px;
-  flex-grow: 1;
-  overflow-y: auto; /* ¡Esto controla el scroll interno de los mensajes! */
+  /* --- REMOVIDO: flex-grow: 1; --- */
+  flex-shrink: 0; /* <-- AÑADIDO: Evita que la caja de chat se encoja */
+  overflow-y: auto; /* ¡Esto habilita el scroll interno! */
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   display: flex;
@@ -70,7 +64,8 @@ body {
   margin-bottom: 0.8rem;
   box-sizing: border-box;
   min-height: 350px; /* Altura mínima inicial */
-  max-height: 60vh; /* Altura máxima antes del scroll interno */
+  max-height: 60vh; /* <-- Altura máxima antes del scroll interno. Ajusta si quieres que sea más alta/baja. */
+  height: auto; /* <-- AÑADIDO: Su altura base es automática según su contenido */
 }
 
 /* Mensajes - no cambiaron */
