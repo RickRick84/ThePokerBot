@@ -63,8 +63,8 @@ body {
 
   /* --- ¡FORZANDO ALTURA FIJA Y SCROLL INTERNO DESDE EL PRINCIPIO! --- */
   /* Usamos height con !important y eliminamos otras propiedades de altura/flex */
-  height: 450px !important; /* <-- Altura fija en píxeles. AJUSTA ESTE VALOR al que consideres el tamaño ideal. */
-  overflow-y: auto !important; /* <-- Habilita el scroll interno. */
+  height: 450px !important; /* <-- Altura fija en píxeles. USA UN VALOR QUE TE GUSTE MUCHO. El !important intenta asegurar que se aplique. */
+  overflow-y: auto !important; /* <-- Habilita el scroll interno. El !important intenta asegurar que se aplique. */
   /* flex-grow: 1; /* Removido */
   /* flex-shrink: 0; /* Removido */
   /* min-height: 350px; /* Removido */
@@ -161,7 +161,6 @@ button:hover {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
 }
-
 
 
 
