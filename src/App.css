@@ -33,10 +33,11 @@ body {
   transform: translate(-50%, -50%); /* Centrado */
   /* --- Fin Posicionamiento Fijo y Centrado --- */
 
-  /* Altura máxima del contenedor fijo (asegura que no se salga de la pantalla) */
-  /* AJUSTADO: Reducido para dar más espacio abajo */
-  max-height: 85vh; /* <-- AJUSTA ESTE VALOR. Prueba 80vh, 75vh si necesitas más margen */
-  overflow-y: auto; /* Scroll si el contenido de .app excede max-height (debería ser raro) */
+  /* --- Definimos la altura del CONTENEDOR FIJO --- */
+  /* Usamos una altura que se vea bien y permita espacio para título e input */
+  height: 85vh; /* <-- AJUSTA ESTE VALOR. Puedes probar 80vh, 90vh, etc. */
+  max-height: 95vh; /* Mantenemos un max-height de seguridad */
+  overflow-y: hidden; /* Ocultamos el scroll de este contenedor (el scroll va en .chat-box) */
 }
 
 /* Título principal - no cambiaron */
@@ -50,7 +51,8 @@ body {
   max-width: 540px;
   text-align: center;
   margin: 0 auto 1.5rem auto;
-  flex-shrink: 0;
+  flex-shrink: 0; /* Evita que se encoja */
+  height: auto; /* Su altura se basa en su contenido */
 }
 
 /* Caja de chat */
@@ -61,17 +63,14 @@ body {
   width: 100%;
   max-width: 540px;
 
-  /* --- ¡FORZANDO ALTURA FIJA Y SCROLL INTERNO DESDE EL PRINCIPIO! --- */
-  /* Usamos height con !important y eliminamos otras propiedades de altura/flex */
-  height: 450px !important; /* <-- Altura fija en píxeles. USA UN VALOR QUE TE GUSTE MUCHO. El !important intenta asegurar que se aplique. */
-  overflow-y: auto !important; /* <-- Habilita el scroll interno. El !important intenta asegurar que se aplique. */
-  /* flex-grow: 1; /* Removido */
-  /* flex-shrink: 0; /* Removido */
-  /* min-height: 350px; /* Removido */
-  /* max-height: 60vh; /* Removido */
-  /* height: auto; /* Removido */
-  /* flex-basis: auto; /* Removido */
-  /* --- FIN FORZANDO --- */
+  /* --- PERMITIMOS QUE FLEXBOX DETERMINE SU ALTURA DENTRO DEL CONTENEDOR FIJO --- */
+  flex-grow: 1; /* <-- ¡Permite que la caja de chat crezca para llenar el espacio restante en .app! */
+  flex-shrink: 1; /* Permite que se encoja si es necesario */
+  flex-basis: auto; /* Su tamaño base inicial es automático */
+  min-height: 0; /* Importante para que flex-grow funcione correctamente */
+
+  overflow-y: auto; /* <-- ¡Esto habilita el scroll interno! */
+  /* --- FIN FLEXBOX PARA ALTURA --- */
 
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
@@ -114,9 +113,9 @@ body {
   border-radius: 12px;
   align-items: center;
   box-sizing: border-box;
-  flex-shrink: 0;
+  flex-shrink: 0; /* Evita que se encoja */
   margin-top: 0.8rem;
-  height: auto;
+  height: auto; /* Su altura se basa en su contenido */
 }
 
 input {
