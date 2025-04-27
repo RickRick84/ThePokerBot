@@ -59,15 +59,19 @@ body {
   padding: 1rem;
   width: 100%;
   max-width: 540px;
-  /* --- AHORA CON ALTURA FIJA EN PIXELES Y SIN FLEX-GROW --- */
-  /* flex-grow: 1; /* Removido */
-  /* flex-shrink: 0; /* Removido */
-  /* min-height: 350px; /* Removido */
-  /* max-height: 60vh; /* Removido */
-  /* height: auto; /* Removido */
-  height: 450px; /* <-- ¡Altura fija en píxeles! Ajusta este valor. */
-  overflow-y: auto; /* ¡Esto habilita el scroll interno cuando el contenido excede la altura fija! */
-  /* --- FIN ALTURA FIJA --- */
+
+  /* --- ¡FORZANDO ALTURA FIJA Y SCROLL INTERNO DESDE EL PRINCIPIO! --- */
+  height: 450px !important; /* <-- Altura fija en píxeles. USA UN VALOR QUE TE GUSTE MUCHO. El !important intenta asegurar que se aplique. */
+  overflow-y: auto !important; /* <-- Habilita el scroll interno. El !important intenta asegurar que se aplique. */
+  /* Removimos todas las propiedades de flexbox de altura y min/max-height para evitar conflictos */
+  /* flex-grow: 1; */
+  /* flex-shrink: 0; */
+  /* min-height: 350px; */
+  /* max-height: 60vh; */
+  /* height: auto; */
+  /* flex-basis: auto; */
+  /* --- FIN FORZANDO --- */
+
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   display: flex; /* Mantenemos flex para el layout interno de los mensajes */
