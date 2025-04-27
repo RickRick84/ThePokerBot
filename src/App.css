@@ -12,8 +12,8 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 100vh; /* Aseguramos que body tenga 100% altura para el elemento fijo */
-  overflow: hidden; /* Ocultamos el scroll del body */
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* Contenedor principal */
@@ -25,12 +25,14 @@ body {
   width: 100%;
   max-width: 600px;
   box-sizing: border-box;
-  position: fixed; /* Fijo en la pantalla */
+  position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* Centrado */
-  max-height: 95vh; /* Altura máxima del contenedor fijo */
-  overflow-y: auto; /* Scroll si el contenido de .app excede max-height */
+  transform: translate(-50%, -50%);
+  /* --- AJUSTADO: Reducimos la altura máxima del contenedor fijo --- */
+  max-height: 88vh; /* <-- Reducido de 95vh. Ajusta si necesitas más espacio abajo */
+  /* --- FIN AJUSTADO --- */
+  overflow-y: auto;
 }
 
 /* Título principal - no cambiaron */
@@ -54,8 +56,14 @@ body {
   padding: 1rem;
   width: 100%;
   max-width: 540px;
-  /* --- REMOVIDO: flex-grow: 1; --- */
-  flex-shrink: 0; /* <-- AÑADIDO: Evita que la caja de chat se encoja */
+  /* --- REMOVIDO: flex-grow: 1; y min/max-height --- */
+  /* flex-grow: 1; */
+  flex-shrink: 0;
+  /* min-height: 350px; */
+  /* max-height: 60vh; */
+  /* --- AÑADIDO: Altura Fija usando vh --- */
+  height: 50vh; /* <-- Altura de la caja de chat = 50% de la altura de la vista. Ajusta este valor. */
+  /* --- FIN AÑADIDO --- */
   overflow-y: auto; /* ¡Esto habilita el scroll interno! */
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
@@ -63,9 +71,7 @@ body {
   flex-direction: column;
   margin-bottom: 0.8rem;
   box-sizing: border-box;
-  min-height: 350px; /* Altura mínima inicial */
-  max-height: 60vh; /* <-- Altura máxima antes del scroll interno. Ajusta si quieres que sea más alta/baja. */
-  height: auto; /* <-- AÑADIDO: Su altura base es automática según su contenido */
+  height: auto; /* <-- Mantenemos height auto como base, pero height: 50vh lo sobrescribe */
 }
 
 /* Mensajes - no cambiaron */
