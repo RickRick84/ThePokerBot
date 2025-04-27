@@ -29,7 +29,7 @@ function App() {
 
       console.log("📤 Enviando a backend:", payload);
 
-const response = await fetch('/api/chat', {
+const response = await fetch('https://the-poker-bot-back-end.vercel.app/api/chat', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
