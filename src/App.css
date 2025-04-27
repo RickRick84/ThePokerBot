@@ -33,11 +33,11 @@ body {
   transform: translate(-50%, -50%); /* Centrado */
   /* --- Fin Posicionamiento Fijo y Centrado --- */
 
-  /* --- Definimos la altura del CONTENEDOR FIJO --- */
-  /* Usamos una altura que se vea bien y permita espacio para título e input */
+  /* Definimos la altura del CONTENEDOR FIJO */
+  /* AJUSTADO: Altura para dejar espacio suficiente */
   height: 85vh; /* <-- AJUSTA ESTE VALOR. Puedes probar 80vh, 90vh, etc. */
   max-height: 95vh; /* Mantenemos un max-height de seguridad */
-  overflow-y: hidden; /* Ocultamos el scroll de este contenedor (el scroll va en .chat-box) */
+  overflow-y: hidden; /* Ocultamos el scroll de este contenedor */
 }
 
 /* Título principal - no cambiaron */
@@ -51,8 +51,8 @@ body {
   max-width: 540px;
   text-align: center;
   margin: 0 auto 1.5rem auto;
-  flex-shrink: 0; /* Evita que se encoja */
-  height: auto; /* Su altura se basa en su contenido */
+  flex-shrink: 0;
+  height: auto;
 }
 
 /* Caja de chat */
@@ -63,14 +63,18 @@ body {
   width: 100%;
   max-width: 540px;
 
-  /* --- PERMITIMOS QUE FLEXBOX DETERMINE SU ALTURA DENTRO DEL CONTENEDOR FIJO --- */
-  flex-grow: 1; /* <-- ¡Permite que la caja de chat crezca para llenar el espacio restante en .app! */
-  flex-shrink: 1; /* Permite que se encoja si es necesario */
-  flex-basis: auto; /* Su tamaño base inicial es automático */
-  min-height: 0; /* Importante para que flex-grow funcione correctamente */
+  /* --- COMPORTAMIENTO HÍBRIDO: EXPANDIR Y LUEGO SCROLL --- */
+  flex-grow: 1; /* Permite que crezca para llenar el espacio disponible en el contenedor fijo */
+  flex-shrink: 1; /* Permite que se encoja */
+  flex-basis: auto; /* Su tamaño base es automático */
 
-  overflow-y: auto; /* <-- ¡Esto habilita el scroll interno! */
-  /* --- FIN FLEXBOX PARA ALTURA --- */
+  /* Ajustamos min-height y max-height para el comportamiento híbrido */
+  min-height: 30vh; /* <-- Altura mínima inicial (ajusta este valor) */
+  max-height: 60vh; /* <-- Altura máxima antes del scroll interno (ajusta este valor) */
+
+  overflow-y: auto; /* <-- Habilita el scroll interno cuando el contenido excede el max-height */
+
+  /* --- FIN COMPORTAMIENTO HÍBRIDO --- */
 
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
@@ -78,6 +82,7 @@ body {
   flex-direction: column; /* Mantenemos flex direction para el layout interno de los mensajes */
   margin-bottom: 0.8rem;
   box-sizing: border-box;
+  /* min-height: 0; /* No debería ser necesario con min-height > 0 */
 }
 
 /* Mensajes - no cambiaron */
@@ -113,9 +118,9 @@ body {
   border-radius: 12px;
   align-items: center;
   box-sizing: border-box;
-  flex-shrink: 0; /* Evita que se encoja */
+  flex-shrink: 0;
   margin-top: 0.8rem;
-  height: auto; /* Su altura se basa en su contenido */
+  height: auto;
 }
 
 input {
