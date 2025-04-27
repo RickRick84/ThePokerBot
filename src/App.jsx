@@ -18,7 +18,7 @@ function App() {
     setLoading(true);
 
     try {
-      const url = 'https://poker-bot-back-end.vercel.app/chat';
+      const url = 'https://the-poker-bot-back-end.vercel.app/api/chat';
       console.log("Usando backend en producción:", url);
 
       const payload = {
