@@ -54,14 +54,14 @@ body {
   flex-direction: column;
   margin-bottom: 0.8rem;
   box-sizing: border-box;
-  min-height: 0; /* Importante para flex-grow */
+  min-height: 0;
 }
 
 /* Mensajes - no cambiaron */
 .message {
   max-width: 80%;
   padding: 0.7rem 1.2rem;
-  border-radius: 20px;
+  border-radius: 20px; /* ¿Te referías a este borde redondeado con el círculo rojo? */
   margin: 0.4rem 0;
   word-wrap: break-word;
   font-size: 1rem;
@@ -83,16 +83,12 @@ body {
 /* Barra de entrada */
 .input-bar {
   display: flex;
-  gap: 0.6rem; /* Ajustado un poco el espacio */
+  gap: 0.4rem; /* Reducimos un poco más el espacio entre el input y el botón */
   width: 100%;
   max-width: 540px;
-  /* --- REMOVIDOS --- */
-  /* background-color: rgba(0, 0, 0, 0.5); */
-  /* backdrop-filter: blur(8px); */
-  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */
-  /* --- FIN REMOVIDOS --- */
-  padding: 0.6rem; /* Volvemos a un padding más similar al original para el contenedor */
-  border-radius: 12px; /* Mantenemos los bordes redondeados en el contenedor si quieres */
+  padding: 0.6rem;
+  /* background-color: rgba(0, 0, 0, 0.1); /* Opcional: un fondo muy sutil para la barra */
+  border-radius: 12px;
   align-items: center;
   box-sizing: border-box;
   flex-shrink: 0;
@@ -101,29 +97,30 @@ body {
 }
 
 input {
-  flex: 1;
-  padding: 0.8rem; /* Mantenemos un padding generoso para el texto dentro del input */
+  flex: 1; /* ¡Permite que el input crezca y ocupe el espacio disponible! */
+  padding: 0.8rem;
   border: none;
-  border-radius: 10px;
+  /* Aumentamos el borde redondeado */
+  border-radius: 25px; /* O puedes probar un valor aún mayor como 30px */
   font-size: 1rem;
-  background-color: #1e1e1e; /* Mantenemos el fondo oscuro solo en el campo de input */
+  background-color: #1e1e1e;
   color: #fff;
-  /* Puedes ajustar el color del placeholder si quieres */
-  /* &::placeholder {
-    color: #ccc;
-  } */
+  /* Añadimos padding a la derecha para que el texto no toque el borde curvo */
+  padding-right: 1.5rem;
 }
 
 button {
-  background-color: #00ff88; /* Mantenemos el botón verde */
+  background-color: #00ff88;
   color: #000;
   border: none;
-  border-radius: 10px;
-  padding: 0.8rem 1.2rem; /* Mantenemos un padding cómodo para el botón */
+  /* Mantenemos el borde del botón menos redondeado o puedes igualarlo al input */
+  border-radius: 10px; /* O cambia a 25px si quieres que sean iguales */
+  padding: 0.8rem 1.2rem;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
-  flex-shrink: 0;
+  flex-shrink: 0; /* Evita que el botón se encoja */
+  flex-grow: 0; /* Asegura que el botón no intente crecer */
 }
 
 button:hover {
