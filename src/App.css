@@ -33,11 +33,12 @@ body {
   transform: translate(-50%, -50%); /* Centrado */
   /* --- Fin Posicionamiento Fijo y Centrado --- */
 
-  /* --- Definimos la altura del CONTENEDOR FIJO --- */
-  /* Usamos una altura que se vea bien y permita espacio para título e input */
-  height: 85vh; /* <-- AJUSTA ESTE VALOR (por ejemplo, a 80vh, 90vh) si quieres que el bloque completo sea más alto/bajo. */
+  /* Definimos la altura del CONTENEDOR FIJO */
+  /* AJUSTADO: Altura para dejar espacio suficiente */
   max-height: 95vh; /* Mantenemos un max-height de seguridad */
-  overflow-y: hidden; /* Ocultamos el scroll de este contenedor (el scroll va en .chat-box) */
+  overflow-y: auto; /* Scroll si el contenido de .app excede max-height (debería ser raro) */
+  /* Añadido: Darle una altura definida para que los hijos flex con grow funcionen */
+  height: 85vh; /* <-- Altura del contenedor fijo. Ajusta si es necesario. */
 }
 
 /* Título principal - no cambiaron */
@@ -63,18 +64,17 @@ body {
   width: 100%;
   max-width: 540px;
 
-  /* --- COMPORTAMIENTO HÍBRIDO: EXPANDIR Y LUEGO SCROLL --- */
-  /* La caja empieza en min-height, se expande hasta max-height, y luego scrollea internamente */
-  flex-grow: 1; /* Permite que crezca para llenar el espacio disponible en el contenedor fijo */
-  flex-shrink: 1; /* Permite que se encoja */
-  flex-basis: auto; /* Su tamaño base es automático */
-
-  min-height: 30vh; /* <-- Altura mínima inicial (ajusta este valor si quieres que empiece más alto/bajo) */
-  max-height: 60vh; /* <-- Altura máxima antes del scroll interno (ajusta este valor si quieres que se expanda más/menos antes del scroll) */
-
-  overflow-y: auto; /* <-- Habilita el scroll interno cuando el contenido excede el max-height */
-
-  /* --- FIN COMPORTAMIENTO HÍBRIDO --- */
+  /* --- ALTURA FIJA Y SCROLL SIEMPRE VISIBLE --- */
+  /* Removimos flex-grow/shrink y min/max-height para usar una altura fija clara */
+  /* flex-grow: 1; */
+  /* flex-shrink: 0; */
+  /* min-height: 30vh; */
+  /* max-height: 60vh; */
+  /* height: auto; */
+  /* flex-basis: auto; */
+  height: 450px; /* <-- Altura fija en píxeles. AJUSTA ESTE VALOR al tamaño que buscas "desde el principio". */
+  overflow-y: scroll; /* <-- ¡Esto hace que la barra de scroll sea SIEMPRE visible! */
+  /* --- FIN ALTURA FIJA Y SCROLL --- */
 
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
@@ -82,7 +82,6 @@ body {
   flex-direction: column; /* Mantenemos flex direction para el layout interno de los mensajes */
   margin-bottom: 0.8rem;
   box-sizing: border-box;
-  /* min-height: 0; /* No debería ser necesario con min-height > 0 */
 }
 
 /* Mensajes - no cambiaron */
