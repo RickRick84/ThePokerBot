@@ -9,24 +9,20 @@ body {
   color: #fff;
   min-height: 100vh;
   display: flex;
-  justify-content: center; /* Centra el contenido horizontalmente */
-  align-items: center; /* Centra el contenido verticalmente si es más corto que 100vh */
-  flex-direction: column; /* Apila los hijos verticalmente */
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 /* Contenedor principal */
 .app {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centra los elementos internos (.title, .chat-box, .input-bar) */
-  padding: 1rem; /* Padding alrededor del contenido */
-  width: 100%; /* Ocupa todo el ancho disponible hasta max-width */
-  max-width: 600px; /* Limita el ancho máximo del contenedor principal */
-  /* Eliminamos las alturas explícitas aquí para que el contenido determine la altura */
-  /* height: 100%; */
-  /* min-height: 100vh; */
+  align-items: center;
+  padding: 1rem;
+  width: 100%;
+  max-width: 600px;
   box-sizing: border-box;
-  /* flex-grow: 1; */ /* También removemos flex-grow de .app */
 }
 
 /* Título principal */
@@ -37,11 +33,10 @@ body {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
   letter-spacing: 0.15rem;
   width: 100%;
-  max-width: 540px; /* Mantenemos el ancho máximo */
+  max-width: 540px;
   text-align: center;
   margin: 0 auto 1.5rem auto;
-  flex-shrink: 0; /* Evita que el título se encoja si hay poco espacio */
-  /* flex-basis: auto; /* Por defecto, toma el tamaño de su contenido */
+  flex-shrink: 0;
 }
 
 /* Caja de chat */
@@ -50,8 +45,8 @@ body {
   backdrop-filter: blur(8px);
   padding: 1rem;
   width: 100%;
-  max-width: 540px; /* Mantenemos el ancho máximo */
-  flex-grow: 1; /* Permite que la caja de chat crezca para ocupar el espacio restante */
+  max-width: 540px;
+  flex-grow: 1;
   overflow-y: auto;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
@@ -59,8 +54,7 @@ body {
   flex-direction: column;
   margin-bottom: 0.8rem;
   box-sizing: border-box;
-  /* flex-basis: auto; /* Permitimos que tome su tamaño inicial basado en contenido */
-  min-height: 0; /* ¡Importante! Permite que flex-grow funcione correctamente incluso si no hay mensajes */
+  min-height: 0; /* Importante para flex-grow */
 }
 
 /* Mensajes - no cambiaron */
@@ -89,20 +83,51 @@ body {
 /* Barra de entrada */
 .input-bar {
   display: flex;
-  gap: 0.8rem;
+  gap: 0.6rem; /* Ajustado un poco el espacio */
   width: 100%;
-  max-width: 540px; /* Mantenemos el ancho máximo */
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(8px);
-  padding: 0.8rem 1rem;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  max-width: 540px;
+  /* --- REMOVIDOS --- */
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  /* backdrop-filter: blur(8px); */
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */
+  /* --- FIN REMOVIDOS --- */
+  padding: 0.6rem; /* Volvemos a un padding más similar al original para el contenedor */
+  border-radius: 12px; /* Mantenemos los bordes redondeados en el contenedor si quieres */
   align-items: center;
   box-sizing: border-box;
-  flex-shrink: 0; /* Evita que la barra de input se encoja */
+  flex-shrink: 0;
   margin-top: 0.8rem;
-  height: auto; /* Asegura que su altura se base en el contenido */
-  /* flex-basis: auto; /* Por defecto, toma el tamaño de su contenido */
+  height: auto;
+}
+
+input {
+  flex: 1;
+  padding: 0.8rem; /* Mantenemos un padding generoso para el texto dentro del input */
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  background-color: #1e1e1e; /* Mantenemos el fondo oscuro solo en el campo de input */
+  color: #fff;
+  /* Puedes ajustar el color del placeholder si quieres */
+  /* &::placeholder {
+    color: #ccc;
+  } */
+}
+
+button {
+  background-color: #00ff88; /* Mantenemos el botón verde */
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  padding: 0.8rem 1.2rem; /* Mantenemos un padding cómodo para el botón */
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  flex-shrink: 0;
+}
+
+button:hover {
+  background-color: #00e07a;
 }
 
 /* Scroll personalizado - no cambiaron */
