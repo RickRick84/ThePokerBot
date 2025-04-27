@@ -65,15 +65,17 @@ body {
   max-width: 540px;
 
   /* --- ALTURA FIJA Y SCROLL SIEMPRE VISIBLE --- */
-  /* Removimos flex-grow/shrink y min/max-height para usar una altura fija clara */
+  /* Aumentamos la altura fija para que quepa más contenido */
+  height: 550px; /* <-- ¡AUMENTADA LA ALTURA FIJA! AJUSTA ESTE VALOR si aún no es suficiente. */
+  overflow-y: scroll; /* <-- ¡Esto hace que la barra de scroll sea SIEMPRE visible! */
+
+  /* Removimos todas las propiedades de flexbox de altura y min/max/auto heights */
   /* flex-grow: 1; */
   /* flex-shrink: 0; */
   /* min-height: 30vh; */
   /* max-height: 60vh; */
   /* height: auto; */
   /* flex-basis: auto; */
-  height: 450px; /* <-- Altura fija en píxeles. AJUSTA ESTE VALOR al tamaño que buscas "desde el principio". */
-  overflow-y: scroll; /* <-- ¡Esto hace que la barra de scroll sea SIEMPRE visible! */
   /* --- FIN ALTURA FIJA Y SCROLL --- */
 
   border-radius: 12px;
