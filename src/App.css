@@ -70,7 +70,8 @@ body {
 
   /* Altura fija y Scroll siempre visible */
   height: 650px; /* <-- Altura fija en píxeles de la caja de chat. Ajusta si es necesario. */
-  overflow-y: scroll; /* <-- ¡La barra de scroll es SIEMPRE visible! */
+  overflow-y: scroll; /* <-- ¡El scroll debe estar AQUÍ, solo vertical! */
+  overflow-x: hidden; /* <-- Aseguramos que no haya scroll horizontal en el chat box */
 
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
@@ -88,22 +89,28 @@ body {
   padding: 0.7rem 1.2rem;
   border-radius: 20px;
   margin: 0.4rem 0;
-  word-wrap: break-word; /* Mantener por compatibilidad */
-  overflow-wrap: break-word; /* <-- CLAVE: Rompe palabras largas para evitar desborde */
-  overflow-x: hidden; /* <-- CLAVE: Oculta desborde horizontal y ayuda a la alineación */
+  /* --- AJUSTADO: Eliminamos propiedades de desborde horizontal de aquí --- */
+  /* word-wrap: break-word; */
+  /* overflow-wrap: break-word; */
+  /* overflow-x: hidden; */
+  /* --- FIN AJUSTADO --- */
   font-size: 1rem;
   line-height: 1.4;
   box-sizing: border-box; /* Asegurar que padding se incluya en width/max-width */
+
+  /* Añadir manejo de quiebre de palabra aquí para mayor seguridad */
+   word-break: break-word; /* Propiedad más moderna y efectiva */
+   overflow-wrap: break-word; /* Alias para word-break, buena práctica incluir ambos */
 }
 
 .message.user {
-  align-self: flex-end; /* <-- CLAVE: Alinea mensajes de usuario a la derecha */
+  align-self: flex-end; /* <-- CLAVE: Alinea a la derecha */
   background-color: #00e0ff;
   color: #000;
 }
 
 .message.assistant {
-  align-self: flex-start; /* <-- CLAVE: Alinea mensajes del asistente a la izquierda */
+  align-self: flex-start; /* <-- CLAVE: Alinea a la izquierda */
   background-color: #00ff88;
   color: #000;
 }
