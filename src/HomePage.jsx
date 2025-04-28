@@ -12,8 +12,8 @@ function HomePage() {
   };
 
   return (
-    // Añadimos la clase 'homepage-app' aquí para controlarla con CSS
-    <div className="app homepage-app"> {/* <-- Modificado aquí: Añadida la clase 'homepage-app' */}
+    // Asegúrate de que aquí sigue la clase 'homepage-app'
+    <div className="app homepage-app"> {/* <-- Asegúrate de tener ambas clases aquí */}
       {/* Reutilizamos la estructura y estilos para el logo */}
       <div className="title-container">
         <img src="/i_love_poker_logo_.png" alt="The Poker Bot Logo" className="title-image" />
@@ -28,12 +28,12 @@ function HomePage() {
         <button onClick={() => handleLanguageSelect('en')}>ENGLISH</button>
       </div>
 
-      {/* Este div vacío ayuda a mantener la distribución vertical similar a la página de chat,
-          ocupando el espacio que normalmente tomaría la caja de chat + barra de input.
-          Asegura que el contenedor '.app' tenga una altura similar en ambas páginas. */}
-      <div style={{ height: '650px', marginTop: '0.8rem', maxWidth: '540px', width: '100%' }}>
+      {/* --- ELIMINADO: Quitamos el div de espacio que podría causar problemas de layout --- */}
+      {/* <div style={{ height: '650px', marginTop: '0.8rem', maxWidth: '540px', width: '100%' }}> */}
          {/* Puedes ajustar el 'height' aquí para que visualmente se alinee mejor */}
-      </div>
+      {/* </div> */}
+      {/* --- FIN ELIMINADO --- */}
+
     </div>
   );
 }
