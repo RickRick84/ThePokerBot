@@ -12,8 +12,8 @@ function HomePage() {
   };
 
   return (
-    // Reutilizamos la clase 'app' para mantener el centrado fijo y el background
-    <div className="app">
+    // Añadimos la clase 'homepage-app' aquí para controlarla con CSS
+    <div className="app homepage-app"> {/* <-- Modificado aquí: Añadida la clase 'homepage-app' */}
       {/* Reutilizamos la estructura y estilos para el logo */}
       <div className="title-container">
         <img src="/i_love_poker_logo_.png" alt="The Poker Bot Logo" className="title-image" />

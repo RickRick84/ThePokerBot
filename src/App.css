@@ -158,7 +158,7 @@ button:hover {
     border-radius: 10px;
 }
 
-/* --- NUEVOS ESTILOS PARA LA PÁGINA DE INICIO Y SELECTOR DE IDIOMA --- */
+/* --- ESTILOS PARA LA PÁGINA DE INICIO Y SELECTOR DE IDIOMA --- */
 .language-selector {
   display: flex;
   flex-direction: column;
@@ -203,9 +203,13 @@ button:hover {
   background-color: #00e07a; /* Color al pasar el mouse */
 }
 
-/* Estilo para el div de espacio en HomePage para mantener alineación visual */
-/* Puedes ajustar el height si es necesario */
-/* Se define inline en HomePage.jsx por ahora para simplificar */
+/* --- REGLA PARA ANULAR SCROLL EN LA PÁGINA DE INICIO --- */
+/* Asegúrate de haber añadido la clase 'homepage-app' al div principal en HomePage.jsx */
+.homepage-app {
+  overflow-y: visible !important; /* Oculta el scroll */
+  height: auto !important; /* Permite que la altura se ajuste al contenido */
+  max-height: none !important; /* Asegura que no haya un max-height que fuerce scroll */
+}
 
 
 
