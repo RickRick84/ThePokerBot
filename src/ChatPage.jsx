@@ -71,25 +71,22 @@ function ChatPage() { // Nombre del componente
 
   // Efecto para scrollear al inicio del último mensaje cuando los mensajes cambian
   useEffect(() => {
-    // Solo scrollear si tenemos mensajes después del inicial del sistema
-    // y la carga ha terminado (esto asume backend NO-STREAMING)
-    if (!loading && messages.length > 1) {
-      // Usamos un pequeño timeout para asegurarnos de que el DOM se actualizó con el último mensaje
-      const timeoutId = setTimeout(() => {
-         if (lastMessageRef.current) {
-           // <-- AJUSTADO: Scrollear al inicio del último mensaje con un pequeño delay para asegurar renderizado
-           lastMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-         } else if (chatBoxRef.current) {
-            // Fallback: si no hay referencia al último mensaje, scrollear al fondo
-            chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
-         }
-      }, 50); // Un pequeño delay (50ms), puedes ajustarlo si es necesario. Puedes probar con 100 o 200 si 50 no es suficiente.
-       return () => clearTimeout(timeoutId); // Limpiar el timeout si los mensajes cambian de nuevo rápido
-    } else if (chatBoxRef.current && messages.length <= 1) {
-       // Comportamiento original al inicio del chat o solo con el mensaje del sistema
-       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
-    }
-  }, [messages, loading]); // Este efecto se ejecuta cada vez que la lista de mensajes o el estado de carga cambia
+    // Solo scrollear si tenemos una referencia al último mensaje Y hay mensajes más allá del inicial del sistema.
+    // También disparamos el scroll cuando loading cambia, para reaccionar al fin de la carga.
+     if (lastMessageRef.current && messages.length > 1) {
+          // Usamos un pequeño timeout para asegurarnos de que el DOM se actualizó con el último mensaje
+          // El timeout es crucial porque los mensajes se agregan al estado, pero la renderización
+          // del DOM puede tomar un instante, especialmente con respuestas largas.
+          const timeoutId = setTimeout(() => {
+               console.log("Attempting to scroll to:", lastMessageRef.current);
+               lastMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 100); // Aumentamos el delay a 100ms. Si sigue fallando, prueba con 200ms.
+          return () => clearTimeout(timeoutId); // Limpiar el timeout si los mensajes cambian de nuevo rápido
+     } else if (chatBoxRef.current && messages.length <= 1) {
+          // Comportamiento al inicio del chat o solo con el mensaje del sistema: scrollear al fondo
+          chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+     }
+  }, [messages, loading]); // Depende de los mensajes y el estado de carga
 
 
   // Efecto para actualizar el idioma si cambia el parámetro de la URL
