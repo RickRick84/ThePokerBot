@@ -20,20 +20,20 @@ body {
 .app {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centra los elementos internos */
-  padding: 1rem; /* Padding alrededor del contenido */
+  align-items: center;
+  padding: 1rem;
   width: 100%;
-  max-width: 600px; /* Limita el ancho del bloque */
+  max-width: 600px;
   box-sizing: border-box;
 
   /* Posicionamiento Fijo y Centrado */
   position: fixed; /* Esto lo mantiene fijo */
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* Centrado */
+  transform: translate(-50%, -50%); /* ESTO crea el problema para fixed internos */
 
-  /* Necesitamos relative para que los elementos con 'position: absolute' dentro se posicionen respecto a este contenedor, aunque el home-link ahora será fixed. Lo mantenemos por si acaso. */
-  position: relative;
+  /* Eliminamos position: relative; ya que home-link ahora será absolute respecto al body */
+  /* position: relative; <-- ¡ELIMINADA ESTA LÍNEA! */
 
 
   /* Altura máxima del contenedor fijo (asegura que no se salga de la pantalla) */
@@ -117,9 +117,8 @@ body {
   flex-shrink: 0;
   margin-top: 0.8rem;
   height: auto;
-  /* --- AJUSTADO: Alineamos a la derecha --- */
-  align-self: flex-end; /* Alinea este item flex al final del eje cruzado (a la derecha en una columna) */
-  /* --- FIN AJUSTADO --- */
+  /* Alineamos a la derecha */
+  align-self: flex-end;
 }
 
 input {
@@ -220,8 +219,8 @@ button:hover {
 
 /* --- ESTILOS PARA EL ÍCONO DE HOME --- */
 .home-link {
-  /* --- AJUSTADO: Posicionamiento fijo respecto a la ventana --- */
-  position: fixed; /* Posiciona respecto a la ventana del navegador */
+  /* --- AJUSTADO: Posicionamiento absoluto respecto al body/ventana --- */
+  position: absolute; /* Posiciona respecto a la ventana (viewport) */
   top: 1rem; /* 1rem desde el borde superior de la ventana */
   left: 1rem; /* 1rem desde el borde izquierdo de la ventana */
   /* --- FIN AJUSTADO --- */
