@@ -9,13 +9,15 @@ function App() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const chatBoxRef = useRef(null);
+  const chatBoxRef = useRef(null); // Referencia para la caja de chat
 
+  // Efecto para scrollear al final cuando los mensajes cambian
   useEffect(() => {
     if (chatBoxRef.current) {
+      // Scrolleamos el elemento al final
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages]); // Se ejecuta cada vez que 'messages' cambia
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -49,16 +51,16 @@ function App() {
 
       if (data.choices && data.choices.length > 0) {
         const reply = data.choices[0].message;
-        setMessages(currentMessages => [...currentMessages, reply]); // Usamos la forma de actualizaci\u00F3n con funci\u00F3n para asegurar el estado m\u00E1s reciente
+        setMessages(currentMessages => [...currentMessages, reply]); // Usamos la forma de actualización con función
       } else if (data.error) {
         console.error("❌ Error en la respuesta de OpenAI:", data.error);
-        setMessages(currentMessages => [...currentMessages, { // Usamos forma de actualizaci\u00F3n con funci\u00F3n
+        setMessages(currentMessages => [...currentMessages, { // Usamos forma de actualización con función
           role: 'assistant',
-          content: `Error de OpenAI: ${data.error.code || 'C\u00F3digo desconocido'} - ${data.error.message || 'Error desconocido'}`
+          content: `Error de OpenAI: ${data.error.code || 'Código desconocido'} - ${data.error.message || 'Error desconocido'}`
         }]);
       } else {
         console.error("❌ Formato inesperado de respuesta de OpenAI:", data);
-        setMessages(currentMessages => [...currentMessages, { // Usamos forma de actualizaci\u00F3n con funci\u00F3n
+        setMessages(currentMessages => [...currentMessages, { // Usamos forma de actualización con función
           role: 'assistant',
           content: 'No se pudo obtener una respuesta v\u00E1lida de OpenAI.'
         }]);
@@ -76,7 +78,7 @@ function App() {
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      e.preventDefault();
+      e.preventDefault(); // Previene salto de línea
       sendMessage();
     }
   };
@@ -84,11 +86,11 @@ function App() {
   return (
     <div className="app">
       <div className="title-container">
-        {/* Image element for the title */}
+        {/* Elemento de imagen para el título */}
         <img src="/i_love_poker_logo_.png" alt="The Poker Bot Logo" className="title-image" />
       </div>
-      <div className="chat-box" ref={chatBoxRef}>
-        {messages.slice(1).map((msg, idx) => ( // Usamos slice(1) para no mostrar el mensaje system inicial
+      <div className="chat-box" ref={chatBoxRef}> {/* Adjuntamos la referencia aquí */}
+        {messages.slice(1).map((msg, idx) => ( // slice(1) para no mostrar mensaje system
           <div key={idx} className={`message ${msg.role}`}>
             <span>{msg.content}</span>
           </div>
@@ -100,9 +102,9 @@ function App() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Escribí tu pregunta sobre póker..."
+          placeholder="Escrib\u00ED tu pregunta sobre p\u00F3ker..."
         />
-        <button onClick={sendMessage} disabled={loading}>Enviar</button>
+        <button onClick={sendMessage} disabled={loading}>Enviar</button> {/* Deshabilitar en loading */}
       </div>
     </div>
   );

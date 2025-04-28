@@ -66,7 +66,7 @@ body {
   max-width: 540px;
 
   /* Altura fija y Scroll siempre visible */
-  height: 550px; /* <-- Altura fija en píxeles. AJUSTA ESTE VALOR (ej: 400px, 500px, 600px) al tamaño que buscas "desde el principio". */
+  height: 650px; /* <-- Altura fija en píxeles. AJUSTA ESTE VALOR (ej: 600px, 700px) al tamaño que buscas "desde el principio". */
   overflow-y: scroll; /* <-- ¡Esto hace que la barra de scroll sea SIEMPRE visible! */
 
   border-radius: 12px;
