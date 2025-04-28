@@ -64,14 +64,27 @@ export default async function handler(req) {
     if (toolCalls && toolCalls.length > 0) {
       const firstToolCall = toolCalls[0]; // Para simplificar, solo manejamos la primera llamada de herramienta
       if (firstToolCall.function.name === "search_web") {
-        const functionArgs = JSON.parse(firstToolCall.function.arguments);
+        // Asegurarse de que functionArgs es un objeto válido antes de acceder a .query
+        let functionArgs = {};
+        try {
+            functionArgs = JSON.parse(firstToolCall.function.arguments);
+        } catch (e) {
+            console.error("Error parsing tool call arguments:", e);
+            // Enviar un error específico si los argumentos no se parsean
+            return new Response(JSON.stringify({ error: "Error procesando argumentos de la función de búsqueda." }), {
+                status: 500,
+                headers: { 'Content-Type': 'application/json' },
+            });
+        }
+
         const searchQuery = functionArgs.query;
 
         console.log(`🤖 Modelo decidió llamar a search_web con query: "${searchQuery}"`);
 
         // --- AQUÍ IRÍA LA LÓGICA REAL DE BÚSQUEDA WEB ---
         // POR AHORA, SIMULAMOS EL RESULTADO
-        const simulatedSearchResults = `[Resultados de búsqueda para "${searchQuery}"]: El ganador de la WSOP Main Event 2024 fue John Smith. Otros resultados recientes...`;
+        // Asegúrate que esta simulación tiene el formato que OpenAI espera de una herramienta
+        const simulatedSearchResults = `[Resultados de búsqueda para "${searchQuery}"]: El ganador de la WSOP Main Event 2024 fue John Smith. Otros resultados recientes relevantes para poker: ...`;
         console.log("🔍 Simulando resultados de búsqueda:", simulatedSearchResults);
         // --- FIN SIMULACIÓN ---
 
@@ -83,23 +96,42 @@ export default async function handler(req) {
           {
             role: "tool", // <-- Rol 'tool' para los resultados de la herramienta
             tool_call_id: firstToolCall.id, // ID de la llamada original a la herramienta
-            content: simulatedSearchResults, // <-- Aquí van los resultados de la búsqueda real
+            content: simulatedSearchResults, // <-- Aquí van los resultados de la búsqueda real o simulada
           },
         ];
 
         console.log("🔄 Re-enviando a OpenAI con resultados de búsqueda...");
 
         // --- Ahora sí, la segunda llamada puede ser un stream para la respuesta final ---
-        const finalResponseStream = await openai.chat.completions.create({
-          model: model,
-          messages: messagesWithToolResults,
-          stream: true, // <--- La respuesta final SÍ puede ser un stream
-        });
+        // Usamos un bloque try-catch para esta segunda llamada también
+        try {
+             const finalResponseStream = await openai.chat.completions.create({
+               model: model,
+               messages: messagesWithToolResults,
+               stream: true, // <--- La respuesta final SÍ puede ser un stream
+             });
 
-        // Devolver el stream de la respuesta final al cliente
-        return new Response(finalResponseStream, {
-          headers: { 'Content-Type': 'text/event-stream' },
-        });
+             // Devolver el stream de la respuesta final al cliente
+             return new Response(finalResponseStream, {
+               headers: { 'Content-Type': 'text/event-stream' },
+             });
+
+        } catch (secondCallError) {
+             console.error('Error in second OpenAI call (with tool results):', secondCallError);
+             // Enviar un error específico si falla la segunda llamada
+             let errorMsg = "Error en la segunda llamada a OpenAI con resultados de búsqueda.";
+             if (secondCallError.response) {
+                 errorMsg += ` Status: ${secondCallError.response.status}`;
+                 if (secondCallError.response.data) errorMsg += ` Data: ${JSON.stringify(secondCallError.response.data)}`;
+             } else if (secondCallError.message) {
+                 errorMsg += ` Message: ${secondCallError.message}`;
+             }
+              return new Response(JSON.stringify({ error: errorMsg }), {
+                  status: 500,
+                  headers: { 'Content-Type': 'application/json' },
+              });
+        }
+
 
       } else {
           // Si OpenAI llama a una herramienta que no reconocemos (no debería pasar con tool_choice="auto" y solo una herramienta)
@@ -113,46 +145,43 @@ export default async function handler(req) {
 
     } else {
         // --- Si OpenAI NO decidió llamar a una herramienta, la primera respuesta es la final ---
-        // En este caso, la respuesta inicial de OpenAI es la respuesta final del chat.
-        // Si queremos que esta respuesta TAMBIÉN sea un stream, debemos hacer una segunda llamada aquí con stream: true.
-        // O podríamos haber puesto stream: true en la primera llamada y manejar las tool_calls de forma diferente (más complejo).
-        // Por simplicidad ahora, si no hay llamada a herramienta, la respuesta es la inicial (NO stream)
-         console.log("🤖 Modelo no llamó a herramienta, enviando respuesta directa.");
+        // Esta respuesta inicial de OpenAI es la respuesta final del chat (no stream)
+        console.log("🤖 Modelo no llamó a herramienta, enviando respuesta directa (no stream).");
 
-         // Opcional: si quieres que incluso las respuestas sin herramientas sean stream, haz otra llamada aquí:
-         /*
-         const finalResponseStream = await openai.chat.completions.create({
-             model: model, messages: messages, stream: true,
-         });
-         return new Response(finalResponseStream, { headers: { 'Content-Type': 'text/event-stream' } });
-         */
+        // Convertimos la respuesta inicial (no stream) a un formato compatible con el frontend streaming logic (aunque sea un solo chunk)
+         const finalData = {
+             choices: [{ message: responseMessage, index: 0, finish_reason: 'stop' }],
+             model: initialResponse.model, // Incluir el modelo si está disponible
+             id: initialResponse.id, // Incluir ID si está disponible
+             // Otros campos relevantes si los hay
+         };
 
-        // O, simplemente devolvemos la respuesta completa inicial (no stream)
-         return new Response(JSON.stringify(initialResponse), {
+
+         // Devolvemos una respuesta JSON (no stream) que el frontend pueda manejar como si fuera un stream terminado
+         return new Response(JSON.stringify(finalData), {
             status: 200,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json' }, // Importante: Aquí es application/json, no text/event-stream
          });
     }
 
   } catch (error) {
-    console.error('Error during OpenAI interaction (function calling):', error);
+    console.error('Error general durante la interacción con OpenAI (Function Calling):', error);
 
-    let errorMessage = 'An error occurred during the API interaction.';
+    let errorMessage = 'Ocurrió un error general al procesar la solicitud con la API.';
     let statusCode = 500;
 
     if (error.response) {
-      errorMessage = `OpenAI API error: ${error.response.status} - ${error.response.statusText}`;
-      statusCode = error.response.status;
+      errorMessage = `Error de la API de OpenAI: ${error.response.status}`;
        if (error.response.data) {
-           console.error('OpenAI response data:', error.response.data);
-           errorMessage += `: ${JSON.stringify(error.response.data)}`;
+           errorMessage += ` - ${JSON.stringify(error.response.data)}`;
        }
+      statusCode = error.response.status;
     } else if (error.message) {
-      errorMessage = `Request error: ${error.message}`;
+      errorMessage = `Error de solicitud: ${error.message}`;
       statusCode = 500;
     }
 
-
+    // Devolver una respuesta JSON con el error
     return new Response(JSON.stringify({ error: errorMessage }), {
       status: statusCode,
       headers: { 'Content-Type': 'application/json' },
