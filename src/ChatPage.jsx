@@ -55,6 +55,18 @@ function ChatPage() { // Nombre del componente
 
   const chatBoxRef = useRef(null);
 
+  // Creamos una referencia a un objeto de Audio para el sonido del botón Enviar
+  const sendAudioRef = useRef(new Audio('/sounds/button-click.mp3')); // <-- Asegúrate que esta ruta y nombre de archivo sean correctos
+
+  // Función para reproducir el sonido de envío
+  const playSendSound = () => {
+    // Reinicia el sonido al principio
+    sendAudioRef.current.currentTime = 0;
+    // Intenta reproducir el sonido
+    sendAudioRef.current.play().catch(error => console.error("Error playing send sound:", error));
+  };
+
+
   // Efecto para scrollear al final cuando los mensajes cambian
   useEffect(() => {
     if (chatBoxRef.current) {
@@ -70,7 +82,8 @@ function ChatPage() { // Nombre del componente
   }, [lang]);
 
 
-  const sendMessage = async () => {
+  // Lógica principal para enviar el mensaje (sin sonido)
+  const sendMessageLogic = async () => {
     if (!input.trim()) return;
 
     const userMessage = { role: 'user', content: input };
@@ -128,24 +141,32 @@ function ChatPage() { // Nombre del componente
     }
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      sendMessage();
-    }
-  };
+  // Handler para el click del botón
+  const handleButtonClick = () => {
+      playSendSound(); // <-- Reproduce el sonido
+      sendMessageLogic(); // <-- Llama a la lógica de envío
+  }
+
+  // Handler para la tecla Enter en el input
+  const handleKeyDownOptimized = (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault(); // Previene la acción por defecto del Enter
+        playSendSound(); // <-- Reproduce el sonido
+        sendMessageLogic(); // <-- Llama a la lógica de envío
+      }
+  }
+
 
   return (
     // Usamos Fragment <> </> para poder retornar el Link Y el div.app
     <>
-      {/* Enlace con ícono de Home colocado FUERA del div.app */}
-      {/* Con position: fixed en CSS, ahora debería posicionarse respecto a la ventana */}
+      {/* Enlace con ícono de Home */}
+      {/* Asegúrate que el tamaño y posición aquí sea el que te gustó */}
       <Link to="/" className="home-link">
-        <FaHome size={15} /> {/* Ajusta el tamaño aquí si quieres. Le puse 30 para probar. */}
+        <FaHome size={15} /> {/* <-- Verifica este tamaño */}
       </Link>
 
       {/* Contenedor principal con estilo fijo y centrado */}
-      {/* Asegúrate de que App.css NO tenga position: relative en .app */}
       <div className="app"> {/* Reutiliza la clase 'app' */}
 
         {/* Estructura y estilos para el logo */}
@@ -168,14 +189,15 @@ function ChatPage() { // Nombre del componente
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
+            onKeyDown={handleKeyDownOptimized} // <-- Usamos el nuevo handler con sonido
             placeholder={t.placeholder}
           />
-          <button onClick={sendMessage} disabled={loading}>{t.sendButton}</button>
+          {/* <-- Usamos el nuevo handler con sonido en el botón */}
+          <button onClick={handleButtonClick} disabled={loading}>{t.sendButton}</button>
         </div>
       </div>
     </> // Cerramos el Fragment
   );
 }
 
-export default ChatPage; // Exportamos el componente como ChatPage
+export default ChatPage; // Exportamos el componente

@@ -1,39 +1,47 @@
-import React from 'react';
+import React, { useRef } from 'react'; // Importamos useRef
 import { useNavigate } from 'react-router-dom'; // Hook para navegar entre rutas
-import './App.css'; // Importamos el CSS principal para reutilizar estilos como el background y .app
+import './App.css'; // Importamos el CSS principal
 
 function HomePage() {
   const navigate = useNavigate(); // Obtenemos la función para navegar
 
-  // Función que se llama al hacer click en un botón de idioma
-  const handleLanguageSelect = (lang) => {
-    localStorage.setItem('pokerBotLang', lang); // Guardamos el idioma elegido en el almacenamiento local
-    navigate(`/chat/${lang}`); // Navegamos a la ruta del chat, incluyendo el idioma en la URL
+  // Creamos una referencia a un objeto de Audio.
+  // La ruta es relativa a la carpeta 'public'.
+  const audioRef = useRef(new Audio('/sounds/button-click.mp3')); // <-- Asegúrate que esta ruta y nombre de archivo sean correctos
+
+  // Función para reproducir el sonido
+  const playSound = () => {
+    // Reinicia el sonido al principio cada vez que se llama, para que se pueda reproducir rápido
+    audioRef.current.currentTime = 0;
+    // Intenta reproducir el sonido y captura cualquier posible error (por ejemplo, si el navegador lo bloquea)
+    audioRef.current.play().catch(error => console.error("Error playing sound:", error));
   };
 
-  return ( // <-- Aquí empieza el return con (
+
+  // Función que se llama al hacer click en un botón de idioma
+  const handleLanguageSelect = (lang) => {
+    playSound(); // <-- Reproducimos el sonido ANTES de navegar
+    localStorage.setItem('pokerBotLang', lang); // Guardamos el idioma elegido
+    navigate(`/chat/${lang}`); // Navegamos a la ruta del chat
+  };
+
+  return (
     // Asegúrate de que aquí sigue la clase 'homepage-app'
-    <div className="app homepage-app"> {/* <-- Asegúrate de tener ambas clases aquí */}
+    <div className="app homepage-app">
       {/* Reutilizamos la estructura y estilos para el logo */}
       <div className="title-container">
         <img src="/i_love_poker_logo_.png" alt="The Poker Bot Logo" className="title-image" />
-      </div> {/* <-- Cierre correcto de title-container */}
+      </div>
 
       {/* Contenedor para los botones de selección de idioma */}
       <div className="language-selector">
-        {/* --- ELIMINADO: Quitamos el título "Selecciona tu idioma" --- */}
-        {/* <h2>Selecciona tu idioma</h2> */}
-        {/* --- FIN ELIMINADO --- */}
-        {/* Botones para cada idioma */}
+        {/* Botones para cada idioma - Ahora llaman a handleLanguageSelect que reproduce el sonido */}
         <button onClick={() => handleLanguageSelect('es')}>ESPAÑOL</button>
         <button onClick={() => handleLanguageSelect('pt')}>PORTUGUÊS</button>
         <button onClick={() => handleLanguageSelect('en')}>ENGLISH</button>
-      </div> {/* <-- Cierre correcto de language-selector */}
-
-      {/* Removed the spacing div previously */}
-
-    </div> // <-- Cierre correcto del div.app homepage-app
-  ); // <-- ¡Aquí el paréntesis de cierre del return!
+      </div>
+    </div>
+  );
 }
 
 export default HomePage; // Exportamos el componente
