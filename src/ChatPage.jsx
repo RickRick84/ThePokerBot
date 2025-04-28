@@ -54,6 +54,7 @@ function ChatPage() { // Nombre del componente
   const [loading, setLoading] = useState(false);
 
   const chatBoxRef = useRef(null);
+  const lastMessageRef = useRef(null); // <-- Referencia al último mensaje para scrollear a él
 
   // Creamos una referencia a un objeto de Audio para el sonido del botón Enviar
   const sendAudioRef = useRef(new Audio('/sounds/button-click.mp3')); // <-- Asegúrate que esta ruta y nombre de archivo sean correctos
@@ -69,10 +70,16 @@ function ChatPage() { // Nombre del componente
 
   // Efecto para scrollear al final cuando los mensajes cambian
   useEffect(() => {
-    if (chatBoxRef.current) {
-      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+    if (lastMessageRef.current) {
+      // <-- AJUSTADO: Scrollear al inicio del último mensaje
+      lastMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else if (chatBoxRef.current) {
+       // Si por alguna razón no tenemos referencia al último mensaje (ej: primer mensaje),
+       // scrolleamos al fondo del chatbox (comportamiento original)
+       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages]); // Depende de los mensajes
+
 
   // Efecto para actualizar el idioma si cambia el parámetro de la URL
   useEffect(() => {
@@ -176,12 +183,21 @@ function ChatPage() { // Nombre del componente
 
         {/* La caja de chat con el scroll */}
         <div className="chat-box" ref={chatBoxRef}>
-          {messages.slice(1).map((msg, idx) => ( // slice(1) para no mostrar mensaje system
-            <div key={idx} className={`message ${msg.role}`}>
+          {messages.slice(1).map((msg, idx, arr) => ( // slice(1) para no mostrar mensaje system
+            // Añadimos la referencia al último elemento
+            <div
+              key={idx}
+              className={`message ${msg.role}`}
+              ref={idx === arr.length - 1 ? lastMessageRef : null} // <-- Asigna la ref al último mensaje
+            >
               <span>{msg.content}</span>
             </div>
           ))}
-          {loading && <div className="message assistant"><span>{t.writing}</span></div>}
+          {loading && (
+             <div className="message assistant" ref={messages.slice(1).length === 0 ? lastMessageRef : null}> {/* También asigna la ref al mensaje de "Escribiendo" si es el primero */}
+               <span>{t.writing}</span>
+             </div>
+          )}
         </div>
 
         {/* La barra de entrada */}
