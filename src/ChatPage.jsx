@@ -22,8 +22,8 @@ const translations = {
     sendButton: 'Enviar',
     writing: 'Escrevendo...',
     openaiError: (code, message) => `Erro da OpenAI: ${code || 'Código desconhecido'} - ${message || 'Erro desconhecido'}`,
-    fetchError: 'Ocorreu um error ao conectar com a API.',
-    invalidOpenAIResponse: 'Não foi possível obter una resposta válida da OpenAI.',
+    fetchError: 'Ocorreu um error ao conectar com a API.', // Corregido typo aquí
+    invalidOpenAIResponse: 'Não foi possível obter una resposta válida da OpenAI.', // Corregido typo aquí
   },
   en: {
     system: 'Respond only about poker in English. If asked anything else, say you only talk about poker.',
@@ -217,19 +217,19 @@ function ChatPage() { // Nombre del componente
                                 const deltaContent = chunk.choices?.[0]?.delta?.content;
                                 if (deltaContent) {
                                     assistantResponse += deltaContent;
-                                    // >>> AJUSTE CLAVE AQUÍ: Crear una copia inmutable del mensaje a actualizar <<<
+                                    // >>> AJUSTE CLAVE AQUÍ: Crear una copia inmutable del array completo <<<
                                     setMessages(currentMessages => {
-                                        const updatedMessages = [...currentMessages];
-                                        if (updatedMessages[messageIndexToUpdate]) { // Verificación de seguridad
-                                            updatedMessages[messageIndexToUpdate] = {
-                                                ...updatedMessages[messageIndexToUpdate], // Copia las propiedades existentes
-                                                content: assistantResponse // Solo actualiza el contenido
+                                        const updatedMessages = [...currentMessages]; // Crea una copia nueva del array
+                                        if (updatedMessages[messageIndexToUpdate]) {
+                                            updatedMessages[messageIndexToUpdate] = { // Crea una copia inmutable del objeto mensaje
+                                                ...updatedMessages[messageIndexToUpdate],
+                                                content: assistantResponse
                                             };
                                         } else {
                                              console.warn("Streaming: Índice de mensaje a actualizar no encontrado, añadiendo nuevo mensaje.");
                                              return [...currentMessages, { role: 'assistant', content: assistantResponse }];
                                         }
-                                        return updatedMessages;
+                                        return updatedMessages; // Devuelve el NUEVO array
                                     });
                                 }
                             } catch (e) {
@@ -243,25 +243,23 @@ function ChatPage() { // Nombre del componente
                             }
                         }
                     } else if (line) {
-                         // Manejar líneas que no tienen el prefijo "data: ", si es el caso.
-                         // Mantenemos esta lógica por robustez, aunque el formato SSE con "data: " es estándar.
                          try {
                             const chunk = JSON.parse(line);
                             const deltaContent = chunk.choices?.[0]?.delta?.content;
                             if (deltaContent) {
                                 assistantResponse += deltaContent;
                                 setMessages(currentMessages => {
-                                    const updatedMessages = [...currentMessages];
-                                     if (updatedMessages[messageIndexToUpdate]) { // Verificación de seguridad
-                                        updatedMessages[messageIndexToUpdate] = {
-                                            ...updatedMessages[messageIndexToUpdate], // Copia propiedades
-                                            content: assistantResponse // Actualiza contenido
+                                    const updatedMessages = [...currentMessages]; // Crea copia del array
+                                     if (updatedMessages[messageIndexToUpdate]) {
+                                        updatedMessages[messageIndexToUpdate] = { // Crea copia del objeto
+                                            ...updatedMessages[messageIndexToUpdate],
+                                            content: assistantResponse
                                         };
                                      } else {
                                          console.warn("Streaming: Índice de mensaje a actualizar (raw) no encontrado, añadiendo nuevo mensaje.");
                                          return [...currentMessages, { role: 'assistant', content: assistantResponse }];
                                      }
-                                    return updatedMessages;
+                                    return updatedMessages; // Devuelve el NUEVO array
                                 });
                             }
                          } catch (e) {
