@@ -22,7 +22,7 @@ const translations = {
     sendButton: 'Enviar',
     writing: 'Escrevendo...',
     openaiError: (code, message) => `Erro da OpenAI: ${code || 'Código desconhecido'} - ${message || 'Erro desconhecido'}`,
-    fetchError: 'Ocurrió un error al conectar con la API.',
+    fetchError: 'Ocorreu um error ao conectar com a API.',
     invalidOpenAIResponse: 'Não foi possível obter una resposta válida da OpenAI.',
   },
   en: {
@@ -55,7 +55,7 @@ function ChatPage() { // Nombre del componente
 
   const chatBoxRef = useRef(null);
   // Eliminamos lastMessageRef ya que scrollearemos al fondo del chatBox
-  // const lastMessageRef = useRef(null); // <-- Referencia al último mensaje para scrollear a él
+  // const lastMessageRef = useRef(null);
 
 
   // Creamos una referencia a un objeto de Audio para el sonido del botón Enviar
@@ -217,40 +217,34 @@ function ChatPage() { // Nombre del componente
                                 const deltaContent = chunk.choices?.[0]?.delta?.content;
                                 if (deltaContent) {
                                     assistantResponse += deltaContent;
-                                    // Actualiza el mensaje del asistente en el estado con el contenido acumulado
+                                    // >>> AJUSTE CLAVE AQUÍ: Crear una copia inmutable del mensaje a actualizar <<<
                                     setMessages(currentMessages => {
                                         const updatedMessages = [...currentMessages];
-                                        // Actualiza el mensaje del asistente en el índice correcto
-                                        // Usamos messageIndexToUpdate que capturamos al inicio
                                         if (updatedMessages[messageIndexToUpdate]) { // Verificación de seguridad
                                             updatedMessages[messageIndexToUpdate] = {
-                                                role: 'assistant', // Aseguramos el rol
-                                                content: assistantResponse
+                                                ...updatedMessages[messageIndexToUpdate], // Copia las propiedades existentes
+                                                content: assistantResponse // Solo actualiza el contenido
                                             };
                                         } else {
-                                             // Caso de fallback raro: si el índice no existe, añadir como nuevo mensaje
                                              console.warn("Streaming: Índice de mensaje a actualizar no encontrado, añadiendo nuevo mensaje.");
                                              return [...currentMessages, { role: 'assistant', content: assistantResponse }];
                                         }
-
                                         return updatedMessages;
                                     });
                                 }
                             } catch (e) {
                                 console.error("❌ Error parsing stream chunk JSON:", jsonStr, e);
-                                // Si hay un error de parseo en un chunk, mostramos un error en un nuevo mensaje
                                 setMessages(currentMessages => [...currentMessages, {
                                      role: 'assistant',
                                      content: t.fetchError + ' (Error de parseo en stream: ' + e.message + ')'
                                 }]);
-                                reader.cancel(); // Cancelar la lectura del stream si hay error
-                                break; // Salir del loop while(true)
+                                reader.cancel();
+                                break;
                             }
                         }
                     } else if (line) {
-                         // Manejar líneas que no tienen el prefijo "data: ",
-                         // si tu backend no lo añade pero sí envía JSONs separados por \n\n
-                         // Este bloque es menos común para streams SSE directos de OpenAI pero lo mantenemos por robustez.
+                         // Manejar líneas que no tienen el prefijo "data: ", si es el caso.
+                         // Mantenemos esta lógica por robustez, aunque el formato SSE con "data: " es estándar.
                          try {
                             const chunk = JSON.parse(line);
                             const deltaContent = chunk.choices?.[0]?.delta?.content;
@@ -258,16 +252,15 @@ function ChatPage() { // Nombre del componente
                                 assistantResponse += deltaContent;
                                 setMessages(currentMessages => {
                                     const updatedMessages = [...currentMessages];
-                                    // Actualiza el mensaje del asistente en el índice correcto
-                                    if (updatedMessages[messageIndexToUpdate]) { // Verificación de seguridad
-                                         updatedMessages[messageIndexToUpdate] = {
-                                             role: 'assistant', // Aseguramos el rol
-                                             content: assistantResponse
-                                         };
-                                    } else {
+                                     if (updatedMessages[messageIndexToUpdate]) { // Verificación de seguridad
+                                        updatedMessages[messageIndexToUpdate] = {
+                                            ...updatedMessages[messageIndexToUpdate], // Copia propiedades
+                                            content: assistantResponse // Actualiza contenido
+                                        };
+                                     } else {
                                          console.warn("Streaming: Índice de mensaje a actualizar (raw) no encontrado, añadiendo nuevo mensaje.");
                                          return [...currentMessages, { role: 'assistant', content: assistantResponse }];
-                                    }
+                                     }
                                     return updatedMessages;
                                 });
                             }
@@ -283,33 +276,28 @@ function ChatPage() { // Nombre del componente
                     }
                 }
             }
-            // Después de que el while(true) termine (done es true o se canceló)
             console.log("Fin del procesamiento del stream.");
-            // No hacemos nada aquí con setMessages porque ya se actualizó en el loop.
 
 
         } else {
             // --- MANEJAR RESPUESTA NO-STREAMING (JSON completo) ---
             console.log("📦 Recibiendo respuesta JSON completa (no streaming).");
-            const data = await response.json(); // Esperamos el JSON completo
+            const data = await response.json();
 
             if (data.choices && data.choices.length > 0 && data.choices[0].message) {
-                 // Reemplaza el mensaje del asistente en el índice capturado con la respuesta completa
                 setMessages(currentMessages => {
                      const updatedMessages = [...currentMessages];
-                     if (updatedMessages[messageIndexToUpdate]) { // Usamos el índice capturado
-                         updatedMessages[messageIndexToUpdate] = data.choices[0].message; // Reemplaza el placeholder
+                     if (updatedMessages[messageIndexToUpdate]) {
+                         updatedMessages[messageIndexToUpdate] = data.choices[0].message;
                      } else {
                           updatedMessages.push(data.choices[0].message);
                      }
                      return updatedMessages;
                 });
             } else if (data.error) {
-                console.error("❌ Error en la respuesta de OpenAI (no stream):", data.error);
-                 // Modifica el mensaje del asistente en el índice capturado con el error
                  setMessages(currentMessages => {
                     const updatedMessages = [...currentMessages];
-                    if (updatedMessages[messageIndexToUpdate]) { // Usamos el índice capturado
+                    if (updatedMessages[messageIndexToUpdate]) {
                          updatedMessages[messageIndexToUpdate] = {
                              role: 'assistant',
                              content: t.openaiError(data.error.code, data.error.message)
@@ -323,11 +311,9 @@ function ChatPage() { // Nombre del componente
                     return updatedMessages;
                  });
             } else {
-                console.error("❌ Formato inesperado de respuesta de OpenAI (no stream):", data);
-                 // Modifica el mensaje del asistente en el índice capturado con el error
                  setMessages(currentMessages => {
                     const updatedMessages = [...currentMessages];
-                    if (updatedMessages[messageIndexToUpdate]) { // Usamos el índice capturado
+                    if (updatedMessages[messageIndexToUpdate]) {
                          updatedMessages[messageIndexToUpdate] = {
                              role: 'assistant',
                              content: t.invalidOpenAIResponse
@@ -345,14 +331,13 @@ function ChatPage() { // Nombre del componente
 
 
     } catch (error) {
-      console.error("❌ Error general en fetch:", error); // <-- console.error mantenido
-      // Mostrar un mensaje de error general de conexión o fetch (modificando el mensaje del asistente en el índice capturado)
+      console.error("❌ Error general en fetch:", error);
        setMessages(currentMessages => {
              const updatedMessages = [...currentMessages];
-             if (updatedMessages[messageIndexToUpdate]) { // Usamos el índice capturado
+             if (updatedMessages[messageIndexToUpdate]) {
                   updatedMessages[messageIndexToUpdate] = {
                        role: 'assistant',
-                       content: t.fetchError + ' (' + error.message + ')' // Incluir mensaje del error
+                       content: t.fetchError + ' (' + error.message + ')'
                   };
              } else {
                   updatedMessages.push({
