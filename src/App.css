@@ -54,33 +54,6 @@ body {
   align-items: center; /* Centramos verticalmente si es necesario */
 }
 
-.title-image { /* Estilos para la imagen dentro del contenedor */
-  max-width: 100%; /* La imagen no excede el ancho del contenedor */
-  height: auto; /* Mantiene la proporción de la imagen */
-  max-height: 250px; /* <-- Altura máxima del logo. Este es el tamaño que te gusta. */
-}
-
-/* Caja de chat */
-.chat-box {
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(8px);
-  padding: 1rem;
-  width: 100%;
-  max-width: 540px;
-
-  /* Altura fija y Scroll siempre visible */
-  height: 650px; /* <-- Altura fija en píxeles de la caja de chat. Ajusta si es necesario. */
-  overflow-y: scroll; /* <-- ¡El scroll debe estar AQUÍ, solo vertical! */
-  overflow-x: hidden; /* <-- Aseguramos que no haya scroll horizontal en el chat box */
-
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-  display: flex; /* Mantenemos flex para el layout interno de los mensajes */
-  flex-direction: column; /* Mantenemos flex direction para el layout interno de los mensajes */
-  margin-bottom: 0.8rem;
-  box-sizing: border-box;
-}
-
 /* Mensajes */
 .message {
   display: block; /* Asegurar comportamiento de bloque dentro del flex container */
@@ -89,28 +62,23 @@ body {
   padding: 0.7rem 1.2rem;
   border-radius: 20px;
   margin: 0.4rem 0;
-  /* --- AJUSTADO: Eliminamos propiedades de desborde horizontal de aquí --- */
-  /* word-wrap: break-word; */
-  /* overflow-wrap: break-word; */
-  /* overflow-x: hidden; */
-  /* --- FIN AJUSTADO --- */
+   /* Mantener el quiebre de palabra para que el texto largo no se salga */
+   word-break: break-word; /* Propiedad más moderna y efectiva */
+   overflow-wrap: break-word; /* Alias para word-break, buena práctica incluir ambos */
+   overflow-x: hidden; /* <-- CLAVE: Oculta desborde horizontal que pueda romper alineación */
   font-size: 1rem;
   line-height: 1.4;
   box-sizing: border-box; /* Asegurar que padding se incluya en width/max-width */
-
-  /* Añadir manejo de quiebre de palabra aquí para mayor seguridad */
-   word-break: break-word; /* Propiedad más moderna y efectiva */
-   overflow-wrap: break-word; /* Alias para word-break, buena práctica incluir ambos */
 }
 
 .message.user {
-  align-self: flex-end; /* <-- CLAVE: Alinea a la derecha */
+  align-self: flex-end; /* <-- CLAVE: Alinea mensajes de usuario a la derecha */
   background-color: #00e0ff;
   color: #000;
 }
 
 .message.assistant {
-  align-self: flex-start; /* <-- CLAVE: Alinea a la izquierda */
+  align-self: flex-start; /* <-- CLAVE: Alinea mensajes del asistente a la izquierda */
   background-color: #00ff88;
   color: #000;
 }
@@ -185,7 +153,7 @@ button {
 }
 
 button:hover {
-  background-color: #00e07a;
+  color: #00e07a;
 }
 
 /* Scroll personalizado - no cambiaron */
@@ -245,7 +213,7 @@ button:hover {
 }
 
 .language-selector button:hover {
-  color: #00e07a; /* Color al pasar el mouse */
+  color: #00e07a;
 }
 
 /* --- REGLA PARA ANULAR SCROLL EN LA PÁGINA DE INICIO --- */
@@ -281,7 +249,7 @@ button:hover {
 }
 
 .home-link:hover {
-  color: #00e07a; /* Color al pasar el mouse */
+  color: #00e07a;
   background-color: rgba(0, 0, 0, 0.7); /* Slightly less transparent on hover */
 }
 
