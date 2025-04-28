@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { useParams, Link } from 'react-router-dom'; // Importamos Link aquí
-import { FaHome } from 'react-icons/fa'; // Importamos el ícono de casita (Font Awesome)
-import './App.css'; // Importamos el CSS principal
+import { useParams, Link } from 'react-router-dom';
+import { FaHome } from 'react-icons/fa'; // Importamos el ícono de casita
+import './App.css';
 
 // Objeto simple para gestionar las traducciones (asegúrate de que este objeto esté completo con tus traducciones)
 const translations = {
@@ -136,40 +136,45 @@ function ChatPage() { // Nombre del componente
   };
 
   return (
-    // Contenedor principal con estilo fijo y centrado (asegúrate de que App.css tenga position: relative;)
-    <div className="app"> {/* Reutiliza la clase 'app' */}
-      {/* Enlace con ícono de Home para volver a la página principal */}
-      {/* Este Link navegará a la ruta "/", que es donde está HomePage */}
-      <Link to="/" className="home-link"> {/* <-- Añadido aquí el Link y la clase */}
-        <FaHome size={30} /> {/* <-- Usamos el componente del ícono. Ajusta el 'size' si quieres. */}
+    // Usamos Fragment <> </> para poder retornar el Link Y el div.app
+    <>
+      {/* Enlace con ícono de Home colocado FUERA del div.app */}
+      {/* Con position: fixed en CSS, ahora debería posicionarse respecto a la ventana */}
+      <Link to="/" className="home-link">
+        <FaHome size={30} /> {/* Ajusta el tamaño aquí si quieres. Le puse 30 para probar. */}
       </Link>
 
-      {/* Estructura y estilos para el logo */}
-      <div className="title-container">
-        <img src="/i_love_poker_logo_.png" alt="The Poker Bot Logo" className="title-image" />
-      </div>
+      {/* Contenedor principal con estilo fijo y centrado */}
+      {/* Asegúrate de que App.css NO tenga position: relative en .app */}
+      <div className="app"> {/* Reutiliza la clase 'app' */}
 
-      {/* La caja de chat con el scroll */}
-      <div className="chat-box" ref={chatBoxRef}>
-        {messages.slice(1).map((msg, idx) => ( // slice(1) para no mostrar mensaje system
-          <div key={idx} className={`message ${msg.role}`}>
-            <span>{msg.content}</span>
-          </div>
-        ))}
-        {loading && <div className="message assistant"><span>{t.writing}</span></div>}
-      </div>
+        {/* Estructura y estilos para el logo */}
+        <div className="title-container">
+          <img src="/i_love_poker_logo_.png" alt="The Poker Bot Logo" className="title-image" />
+        </div>
 
-      {/* La barra de entrada */}
-      <div className="input-bar">
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder={t.placeholder}
-        />
-        <button onClick={sendMessage} disabled={loading}>{t.sendButton}</button>
+        {/* La caja de chat con el scroll */}
+        <div className="chat-box" ref={chatBoxRef}>
+          {messages.slice(1).map((msg, idx) => ( // slice(1) para no mostrar mensaje system
+            <div key={idx} className={`message ${msg.role}`}>
+              <span>{msg.content}</span>
+            </div>
+          ))}
+          {loading && <div className="message assistant"><span>{t.writing}</span></div>}
+        </div>
+
+        {/* La barra de entrada */}
+        <div className="input-bar">
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder={t.placeholder}
+          />
+          <button onClick={sendMessage} disabled={loading}>{t.sendButton}</button>
+        </div>
       </div>
-    </div>
+    </> // Cerramos el Fragment
   );
 }
 

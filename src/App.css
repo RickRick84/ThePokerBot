@@ -30,10 +30,10 @@ body {
   position: fixed; /* Esto lo mantiene fijo */
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* ESTO crea el problema para fixed internos */
+  transform: translate(-50%, -50%); /* ESTO crea el problema para fixed/absolute internos */
 
-  /* Eliminamos position: relative; ya que home-link ahora será absolute respecto al body */
-  /* position: relative; <-- ¡ELIMINADA ESTA LÍNEA! */
+  /* Eliminamos position: relative; */
+  /* position: relative; <-- ¡Asegúrate de que esta línea NO ESTÉ aquí! */
 
 
   /* Altura máxima del contenedor fijo (asegura que no se salga de la pantalla) */
@@ -219,8 +219,8 @@ button:hover {
 
 /* --- ESTILOS PARA EL ÍCONO DE HOME --- */
 .home-link {
-  /* --- AJUSTADO: Posicionamiento absoluto respecto al body/ventana --- */
-  position: absolute; /* Posiciona respecto a la ventana (viewport) */
+  /* --- Posicionamiento fijo respecto a la ventana --- */
+  position: fixed; /* ¡Ahora debe estar fixed! */
   top: 1rem; /* 1rem desde el borde superior de la ventana */
   left: 1rem; /* 1rem desde el borde izquierdo de la ventana */
   /* --- FIN AJUSTADO --- */
