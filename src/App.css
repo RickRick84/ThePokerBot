@@ -26,22 +26,20 @@ body {
   max-width: 600px; /* Limita el ancho del bloque */
   box-sizing: border-box;
 
-  /* --- Posicionamiento Fijo y Centrado --- */
-  position: fixed; /* ¡Esto lo mantiene fijo! */
+  /* Posicionamiento Fijo y Centrado */
+  position: fixed; /* Esto lo mantiene fijo */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%); /* Centrado */
-  /* --- Fin Posicionamiento Fijo y Centrado --- */
 
-  /* Definimos la altura del CONTENEDOR FIJO */
-  /* Ajustado: Altura para dejar espacio suficiente */
+  /* Altura máxima del contenedor fijo (asegura que no se salga de la pantalla) */
   max-height: 95vh; /* Mantenemos un max-height de seguridad */
-  overflow-y: auto; /* Scroll si el contenido de .app excede max-height (debería ser raro) */
-  /* Añadido: Darle una altura definida para que los hijos flex con grow funcionen */
+  overflow-y: auto; /* Scroll si el contenido de .app excede max-height */
+  /* Darle una altura definida para que los hijos flex con grow funcionen */
   height: 85vh; /* <-- Altura del contenedor fijo. Ajusta si es necesario. */
 }
 
-/* Título principal (AHORA ES UNA IMAGEN) */
+/* Contenedor e imagen del título */
 .title-container { /* Contenedor para la imagen del título */
   width: 100%;
   max-width: 540px; /* Ancho máximo para que coincida con el chat */
@@ -56,7 +54,7 @@ body {
 .title-image { /* Estilos para la imagen dentro del contenedor */
   max-width: 100%; /* La imagen no excede el ancho del contenedor */
   height: auto; /* Mantiene la proporción de la imagen */
-  max-height: 150px; /* <-- AJUSTA ESTE VALOR para controlar la altura de la imagen. */
+  max-height: 250px; /* <-- Altura máxima de la imagen. AJUSTA ESTE VALOR para el tamaño deseado. */
 }
 
 /* Caja de chat */
@@ -67,17 +65,9 @@ body {
   width: 100%;
   max-width: 540px;
 
-  /* --- ALTURA FIJA Y SCROLL SIEMPRE VISIBLE --- */
-  /* Removimos flex-grow/shrink y min/max-height para usar una altura fija clara */
-  /* flex-grow: 1; */
-  /* flex-shrink: 0; */
-  /* min-height: 30vh; */
-  /* max-height: 60vh; */
-  /* height: auto; */
-  /* flex-basis: auto; */
+  /* Altura fija y Scroll siempre visible */
   height: 550px; /* <-- Altura fija en píxeles. AJUSTA ESTE VALOR (ej: 400px, 500px, 600px) al tamaño que buscas "desde el principio". */
   overflow-y: scroll; /* <-- ¡Esto hace que la barra de scroll sea SIEMPRE visible! */
-  /* --- FIN ALTURA FIJA Y SCROLL --- */
 
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
@@ -167,6 +157,7 @@ button:hover {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
 }
+
 
 
 

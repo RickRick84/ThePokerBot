@@ -49,25 +49,25 @@ function App() {
 
       if (data.choices && data.choices.length > 0) {
         const reply = data.choices[0].message;
-        setMessages(currentMessages => [...currentMessages, reply]); // Usamos la forma de actualización con función para asegurar el estado más reciente
+        setMessages(currentMessages => [...currentMessages, reply]); // Usamos la forma de actualizaci\u00F3n con funci\u00F3n para asegurar el estado m\u00E1s reciente
       } else if (data.error) {
         console.error("❌ Error en la respuesta de OpenAI:", data.error);
-        setMessages(currentMessages => [...currentMessages, { // Usamos forma de actualización con función
+        setMessages(currentMessages => [...currentMessages, { // Usamos forma de actualizaci\u00F3n con funci\u00F3n
           role: 'assistant',
-          content: `Error de OpenAI: ${data.error.code || 'Código desconocido'} - ${data.error.message || 'Error desconocido'}`
+          content: `Error de OpenAI: ${data.error.code || 'C\u00F3digo desconocido'} - ${data.error.message || 'Error desconocido'}`
         }]);
       } else {
         console.error("❌ Formato inesperado de respuesta de OpenAI:", data);
-        setMessages(currentMessages => [...currentMessages, { // Usamos forma de actualización con función
+        setMessages(currentMessages => [...currentMessages, { // Usamos forma de actualizaci\u00F3n con funci\u00F3n
           role: 'assistant',
-          content: 'No se pudo obtener una respuesta válida de OpenAI.'
+          content: 'No se pudo obtener una respuesta v\u00E1lida de OpenAI.'
         }]);
       }
     } catch (error) {
       console.error("❌ Error en fetch:", error);
-      setMessages(currentMessages => [...currentMessages, { // Usamos forma de actualización con función
+      setMessages(currentMessages => [...currentMessages, { // Usamos forma de actualizaci\u00F3n con funci\u00F3n
         role: 'assistant',
-        content: 'Ocurrió un error al conectarse con la API.'
+        content: 'Ocurri\u00F3 un error al conectarse con la API.'
       }]);
     } finally {
       setLoading(false);
@@ -84,9 +84,8 @@ function App() {
   return (
     <div className="app">
       <div className="title-container">
-        {/* --- ¡RUTA DE IMAGEN CORREGIDA A .png! --- */}
+        {/* Image element for the title */}
         <img src="/i_love_poker_logo_.png" alt="The Poker Bot Logo" className="title-image" />
-        {/* --- FIN RUTA DE IMAGEN --- */}
       </div>
       <div className="chat-box" ref={chatBoxRef}>
         {messages.slice(1).map((msg, idx) => ( // Usamos slice(1) para no mostrar el mensaje system inicial
