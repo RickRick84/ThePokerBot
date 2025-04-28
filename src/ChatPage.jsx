@@ -54,7 +54,8 @@ function ChatPage() { // Nombre del componente
   const [loading, setLoading] = useState(false);
 
   const chatBoxRef = useRef(null);
-  const lastMessageRef = useRef(null); // <-- Referencia al último mensaje para scrollear a él
+  // Eliminamos lastMessageRef ya que scrollearemos al fondo del chatBox
+  // const lastMessageRef = useRef(null); // <-- Referencia al último mensaje para scrollear a él
 
 
   // Creamos una referencia a un objeto de Audio para el sonido del botón Enviar
@@ -69,23 +70,17 @@ function ChatPage() { // Nombre del componente
   };
 
 
-  // Efecto para scrollear al inicio del último mensaje cuando los mensajes cambian
+  // Efecto para scrollear al final del chat cuando los mensajes cambian o carga termina
   useEffect(() => {
-    // Solo scrollear si tenemos una referencia al último mensaje Y hay mensajes más allá del inicial del sistema.
-    // También disparamos el scroll cuando loading cambia, para reaccionar al fin de la carga.
-     if (lastMessageRef.current && messages.length > 1) {
-          // Usamos un pequeño timeout para asegurarnos de que el DOM se actualizó con el último mensaje
-          // El timeout es crucial porque los mensajes se agregan al estado, pero la renderización
-          // del DOM puede tomar un instante, especialmente con respuestas largas.
-          const timeoutId = setTimeout(() => {
-               console.log("Attempting to scroll to:", lastMessageRef.current);
-               lastMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }, 100); // Aumentamos el delay a 100ms. Si sigue fallando, prueba con 200ms.
-          return () => clearTimeout(timeoutId); // Limpiar el timeout si los mensajes cambian de nuevo rápido
-     } else if (chatBoxRef.current && messages.length <= 1) {
-          // Comportamiento al inicio del chat o solo con el mensaje del sistema: scrollear al fondo
-          chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
-     }
+    const chatBox = chatBoxRef.current;
+    if (chatBox) {
+        // Usamos un pequeño timeout para asegurarnos de que el DOM se actualizó
+        const timeoutId = setTimeout(() => {
+            chatBox.scrollTop = chatBox.scrollHeight;
+            console.log("Attempting to scroll to bottom. ScrollHeight:", chatBox.scrollHeight);
+        }, 50); // Un delay corto, 50ms suele ser suficiente después de actualizaciones de estado
+        return () => clearTimeout(timeoutId); // Limpiar el timeout
+    }
   }, [messages, loading]); // Depende de los mensajes y el estado de carga
 
 
@@ -102,8 +97,15 @@ function ChatPage() { // Nombre del componente
     if (!input.trim()) return;
 
     const userMessage = { role: 'user', content: input };
-    // Agregamos el mensaje del usuario y un placeholder para la respuesta del asistente
-    setMessages(currentMessages => [...currentMessages, userMessage, { role: 'assistant', content: '' }]); // Añadimos un mensaje vacío para el streaming
+    // Añadimos el mensaje del usuario y el placeholder para la respuesta del asistente
+    // CAPTURAMOS EL ÍNDICE DEL MENSAJE DEL ASISTENTE JUSTO AQUÍ:
+    let messageIndexToUpdate = -1; // Inicializamos con un valor inválido
+    setMessages(currentMessages => {
+        const updatedMessages = [...currentMessages, userMessage, { role: 'assistant', content: '' }]; // Añadimos el placeholder
+        messageIndexToUpdate = updatedMessages.length - 1; // CAPTURAMOS EL ÍNDICE DEL PLACEHOLDER AÑADIDO
+        return updatedMessages;
+    });
+
     setInput('');
     setLoading(true);
 
@@ -113,7 +115,8 @@ function ChatPage() { // Nombre del componente
 
       const payload = {
         model: 'gpt-4-turbo',
-        messages: [...messages, userMessage], // Enviar todos los mensajes incluyendo el último del usuario
+        // Usamos el estado messages *después* de añadir el mensaje del usuario y el placeholder
+        messages: [...messages, userMessage, { role: 'assistant', content: '' }], // Aseguramos que el payload tiene el mensaje del usuario y el placeholder para la API
         temperature: 0.7,
       };
 
@@ -133,26 +136,39 @@ function ChatPage() { // Nombre del componente
           try {
             const errorData = await response.json();
             console.error('❌ Error en la respuesta del backend:', response.status, errorData);
-            // Mostrar un mensaje de error en el chat (modificando el último mensaje vacío)
+            // Mostrar un mensaje de error en el chat (modificando el mensaje del asistente en el índice capturado)
             setMessages(currentMessages => {
-              const lastMessageIndex = currentMessages.length - 1;
               const updatedMessages = [...currentMessages];
-              updatedMessages[lastMessageIndex] = {
-                  role: 'assistant',
-                  content: errorData.error || `HTTP error! status: ${response.status}`
-              };
+               if (updatedMessages[messageIndexToUpdate]) { // Usamos el índice capturado
+                   updatedMessages[messageIndexToUpdate] = {
+                      role: 'assistant',
+                      content: errorData.error || `HTTP error! status: ${response.status}`
+                   };
+               } else {
+                   // Fallback si el índice no existe (debería existir)
+                   updatedMessages.push({
+                       role: 'assistant',
+                       content: errorData.error || `HTTP error! status: ${response.status}`
+                   });
+               }
               return updatedMessages;
             });
           } catch (jsonError) {
             // Si no pudimos leer el error como JSON, mostramos un error HTTP genérico
             console.error('❌ Error HTTP no-JSON en la respuesta del backend:', response.status, jsonError);
             setMessages(currentMessages => {
-              const lastMessageIndex = currentMessages.length - 1;
               const updatedMessages = [...currentMessages];
-              updatedMessages[lastMessageIndex] = {
-                  role: 'assistant',
-                  content: `HTTP error! status: ${response.status}`
-              };
+                if (updatedMessages[messageIndexToUpdate]) { // Usamos el índice capturado
+                  updatedMessages[messageIndexToUpdate] = {
+                      role: 'assistant',
+                      content: `HTTP error! status: ${response.status}`
+                  };
+                } else {
+                    updatedMessages.push({
+                        role: 'assistant',
+                        content: `HTTP error! status: ${response.status}`
+                    });
+                }
               return updatedMessages;
             });
           }
@@ -161,19 +177,17 @@ function ChatPage() { // Nombre del componente
 
         // --- PROCESAR LA RESPUESTA (AHORA SOPORTA STREAMING Y NO-STREAMING) ---
         const contentType = response.headers.get('Content-Type');
+        const isStreaming = contentType && contentType.includes('text/event-stream');
 
-        if (contentType && contentType.includes('text/event-stream')) {
+        if (isStreaming) {
             // --- MANEJAR RESPUESTA STREAMING (SSE) ---
             console.log("✅ Recibiendo respuesta streaming (SSE).");
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
             let buffer = ''; // Acumula los chunks
             let assistantResponse = ''; // Acumula el contenido del asistente
-            let messageIndexToUpdate = messages.length; // Índice del mensaje del asistente que estamos construyendo (el que añadimos vacío)
 
-            // No eliminamos el mensaje vacío temporal, lo usaremos para construir la respuesta.
-            // setMessages(currentMessages => currentMessages.slice(0, -1)); // Eliminada esta línea
-
+            // messageIndexToUpdate ya está capturado al inicio.
 
             while (true) {
                 const { value, done } = await reader.read();
@@ -203,14 +217,22 @@ function ChatPage() { // Nombre del componente
                                 const deltaContent = chunk.choices?.[0]?.delta?.content;
                                 if (deltaContent) {
                                     assistantResponse += deltaContent;
-                                    // Actualiza el último mensaje en el estado con el contenido acumulado
+                                    // Actualiza el mensaje del asistente en el estado con el contenido acumulado
                                     setMessages(currentMessages => {
                                         const updatedMessages = [...currentMessages];
                                         // Actualiza el mensaje del asistente en el índice correcto
-                                        updatedMessages[messageIndexToUpdate] = {
-                                            role: 'assistant', // Aseguramos el rol
-                                            content: assistantResponse
-                                        };
+                                        // Usamos messageIndexToUpdate que capturamos al inicio
+                                        if (updatedMessages[messageIndexToUpdate]) { // Verificación de seguridad
+                                            updatedMessages[messageIndexToUpdate] = {
+                                                role: 'assistant', // Aseguramos el rol
+                                                content: assistantResponse
+                                            };
+                                        } else {
+                                             // Caso de fallback raro: si el índice no existe, añadir como nuevo mensaje
+                                             console.warn("Streaming: Índice de mensaje a actualizar no encontrado, añadiendo nuevo mensaje.");
+                                             return [...currentMessages, { role: 'assistant', content: assistantResponse }];
+                                        }
+
                                         return updatedMessages;
                                     });
                                 }
@@ -236,10 +258,16 @@ function ChatPage() { // Nombre del componente
                                 assistantResponse += deltaContent;
                                 setMessages(currentMessages => {
                                     const updatedMessages = [...currentMessages];
-                                    updatedMessages[messageIndexToUpdate] = {
-                                         role: 'assistant', // Aseguramos el rol
-                                         content: assistantResponse
-                                    };
+                                    // Actualiza el mensaje del asistente en el índice correcto
+                                    if (updatedMessages[messageIndexToUpdate]) { // Verificación de seguridad
+                                         updatedMessages[messageIndexToUpdate] = {
+                                             role: 'assistant', // Aseguramos el rol
+                                             content: assistantResponse
+                                         };
+                                    } else {
+                                         console.warn("Streaming: Índice de mensaje a actualizar (raw) no encontrado, añadiendo nuevo mensaje.");
+                                         return [...currentMessages, { role: 'assistant', content: assistantResponse }];
+                                    }
                                     return updatedMessages;
                                 });
                             }
@@ -266,35 +294,50 @@ function ChatPage() { // Nombre del componente
             const data = await response.json(); // Esperamos el JSON completo
 
             if (data.choices && data.choices.length > 0 && data.choices[0].message) {
-                 // Reemplaza el último mensaje vacío temporal con la respuesta completa
+                 // Reemplaza el mensaje del asistente en el índice capturado con la respuesta completa
                 setMessages(currentMessages => {
-                     const lastMessageIndex = currentMessages.length - 1; // El último que añadimos (placeholder)
                      const updatedMessages = [...currentMessages];
-                     updatedMessages[lastMessageIndex] = data.choices[0].message; // Reemplaza el placeholder
+                     if (updatedMessages[messageIndexToUpdate]) { // Usamos el índice capturado
+                         updatedMessages[messageIndexToUpdate] = data.choices[0].message; // Reemplaza el placeholder
+                     } else {
+                          updatedMessages.push(data.choices[0].message);
+                     }
                      return updatedMessages;
                 });
             } else if (data.error) {
                 console.error("❌ Error en la respuesta de OpenAI (no stream):", data.error);
-                 // Modifica el último mensaje vacío con el error
+                 // Modifica el mensaje del asistente en el índice capturado con el error
                  setMessages(currentMessages => {
-                    const lastMessageIndex = currentMessages.length - 1;
                     const updatedMessages = [...currentMessages];
-                    updatedMessages[lastMessageIndex] = {
-                         role: 'assistant',
-                         content: t.openaiError(data.error.code, data.error.message)
-                    };
+                    if (updatedMessages[messageIndexToUpdate]) { // Usamos el índice capturado
+                         updatedMessages[messageIndexToUpdate] = {
+                             role: 'assistant',
+                             content: t.openaiError(data.error.code, data.error.message)
+                         };
+                    } else {
+                         updatedMessages.push({
+                             role: 'assistant',
+                             content: t.openaiError(data.error.code, data.error.message)
+                         });
+                    }
                     return updatedMessages;
                  });
             } else {
                 console.error("❌ Formato inesperado de respuesta de OpenAI (no stream):", data);
-                 // Modifica el último mensaje vacío con el error
+                 // Modifica el mensaje del asistente en el índice capturado con el error
                  setMessages(currentMessages => {
-                    const lastMessageIndex = currentMessages.length - 1;
                     const updatedMessages = [...currentMessages];
-                    updatedMessages[lastMessageIndex] = {
-                         role: 'assistant',
-                         content: t.invalidOpenAIResponse
-                    };
+                    if (updatedMessages[messageIndexToUpdate]) { // Usamos el índice capturado
+                         updatedMessages[messageIndexToUpdate] = {
+                             role: 'assistant',
+                             content: t.invalidOpenAIResponse
+                         };
+                    } else {
+                         updatedMessages.push({
+                              role: 'assistant',
+                              content: t.invalidOpenAIResponse
+                         });
+                    }
                     return updatedMessages;
                  });
             }
@@ -303,14 +346,20 @@ function ChatPage() { // Nombre del componente
 
     } catch (error) {
       console.error("❌ Error general en fetch:", error); // <-- console.error mantenido
-      // Mostrar un mensaje de error general de conexión o fetch (modificando el último mensaje vacío)
+      // Mostrar un mensaje de error general de conexión o fetch (modificando el mensaje del asistente en el índice capturado)
        setMessages(currentMessages => {
-             const lastMessageIndex = currentMessages.length - 1;
              const updatedMessages = [...currentMessages];
-             updatedMessages[lastMessageIndex] = {
-                  role: 'assistant',
-                  content: t.fetchError + ' (' + error.message + ')' // Incluir mensaje del error
-             };
+             if (updatedMessages[messageIndexToUpdate]) { // Usamos el índice capturado
+                  updatedMessages[messageIndexToUpdate] = {
+                       role: 'assistant',
+                       content: t.fetchError + ' (' + error.message + ')' // Incluir mensaje del error
+                  };
+             } else {
+                  updatedMessages.push({
+                       role: 'assistant',
+                       content: t.fetchError + ' (' + error.message + ')'
+                  });
+             }
              return updatedMessages;
          });
 
@@ -357,11 +406,11 @@ function ChatPage() { // Nombre del componente
         {/* La caja de chat con el scroll */}
         <div className="chat-box" ref={chatBoxRef}>
           {messages.slice(1).map((msg, idx, arr) => ( // slice(1) para no mostrar mensaje system
-            // Añadimos la referencia al último elemento
+            // Ya no necesitamos la referencia lastMessageRef aquí porque scrolleamos al fondo del chatBox
             <div
               key={idx}
               className={`message ${msg.role}`}
-              ref={idx === arr.length - 1 ? lastMessageRef : null} // <-- Asigna la ref al último mensaje
+              // ref={idx === arr.length - 1 ? lastMessageRef : null} // <-- Eliminada esta línea
             >
               <span>{msg.content}</span>
             </div>
