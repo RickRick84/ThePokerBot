@@ -71,7 +71,7 @@ export default async function handler(req) {
           // --- Fin Adición del Mensaje del Sistema ---
           tools: tools,
           tool_choice: "auto",
-          stream: false,
+          stream: false, // ¡Importante! Primera llamada NO es stream.
         });
 
          if (!initialResponseResult || !initialResponseResult.choices || initialResponseResult.choices.length === 0 || !initialResponseResult.choices[0].message) {
@@ -137,68 +137,68 @@ export default async function handler(req) {
         console.log("🔄 Re-enviando a OpenAI con resultados de búsqueda...");
 
         try {
-          const finalResponseStream = await openai.chat.completions.create({
-            model: model,
-            messages: messagesWithToolResults,
-            stream: true,
-          });
+             const finalResponseStream = await openai.chat.completions.create({
+               model: model,
+               messages: messagesWithToolResults,
+               stream: true, // ¡Importante! Segunda llamada SÍ es stream.
+             });
 
-          // --- AJUSTE CRUCIAL: Procesar el stream de OpenAI y pipearlo a un nuevo ReadableStream compatible con Vercel Edge ---
-          // El error ERR_INVALID_ARG_TYPE ocurre porque el objeto stream de la librería OpenAI
-          // no es directamente compatible con el constructor de Response en Vercel Edge en todos los casos.
-          const readableStream = new ReadableStream({
-            async start(controller) {
-              // Obtener un reader del stream de OpenAI
-              // .toReadableStream() intenta convertirlo a una ReadableStream estándar si no lo es.
-              const reader = finalResponseStream.toReadableStream ? finalResponseStream.toReadableStream().getReader() : finalResponseStream.getReader();
+             // --- AJUSTE CRUCIAL: Procesar el stream de OpenAI y pipearlo a un nuevo ReadableStream compatible con Vercel Edge ---
+             // El error ERR_INVALID_ARG_TYPE ocurre porque el objeto stream de la librería OpenAI
+             // no es directamente compatible con el constructor de Response en Vercel Edge en todos los casos.
+             const readableStream = new ReadableStream({
+               async start(controller) {
+                 // Obtener un reader del stream de OpenAI
+                 // .toReadableStream() intenta convertirlo a una ReadableStream estándar si no lo es.
+                 const reader = finalResponseStream.toReadableStream ? finalResponseStream.toReadableStream().getReader() : finalResponseStream.getReader();
 
-              try {
-                // Leer chunks del stream de OpenAI y encolarlos en el nuevo stream
-                while (true) {
-                  const { done, value } = await reader.read();
-                  if (done) {
-                    break; // El stream de OpenAI terminó
-                  }
-                  // Los chunks de OpenAI ya deberían estar en un formato adecuado (Uint8Array).
-                  // Los encolamos directamente en el nuevo stream.
-                  controller.enqueue(value);
-                }
-              } catch (error) {
-                console.error("Error reading or piping OpenAI stream:", error);
-                controller.error(error); // Reportar el error al nuevo stream
-              } finally {
-                controller.close(); // Cerrar el nuevo stream al terminar
-                reader.releaseLock(); // Liberar el lock del reader
-              }
-            }
-          });
+                 try {
+                   // Leer chunks del stream de OpenAI y encolarlos en el nuevo stream
+                   while (true) {
+                     const { done, value } = await reader.read();
+                     if (done) {
+                       break; // El stream de OpenAI terminó
+                     }
+                     // Los chunks de OpenAI ya deberían estar en un formato adecuado (Uint8Array).
+                     // Los encolamos directamente en el nuevo stream.
+                     controller.enqueue(value);
+                   }
+                 } catch (error) {
+                   console.error("Error reading or piping OpenAI stream:", error);
+                   controller.error(error); // Reportar el error al nuevo stream
+                 } finally {
+                   controller.close(); // Cerrar el nuevo stream al terminar
+                   reader.releaseLock(); // Liberar el lock del reader
+                 }
+               }
+             });
 
-          // Devolver una nueva Response con el ReadableStream como cuerpo y headers correctos para SSE
-          return new Response(readableStream, {
-            headers: {
-              'Content-Type': 'text/event-stream',
-              'Cache-Control': 'no-cache', // Recomendado para SSE (Server-Sent Events)
-              'Connection': 'keep-alive', // Recomendado para SSE
-            },
-          });
+             // Devolver una nueva Response con el ReadableStream como cuerpo y headers correctos para SSE
+             return new Response(readableStream, {
+               headers: {
+                 'Content-Type': 'text/event-stream',
+                 'Cache-Control': 'no-cache', // Recomendado para SSE (Server-Sent Events)
+                 'Connection': 'keep-alive', // Recomendado para SSE
+               },
+             });
 
-     } catch (secondCallError) {
-          console.error('Error in second OpenAI call (with tool results):', secondCallError);
-          let errorMsg = "Error en la segunda llamada a OpenAI con resultados de búsqueda.";
-          if (secondCallError.response) {
-              errorMsg += ` Status: ${secondCallError.response.status}`;
-              // Intentar obtener datos del error si existen
-              if (secondCallError.response.data) {
-                 try { errorMsg += ` Data: ${JSON.stringify(secondCallError.response.data)}`; } catch(e) { /* ignore */ }
-              }
-          } else if (secondCallError.message) {
-              errorMsg += ` Message: ${secondCallError.message}`;
-          }
-           return new Response(JSON.stringify({ error: errorMsg }), {
-               status: secondCallError.status || 500,
-               headers: { 'Content-Type': 'application/json' },
-           });
-     }
+        } catch (secondCallError) {
+             console.error('Error in second OpenAI call (with tool results):', secondCallError);
+             let errorMsg = "Error en la segunda llamada a OpenAI con resultados de búsqueda.";
+             if (secondCallError.response) {
+                 errorMsg += ` Status: ${secondCallError.response.status}`;
+                 // Intentar obtener datos del error si existen
+                 if (secondCallError.response.data) {
+                    try { errorMsg += ` Data: ${JSON.stringify(secondCallError.response.data)}`; } catch(e) { /* ignore */ }
+                 }
+             } else if (secondCallError.message) {
+                 errorMsg += ` Message: ${secondCallError.message}`;
+             }
+              return new Response(JSON.stringify({ error: errorMsg }), {
+                  status: secondCallError.status || 500,
+                  headers: { 'Content-Type': 'application/json' },
+              });
+        }
 
       } else {
            const errorResponse = new Response(JSON.stringify({ error: `Modelo intentó usar una herramienta desconocida: ${firstToolCall.function.name}` }), {
