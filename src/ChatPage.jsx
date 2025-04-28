@@ -141,7 +141,7 @@ function ChatPage() { // Nombre del componente
       {/* Enlace con ícono de Home para volver a la página principal */}
       {/* Este Link navegará a la ruta "/", que es donde está HomePage */}
       <Link to="/" className="home-link"> {/* <-- Añadido aquí el Link y la clase */}
-        <FaHome size={25} /> {/* <-- Usamos el componente del ícono. Ajusta el 'size' si quieres. */}
+        <FaHome size={30} /> {/* <-- Usamos el componente del ícono. Ajusta el 'size' si quieres. */}
       </Link>
 
       {/* Estructura y estilos para el logo */}

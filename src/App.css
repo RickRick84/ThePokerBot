@@ -32,8 +32,8 @@ body {
   left: 50%;
   transform: translate(-50%, -50%); /* Centrado */
 
-  /* IMPORTANTE: Añadimos relative para que los elementos con 'position: absolute' dentro (.home-link) se posicionen respecto a este contenedor */
-  position: relative; /* <-- ¡Asegúrate de que esta línea esté aquí! */
+  /* Necesitamos relative para que los elementos con 'position: absolute' dentro se posicionen respecto a este contenedor, aunque el home-link ahora será fixed. Lo mantenemos por si acaso. */
+  position: relative;
 
 
   /* Altura máxima del contenedor fijo (asegura que no se salga de la pantalla) */
@@ -104,7 +104,7 @@ body {
   color: #000;
 }
 
-/* Barra de entrada - no cambiaron */
+/* Barra de entrada */
 .input-bar {
   display: flex;
   gap: 0.4rem;
@@ -117,6 +117,9 @@ body {
   flex-shrink: 0;
   margin-top: 0.8rem;
   height: auto;
+  /* --- AJUSTADO: Alineamos a la derecha --- */
+  align-self: flex-end; /* Alinea este item flex al final del eje cruzado (a la derecha en una columna) */
+  /* --- FIN AJUSTADO --- */
 }
 
 input {
@@ -215,17 +218,18 @@ button:hover {
   max-height: none !important; /* Asegura que no haya un max-height que fuerce scroll */
 }
 
-/* --- NUEVOS ESTILOS PARA EL ÍCONO DE HOME --- */
+/* --- ESTILOS PARA EL ÍCONO DE HOME --- */
 .home-link {
-  position: absolute; /* Posiciona respecto al contenedor padre (.app) que tiene position: relative */
-  top: 1rem; /* 1rem desde el borde superior del .app */
-  left: 1rem; /* 1rem desde el borde izquierdo del .app */
+  /* --- AJUSTADO: Posicionamiento fijo respecto a la ventana --- */
+  position: fixed; /* Posiciona respecto a la ventana del navegador */
+  top: 1rem; /* 1rem desde el borde superior de la ventana */
+  left: 1rem; /* 1rem desde el borde izquierdo de la ventana */
+  /* --- FIN AJUSTADO --- */
+
   color: #00ff88; /* Color del ícono */
   cursor: pointer; /* Cursor de mano al pasar por encima */
   transition: color 0.2s ease-in-out; /* Transición suave al pasar el mouse */
-  z-index: 10; /* Asegura que el ícono esté por encima de otros elementos si hay superposición */
-  /* Si el ícono se superpone con el logo u otro contenido, podrías necesitar ajustar el padding-top de .app */
-  /* Por ejemplo: .app { padding-top: 2.5rem; } */
+  z-index: 1000; /* Asegura que esté por encima de todo */
 }
 
 .home-link:hover {
