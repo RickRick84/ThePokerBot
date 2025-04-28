@@ -82,27 +82,28 @@ body {
 
 /* Mensajes */
 .message {
-  display: block; /* Asegurar comportamiento de bloque */
-  width: 100%; /* Ocupar el 100% del contenedor antes de max-width */
-  max-width: 80%;
+  display: block; /* Asegurar comportamiento de bloque dentro del flex container */
+  width: 100%; /* Ocupar 100% del ancho disponible antes de aplicar max-width */
+  max-width: 80%; /* Limitar el ancho máximo de la burbuja */
   padding: 0.7rem 1.2rem;
   border-radius: 20px;
   margin: 0.4rem 0;
-  word-wrap: break-word; /* Keep for compatibility */
-  overflow-wrap: break-word; /* <-- ESTAS REGLAS AYUDAN A MANEJAR EL DESBORDE Y ALINEACIÓN */
-  overflow-x: hidden; /* <-- ESTAS REGLAS AYUDAN A MANEJAR EL DESBORDE Y ALINEACIÓN */
+  word-wrap: break-word; /* Mantener por compatibilidad */
+  overflow-wrap: break-word; /* <-- CLAVE: Rompe palabras largas para evitar desborde */
+  overflow-x: hidden; /* <-- CLAVE: Oculta desborde horizontal y ayuda a la alineación */
   font-size: 1rem;
   line-height: 1.4;
+  box-sizing: border-box; /* Asegurar que padding se incluya en width/max-width */
 }
 
 .message.user {
-  align-self: flex-end; /* <-- ESTA REGLA ALINEA A LA DERECHA */
+  align-self: flex-end; /* <-- CLAVE: Alinea mensajes de usuario a la derecha */
   background-color: #00e0ff;
   color: #000;
 }
 
 .message.assistant {
-  align-self: flex-start; /* <-- ESTA REGLA ALINEA A LA IZQUIERDA */
+  align-self: flex-start; /* <-- CLAVE: Alinea mensajes del asistente a la izquierda */
   background-color: #00ff88;
   color: #000;
 }
