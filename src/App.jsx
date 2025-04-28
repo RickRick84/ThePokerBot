@@ -83,7 +83,7 @@ function App() {
     }
   };
 
-  return ( // Aquí empieza el return con (
+  return (
     <div className="app">
       <div className="title-container">
         {/* Elemento de imagen para el título */}
@@ -102,14 +102,14 @@ function App() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Escribí tu pregunta sobre póker..." // Texto corregido aquí
+          placeholder="Escribí tu pregunta sobre póker..."
         />
         <button onClick={sendMessage} disabled={loading}>Enviar</button> {/* Deshabilitar en loading */}
       </div>
     </div>
-  ); // Aquí termina el return con );
-} // Aquí cierra la función App con }
+  );
+}
 
-export default App; // export default App;
+export default App;
 
 
