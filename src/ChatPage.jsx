@@ -141,7 +141,7 @@ function ChatPage() { // Nombre del componente
       {/* Enlace con ícono de Home colocado FUERA del div.app */}
       {/* Con position: fixed en CSS, ahora debería posicionarse respecto a la ventana */}
       <Link to="/" className="home-link">
-        <FaHome size={30} /> {/* Ajusta el tamaño aquí si quieres. Le puse 30 para probar. */}
+        <FaHome size={15} /> {/* Ajusta el tamaño aquí si quieres. Le puse 30 para probar. */}
       </Link>
 
       {/* Contenedor principal con estilo fijo y centrado */}

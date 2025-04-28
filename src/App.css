@@ -122,10 +122,10 @@ body {
 /* --- Media Query para Teléfonos (Pantallas pequeñas) --- */
 @media (max-width: 768px) {
   .input-bar {
-    /* width: 100%; // Se mantiene 100% */
-    /* max-width: none; // Asegurar que max-width no interfiera */
-    gap: 0.1rem; /* Reducir el gap en pantallas pequeñas */
-    padding: 0.4rem; /* Reducir un poco el padding */
+    width: 100%; /* Se mantiene 100% width of parent */
+    max-width: none; /* Ensure max-width doesn't interfere on mobile */
+    gap: 0.1rem; /* Reduce gap on small screens */
+    padding: 0.4rem; /* Reduce padding on small screens */
     /* align-self: center; // Se mantiene */
   }
   .input-bar input {
@@ -135,14 +135,14 @@ body {
 
   /* --- AJUSTADO: Fijar el ancho del botón en móviles --- */
   .input-bar button {
-    width: 95px; /* <-- AJUSTADO: Ancho fijo para el botón en móviles (ajustar si es necesario) */
-    flex-shrink: 0; /* Asegurar que no se encoja por debajo de este ancho fijo */
-    padding: 0.8rem 0; /* Ajustar padding si es necesario con ancho fijo, centramos texto */
-    text-align: center; /* Centrar texto dentro del botón fijo */
+    width: 95px; /* Ancho fijo para el botón en móviles */
+    flex-shrink: 0; /* Asegurar que no se encoja */
+    padding: 0.8rem 0; /* Adjust padding for fixed width */
+    text-align: center; /* Center text within fixed button */
   }
   /* --- FIN AJUSTADO --- */
 
-  /* Puedes ajustar el padding del .app container en móviles si el contenido choca con los bordes */
+  /* Optional: Adjust padding on the .app container itself on small screens if content hits edges */
   /* .app { padding: 1rem 0.5rem; } */
 }
 /* --- FIN Media Query --- */
@@ -247,19 +247,19 @@ button:hover {
 /* --- ESTILOS PARA EL ÍCONO DE HOME --- */
 .home-link {
   position: fixed; /* ¡Debe estar fixed para posicionarse respecto a la ventana! */
-  top: 1.5rem; /* 1.5rem desde el borde superior de la ventana */
-  left: 1.5rem; /* 1.5rem desde el borde izquierdo de la ventana */
+  top: 0.8rem; /* <-- AJUSTADO: Posición más arriba */
+  left: 0.8rem; /* <-- AJUSTADO: Posición más a la izquierda */
 
-  /* --- NUEVOS ESTILOS PARA EL CÍRCULO --- */
+  /* --- AJUSTADO: Reducido el tamaño del círculo --- */
   background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
   backdrop-filter: blur(8px); /* Apply blur effect */
-  width: 40px; /* Fixed width for the circle */
-  height: 40px; /* Fixed height for the circle */
+  width: 25px; /* <-- AJUSTADO: Fixed width for the circle */
+  height: 25px; /* <-- AJUSTADO: Fixed height for the circle */
   border-radius: 50%; /* Make it a circle */
   display: flex; /* Use flexbox to center the icon */
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
-  /* --- FIN NUEVOS ESTILOS --- */
+  /* --- FIN AJUSTADO --- */
 
 
   color: #00ff88; /* Color del ícono */
