@@ -115,17 +115,16 @@ export default async function handler(req) {
 
         const searchQuery = functionArgs.query;
 
-        // --- COMIENZO DE LA SECCIÓN EN TU ÚLTIMO SCREENSHOT (aprox. línea 116) ---
-        console.log(`🤖 Modelo decidió llamar a search_web con query: "${searchQuery}"`); // Línea 118 en tu screenshot
+        console.log(`🤖 Modelo decidió llamar a search_web con query: "${searchQuery}"`);
 
         // --- AQUÍ IRÍA LA LÓGICA REAL DE BÚSQUEDA WEB ---
-        const simulatedSearchResults = `[Resultados de búsqueda para "${searchQuery}"]: El ganador de la WSOP Main Event 2024 fue John Smith. Otros resultados recientes relevantes para poker: ...`; // Línea 121 en tu screenshot
-        console.log("🔍 Simulando resultados de búsqueda:", simulatedSearchResults); // Línea 122 en tu screenshot
+        const simulatedSearchResults = `[Resultados de búsqueda para "${searchQuery}"]: El ganador de la WSOP Main Event 2024 fue John Smith. Otros resultados recientes relevantes para poker: ...`;
+        console.log("🔍 Simulando resultados de búsqueda:", simulatedSearchResults);
         // --- FIN SIMULACIÓN ---
 
 
         // --- Segunda llamada a OpenAI: con los resultados de la búsqueda como contexto ---
-        const messagesWithToolResults = [ // Aproximadamente línea 125-128 en tu screenshot
+        const messagesWithToolResults = [
           ...messages,
           responseMessage,
           {
@@ -135,66 +134,57 @@ export default async function handler(req) {
           },
         ];
 
-        // >>> AÑADE ESTA LÍNEA DE LOG AQUÍ, JUSTO DESPUÉS DE DONDE TERMINÓ TU SECCIÓN VISIBLE EN EL SCREENSHOT <<<
-        console.log("🔄 Re-enviando a OpenAI con resultados de búsqueda..."); // <-- ESTA LÍNEA DEBE ESTAR AQUÍ
-
-        // --- AÑADE TU NUEVO LOG AQUÍ, JUSTO DESPUÉS DE LA LÍNEA ANTERIOR ---
-        console.log("Valor de messagesWithToolResults antes de la segunda llamada:", messagesWithToolResults); // <-- AÑADE ESTA LÍNEA AQUÍ
+        // >>> LÍNEAS DE LOG ELIMINADAS AQUÍ PARA EVITAR INTERFERENCIA CON EL STREAM <<<
+        // console.log("🔄 Re-enviando a OpenAI con resultados de búsqueda...");
+        // console.log("Valor de messagesWithToolResults antes de la segunda llamada:", messagesWithToolResults);
 
         // >>> ESTE ES EL BLOQUE TRY QUE DEBE CONTENER LA LÓGICA DE PIPEO <<<
-        // (Empieza aproximadamente línea 128 en tu screenshot, donde dice 'try {')
         try {
              const finalResponseStream = await openai.chat.completions.create({
                model: model,
-               messages: messagesWithToolResults, // Línea 131 en tu log (donde da el ReferenceError)
+               messages: messagesWithToolResults,
                stream: true, // ¡Importante! Segunda llamada SÍ es stream.
              });
 
              // --- AJUSTE CRUCIAL: Procesar el stream de OpenAI y pipearlo a un nuevo ReadableStream compatible con Vercel Edge ---
              // El error ERR_INVALID_ARG_TYPE ocurre porque el objeto stream de la librería OpenAI
              // no es directamente compatible con el constructor de Response en Vercel Edge en todos los casos.
-             const readableStream = new ReadableStream({ // <-- AHORA SÍ USAMOS EL PIPEO
+             const readableStream = new ReadableStream({
                async start(controller) {
-                 // Obtener un reader del stream de OpenAI
-                 // .toReadableStream() intenta convertirlo a una ReadableStream estándar si no lo es.
                  const reader = finalResponseStream.toReadableStream ? finalResponseStream.toReadableStream().getReader() : finalResponseStream.getReader();
 
                  try {
-                   // Leer chunks del stream de OpenAI y encolarlos en el nuevo stream
                    while (true) {
                      const { done, value } = await reader.read();
                      if (done) {
-                       break; // El stream de OpenAI terminó
+                       break;
                      }
-                     // Los chunks de OpenAI ya deberían estar en un formato adecuado (Uint8Array).
-                     // Los encolamos directamente en el nuevo stream.
                      controller.enqueue(value);
                    }
                  } catch (error) {
-                   console.error("Error reading or piping OpenAI stream:", error);
-                   controller.error(error); // Reportar el error al nuevo stream
+                   console.error("Error reading or piping OpenAI stream:", error); // <-- Log de error mantenido
+                   controller.error(error);
                  } finally {
-                   controller.close(); // Cerrar el nuevo stream al terminar
-                   reader.releaseLock(); // Liberar el lock del reader
+                   controller.close();
+                   reader.releaseLock();
                  }
                }
              });
 
              // Devolver una nueva Response con el ReadableStream como cuerpo y headers correctos para SSE
-             return new Response(readableStream, { // <-- DEVOLVEMOS EL NUEVO STREAM
+             return new Response(readableStream, {
                headers: {
                  'Content-Type': 'text/event-stream',
-                 'Cache-Control': 'no-cache', // Recomendado para SSE (Server-Sent Events)
-                 'Connection': 'keep-alive', // Recomendado para SSE
+                 'Cache-Control': 'no-cache',
+                 'Connection': 'keep-alive',
                },
              });
 
         } catch (secondCallError) {
-             console.error('Error in second OpenAI call (with tool results):', secondCallError);
+             console.error('Error in second OpenAI call (with tool results):', secondCallError); // <-- Log de error mantenido
              let errorMsg = "Error en la segunda llamada a OpenAI con resultados de búsqueda.";
              if (secondCallError.response) {
                  errorMsg += ` Status: ${secondCallError.response.status}`;
-                 // Intentar obtener datos del error si existen
                  if (secondCallError.response.data) {
                     try { errorMsg += ` Data: ${JSON.stringify(secondCallError.response.data)}`; } catch(e) { /* ignore */ }
                  }
@@ -212,13 +202,13 @@ export default async function handler(req) {
                status: 500,
                headers: { 'Content-Type': 'application/json' },
            });
-           console.error(errorResponse.body);
+           console.error(errorResponse.body); // <-- Log de error mantenido
            return errorResponse;
       }
 
     } else {
         // --- Si OpenAI NO decidió llamar a una herramienta, la primera respuesta es la final ---
-        console.log("🤖 Modelo no llamó a herramienta, enviando respuesta directa (no stream).");
+        console.log("🤖 Modelo no llamó a herramienta, enviando respuesta directa (no stream)."); // <-- Log de acción mantenido
 
          const finalData = {
              choices: [{ message: responseMessage, index: 0, finish_reason: 'stop' }],
@@ -233,7 +223,7 @@ export default async function handler(req) {
     }
 
   } catch (error) {
-    console.error('Error general durante la interacción con OpenAI (Function Calling):', error);
+    console.error('Error general durante la interacción con OpenAI (Function Calling):', error); // <-- Log de error mantenido
 
     let errorMessage = 'Ocurrió un error general al procesar la solicitud con la API.';
     let statusCode = 500;
