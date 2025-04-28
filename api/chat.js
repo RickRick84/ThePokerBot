@@ -1,8 +1,7 @@
 import OpenAI from 'openai';
 
-// Esto es necesario para que Vercel sepa que debe esperar un stream (para respuestas finales)
 export const config = {
-  runtime: 'edge', // 'edge' runtime is generally better for streaming
+  runtime: 'edge',
 };
 
 const openai = new OpenAI({
@@ -14,16 +13,38 @@ export default async function handler(req) {
     return new Response('Method Not Allowed', { status: 405 });
   }
 
+  let requestBody;
   try {
-    const { messages, model = 'gpt-4-turbo', temperature = 0.7 } = await req.json();
+    // Intentar parsear el body de la solicitud como JSON
+    requestBody = await req.json();
+  } catch (e) {
+    console.error("Error parsing request body:", e);
+    // Devolver un error si el body no es JSON válido
+    return new Response(JSON.stringify({ error: "Invalid request body: Must be JSON." }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  try {
+    const { messages, model = 'gpt-4-turbo', temperature = 0.7 } = requestBody;
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
-      return new Response('Bad Request: Messages are required', { status: 400 });
+      return new Response('Bad Request: Messages are required and must be an array.', { status: 400 });
     }
+
+    // Validar estructura básica de los mensajes para evitar errores posteriores
+    const isValidMessages = messages.every(msg =>
+        typeof msg === 'object' && msg !== null && typeof msg.role === 'string' && typeof msg.content === 'string'
+    );
+
+    if (!isValidMessages) {
+         return new Response('Bad Request: Invalid message format in messages array.', { status: 400 });
+    }
+
 
     console.log("Received messages for function calling:", messages);
 
-    // --- Definición de las herramientas disponibles ---
     const tools = [
       {
         type: "function",
@@ -42,36 +63,59 @@ export default async function handler(req) {
           },
         },
       },
-      // Puedes definir más herramientas aquí si las necesitas en el futuro
     ];
-    // --- Fin Definición de Herramientas ---
 
+    let responseMessage;
+    let toolCalls;
 
-    // --- Primera llamada a OpenAI: con la pregunta del usuario y las herramientas disponibles ---
-    const initialResponse = await openai.chat.completions.create({
-      model: model,
-      messages: messages,
-      tools: tools, // <--- ¡Le decimos a OpenAI qué herramientas tiene!
-      tool_choice: "auto", // Permite a OpenAI decidir automáticamente si usar una herramienta
-      stream: false, // <--- Importante: La primera llamada NO es un stream, esperamos la decisión de la herramienta
-    });
+    try {
+        // --- Primera llamada a OpenAI: con la pregunta del usuario y las herramientas disponibles ---
+        const initialResponse = await openai.chat.completions.create({
+          model: model,
+          messages: messages,
+          tools: tools,
+          tool_choice: "auto",
+          stream: false,
+        });
+         // Asegurarse de que la respuesta tiene el formato esperado
+         if (!initialResponse || !initialResponse.choices || initialResponse.choices.length === 0) {
+             throw new Error("Unexpected format from OpenAI initial response.");
+         }
 
-    const responseMessage = initialResponse.choices[0].message;
+        responseMessage = initialResponse.choices[0].message;
+        toolCalls = responseMessage.tool_calls;
+
+    } catch (firstCallError) {
+         console.error('Error in first OpenAI call (function calling decision):', firstCallError);
+         // Si la primera llamada falla, devolvemos un error
+         let errorMsg = "Error en la primera llamada a OpenAI para decidir herramienta.";
+         if (firstCallError.response) {
+             errorMsg += ` Status: ${firstCallError.response.status}`;
+              if (firstCallError.response.data) errorMsg += ` Data: ${JSON.stringify(firstCallError.response.data)}`;
+         } else if (firstCallError.message) {
+             errorMsg += ` Message: ${firstCallError.message}`;
+         }
+          return new Response(JSON.stringify({ error: errorMsg }), {
+              status: firstCallError.status || 500, // Usar el status de la respuesta de OpenAI si está disponible
+              headers: { 'Content-Type': 'application/json' },
+          });
+    }
+
 
     // --- Verificar si OpenAI decidió llamar a una herramienta ---
-    const toolCalls = responseMessage.tool_calls;
-
     if (toolCalls && toolCalls.length > 0) {
-      const firstToolCall = toolCalls[0]; // Para simplificar, solo manejamos la primera llamada de herramienta
+      const firstToolCall = toolCalls[0];
       if (firstToolCall.function.name === "search_web") {
-        // Asegurarse de que functionArgs es un objeto válido antes de acceder a .query
         let functionArgs = {};
         try {
             functionArgs = JSON.parse(firstToolCall.function.arguments);
+             if (typeof functionArgs.query !== 'string') {
+                 throw new Error("Invalid query format from OpenAI tool arguments.");
+             }
         } catch (e) {
             console.error("Error parsing tool call arguments:", e);
             // Enviar un error específico si los argumentos no se parsean
-            return new Response(JSON.stringify({ error: "Error procesando argumentos de la función de búsqueda." }), {
+            return new Response(JSON.stringify({ error: `Error procesando argumentos de la función de búsqueda: ${e.message}` }), {
                 status: 500,
                 headers: { 'Content-Type': 'application/json' },
             });
@@ -82,8 +126,6 @@ export default async function handler(req) {
         console.log(`🤖 Modelo decidió llamar a search_web con query: "${searchQuery}"`);
 
         // --- AQUÍ IRÍA LA LÓGICA REAL DE BÚSQUEDA WEB ---
-        // POR AHORA, SIMULAMOS EL RESULTADO
-        // Asegúrate que esta simulación tiene el formato que OpenAI espera de una herramienta
         const simulatedSearchResults = `[Resultados de búsqueda para "${searchQuery}"]: El ganador de la WSOP Main Event 2024 fue John Smith. Otros resultados recientes relevantes para poker: ...`;
         console.log("🔍 Simulando resultados de búsqueda:", simulatedSearchResults);
         // --- FIN SIMULACIÓN ---
@@ -91,19 +133,17 @@ export default async function handler(req) {
 
         // --- Segunda llamada a OpenAI: con los resultados de la búsqueda como contexto ---
         const messagesWithToolResults = [
-          ...messages, // Conservar el historial
-          responseMessage, // Añadir el mensaje original de OpenAI que indicaba la llamada a la herramienta
+          ...messages,
+          responseMessage,
           {
-            role: "tool", // <-- Rol 'tool' para los resultados de la herramienta
-            tool_call_id: firstToolCall.id, // ID de la llamada original a la herramienta
-            content: simulatedSearchResults, // <-- Aquí van los resultados de la búsqueda real o simulada
+            role: "tool",
+            tool_call_id: firstToolCall.id,
+            content: simulatedSearchResults,
           },
         ];
 
         console.log("🔄 Re-enviando a OpenAI con resultados de búsqueda...");
 
-        // --- Ahora sí, la segunda llamada puede ser un stream para la respuesta final ---
-        // Usamos un bloque try-catch para esta segunda llamada también
         try {
              const finalResponseStream = await openai.chat.completions.create({
                model: model,
@@ -127,14 +167,13 @@ export default async function handler(req) {
                  errorMsg += ` Message: ${secondCallError.message}`;
              }
               return new Response(JSON.stringify({ error: errorMsg }), {
-                  status: 500,
+                  status: secondCallError.status || 500, // Usar el status de la respuesta de OpenAI si está disponible
                   headers: { 'Content-Type': 'application/json' },
               });
         }
 
 
       } else {
-          // Si OpenAI llama a una herramienta que no reconocemos (no debería pasar con tool_choice="auto" y solo una herramienta)
            const errorResponse = new Response(JSON.stringify({ error: `Modelo intentó usar una herramienta desconocida: ${firstToolCall.function.name}` }), {
                status: 500,
                headers: { 'Content-Type': 'application/json' },
@@ -145,22 +184,18 @@ export default async function handler(req) {
 
     } else {
         // --- Si OpenAI NO decidió llamar a una herramienta, la primera respuesta es la final ---
-        // Esta respuesta inicial de OpenAI es la respuesta final del chat (no stream)
         console.log("🤖 Modelo no llamó a herramienta, enviando respuesta directa (no stream).");
 
-        // Convertimos la respuesta inicial (no stream) a un formato compatible con el frontend streaming logic (aunque sea un solo chunk)
          const finalData = {
              choices: [{ message: responseMessage, index: 0, finish_reason: 'stop' }],
-             model: initialResponse.model, // Incluir el modelo si está disponible
-             id: initialResponse.id, // Incluir ID si está disponible
-             // Otros campos relevantes si los hay
+             model: initialResponse.model,
+             id: initialResponse.id,
          };
-
 
          // Devolvemos una respuesta JSON (no stream) que el frontend pueda manejar como si fuera un stream terminado
          return new Response(JSON.stringify(finalData), {
             status: 200,
-            headers: { 'Content-Type': 'application/json' }, // Importante: Aquí es application/json, no text/event-stream
+            headers: { 'Content-Type': 'application/json' }, // Importante: Aquí es application/json
          });
     }
 
