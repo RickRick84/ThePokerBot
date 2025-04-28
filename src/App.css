@@ -28,59 +28,53 @@ body {
   max-width: 600px; /* Limita el ancho del contenido */
   box-sizing: border-box;
 
-  /* Altura mínima para que el footer no suba */
   min-height: 100vh; /* Asegurar que ocupe al menos el alto de la ventana */
-
 }
 
 /* --- ESTILOS ESPECÍFICOS PARA LA PÁGINA DE CHAT --- */
-/* Estos estilos solo se aplican al div con clase 'app' EN LA PÁGINA DE CHAT */
-/* Asumimos que el div principal en ChatPage.jsx tiene CLASE "app chat-page-container" */
-.app.chat-page-container { /* <-- Nueva clase combinada para la página de chat */
+.app.chat-page-container { /* <-- Clase para la página de chat */
     position: fixed; /* Posicionamiento fijo para el chat */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    max-height: 95vh; /* Altura máxima del contenedor fijo */
-    height: 85vh; /* Altura definida para flex grow */
-    overflow-y: auto; /* Scroll si el contenido de .app excede max-height */
-    /* backdrop-filter: blur(8px); // Si quieres el blur en todo el contenedor fijo */
-    /* background-color: rgba(0, 0, 0, 0.5); // Si quieres el fondo semi-transparente en todo el contenedor fijo */
+    max-height: 95vh;
+    height: 85vh;
+    overflow-y: auto;
 }
-/* --- FIN ESTILOS ESPECÍFICOS CHAT --- */
-
 
 /* Contenedor e imagen del título (se mantiene igual, se centra dentro de su padre .app) */
 .title-container {
   width: 100%;
-  max-width: 540px; /* Ancho máximo para que coincida con el chat */
-  margin: 0 auto 1.5rem auto; /* Margen inferior */
+  max-width: 540px;
+  margin: 0 auto 1.5rem auto;
   flex-shrink: 0;
   height: auto;
   display: flex;
-  justify-content: center; /* Centramos la imagen */
+  justify-content: center;
   align-items: center;
 }
 
 .title-image {
   max-width: 100%;
   height: auto;
-  max-height: 250px; /* Altura máxima del logo */
+  max-height: 250px;
 }
 
 
-/* Caja de chat (se mantiene igual, es flex item dentro de .app) */
+/* Caja de chat */
 .chat-box {
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
   padding: 1rem;
-  width: 100%;
-  max-width: 540px;
+  /* --- AJUSTADO: Usar ancho fijo en lugar de 100% para estabilidad inicial --- */
+  width: 540px; /* <-- Ancho fijo */
+  max-width: 540px; /* <-- Mantener max-width */
+  /* --- FIN AJUSTADO --- */
 
   /* Altura fija y Scroll siempre visible */
-  height: 650px; /* <-- Altura fija de la caja de chat */
-  overflow-y: scroll; /* <-- Scroll vertical solo AQUÍ */
-  overflow-x: hidden; /* Ocultar scroll horizontal */
+  height: 650px;
+  overflow-y: scroll;
+  overflow-x: hidden; /* Ocultar scroll horizontal AQUI */
 
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
@@ -88,10 +82,11 @@ body {
   flex-direction: column;
   margin-bottom: 0.8rem;
   box-sizing: border-box;
-  flex-grow: 1; /* Permite que la caja de chat crezca para ocupar espacio en la página de chat */
+  flex-grow: 1;
+  min-width: 0;
 }
 
-/* Mensajes (se mantiene igual, alineación y desborde) */
+/* Mensajes */
 .message {
   display: block;
   width: 100%;
@@ -99,52 +94,93 @@ body {
   padding: 0.7rem 1.2rem;
   border-radius: 20px;
   margin: 0.4rem 0;
-   /* Mantener el quiebre de palabra para que el texto largo no se salga */
-   word-break: break-word; /* Propiedad más moderna y efectiva */
-   overflow-wrap: break-word; /* Alias para word-break, buena práctica incluir ambos */
-   overflow-x: hidden; /* <-- CLAVE: Oculta desborde horizontal que pueda romper alineación */
+   word-break: break-word;
+   overflow-wrap: break-word;
+   overflow-x: hidden;
+   overflow-y: hidden;
   font-size: 1rem;
   line-height: 1.4;
   box-sizing: border-box;
+   flex-shrink: 0;
 }
 
 .message.user {
-  align-self: flex-end; /* <-- CLAVE: Alinea mensajes de usuario a la derecha */
+  align-self: flex-end;
   background-color: #00e0ff;
   color: #000;
 }
 
 .message.assistant {
-  align-self: flex-start; /* <-- CLAVE: Alinea mensajes del asistente a la izquierda */
+  align-self: flex-start;
   background-color: #00ff88;
   color: #000;
 }
 
 
-/* Barra de entrada (se mantiene igual, flex item dentro de .app) */
+/* Barra de entrada */
 .input-bar {
   display: flex;
   gap: 0.4rem;
-  width: 100%;
-  max-width: 540px;
+   /* --- AJUSTADO: Usar ancho fijo en lugar de 100% para estabilidad inicial --- */
+  width: 540px; /* <-- Ancho fijo */
+  max-width: 540px; /* <-- Mantener max-width */
+  /* --- FIN AJUSTADO --- */
   padding: 0.6rem;
   border-radius: 12px;
   align-items: center;
   box-sizing: border-box;
-  flex-shrink: 0;
+  flex-shrink: 0; /* <-- Clave: Evita que la barra se encoja */
   margin-top: 0.8rem;
   height: auto;
-  align-self: center;
+  align-self: center; /* Centra la barra horizontalmente en el contenedor flex principal (.app) */
+}
+
+/* Estilos para el input dentro de la barra */
+.input-bar input {
+  flex: 1; /* Permite que el input crezca para ocupar el espacio disponible */
+  padding: 0.8rem;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  background-color: #1e1e1e;
+  color: #fff;
+  padding-right: 1.5rem; /* Espacio para un posible ícono */
+  min-width: 0; /* <-- Añadido: Permite que el input se encoja en flexbox si es necesario */
+}
+
+/* Estilos para el botón dentro de la barra */
+.input-bar button {
+  background-color: #00ff88;
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  padding: 0.8rem 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.input-bar button:hover {
+  color: #00e07a;
 }
 
 /* --- Media Query para Teléfonos (Input Bar) --- */
 @media (max-width: 768px) {
+  /* --- AJUSTADO: En móviles, volver a 100% width para adaptarse --- */
   .input-bar {
-    width: 100%;
-    max-width: none;
+    width: 100%; /* <-- Usar 100% en móviles */
+    max-width: none; /* Asegurar que max-width no interfiera */
     gap: 0.1rem;
     padding: 0.4rem;
   }
+   .chat-box {
+    width: 100%; /* <-- Usar 100% en móviles */
+    max-width: none; /* Asegurar que max-width no interfiera */
+   }
+  /* --- FIN AJUSTADO --- */
+
   .input-bar input {
     min-width: 80px;
   }
@@ -156,23 +192,35 @@ body {
   }
 }
 
-/* --- ESTILOS PARA LA PÁGINA DE INICIO --- */
-/* Estos estilos solo se aplican al div con clase 'app' EN LA PÁGINA DE INICIO */
-/* Asumimos que el div principal en HomePage.jsx tiene CLASE "app homepage-container" */
-.app.homepage-container { /* <-- Nueva clase combinada para la página de inicio */
-   position: relative; /* Cambiar a relativo para flujo normal */
-   top: auto; /* Resetear fixed */
-   left: auto; /* Resetear fixed */
-   transform: none; /* Resetear fixed */
-   height: auto; /* Permitir que la altura se ajuste al contenido */
-   max-height: none; /* Resetear fixed */
-   overflow-y: visible; /* Permitir que el contenido empuje el body scroll */
-   justify-content: flex-start; /* Alinear contenido al inicio de la columna */
-   /* backdrop-filter: none; // Si no quieres el blur en la home */
-   /* background-color: transparent; // Si no quieres el fondo semi-transparente en la home */
+/* Scroll personalizado - no cambiaron */
+.chat-box::-webkit-scrollbar {
+  width: 8px;
 }
 
-/* Contenedor de selector de idioma (se mantiene igual) */
+.chat-box::-webkit-scrollbar-thumb {
+  background: #00e0ff;
+  border-radius: 10px;
+}
+
+.chat-box::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+/* --- ESTILOS PARA LA PÁGINA DE INICIO --- */
+/* Estos estilos solo se aplican al div con clase 'app' EN LA PÁGINA DE INICIO */
+.app.homepage-container {
+   position: relative;
+   top: auto;
+   left: auto;
+   transform: none;
+   height: auto;
+   max-height: none;
+   overflow-y: visible;
+   justify-content: flex-start;
+}
+
+/* Contenedor de selector de idioma */
 .language-selector {
   display: flex;
   flex-direction: column;
@@ -217,9 +265,9 @@ body {
   color: #00e07a;
 }
 
-/* --- ESTILOS PARA EL ÍCONO DE HOME (se mantiene fixed) --- */
+/* --- ESTILOS PARA EL ÍCONO DE HOME --- */
 .home-link {
-  position: fixed; /* ¡Debe estar fixed para posicionarse respecto a la ventana! */
+  position: fixed;
   top: 0.8rem;
   left: 0.8rem;
   background-color: rgba(0, 0, 0, 0.5);
