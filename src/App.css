@@ -41,19 +41,22 @@ body {
   height: 85vh; /* <-- Altura del contenedor fijo. Ajusta si es necesario. */
 }
 
-/* Título principal - no cambiaron */
-.title {
-  font-family: 'Anton', sans-serif;
-  font-size: 4rem;
-  color: #ffd700;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-  letter-spacing: 0.15rem;
+/* Título principal (AHORA ES UNA IMAGEN) */
+.title-container { /* Contenedor para la imagen del título */
   width: 100%;
-  max-width: 540px;
-  text-align: center;
-  margin: 0 auto 1.5rem auto;
+  max-width: 540px; /* Ancho máximo para que coincida con el chat */
+  margin: 0 auto 1.5rem auto; /* Margen inferior para separarlo del chat */
   flex-shrink: 0;
   height: auto;
+  display: flex;
+  justify-content: center; /* Centramos la imagen horizontalmente */
+  align-items: center; /* Centramos verticalmente si es necesario */
+}
+
+.title-image { /* Estilos para la imagen dentro del contenedor */
+  max-width: 100%; /* La imagen no excede el ancho del contenedor */
+  height: auto; /* Mantiene la proporción de la imagen */
+  max-height: 150px; /* <-- AJUSTA ESTE VALOR para controlar la altura de la imagen. */
 }
 
 /* Caja de chat */
@@ -164,7 +167,6 @@ button:hover {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
 }
-
 
 
 

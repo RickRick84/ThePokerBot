@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'; // Importamos useEffect y useRef
+import { useState, useEffect, useRef } from 'react';
 import './App.css';
 
 function App() {
@@ -9,27 +9,23 @@ function App() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const chatBoxRef = useRef(null); // Creamos una referencia al div de la caja de chat
+  const chatBoxRef = useRef(null);
 
-  // Efecto para scrollear al final cuando los mensajes cambian
   useEffect(() => {
     if (chatBoxRef.current) {
-      // Scrolleamos el elemento al final
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }
-  }, [messages]); // Este efecto se ejecuta cada vez que el estado 'messages' cambia
+  }, [messages]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
 
     const newMessages = [...messages, { role: 'user', content: input }];
-    // Actualizamos el estado de mensajes ANTES de enviar la solicitud a la API
     setMessages(newMessages);
     setInput('');
     setLoading(true);
 
     try {
-      // Usa la URL relativa para Vercel
       const url = '/api/chat';
       console.log("Usando backend:", url);
 
@@ -53,7 +49,6 @@ function App() {
 
       if (data.choices && data.choices.length > 0) {
         const reply = data.choices[0].message;
-        // Actualizamos el estado de mensajes con la respuesta del bot
         setMessages(currentMessages => [...currentMessages, reply]); // Usamos la forma de actualización con función para asegurar el estado más reciente
       } else if (data.error) {
         console.error("❌ Error en la respuesta de OpenAI:", data.error);
@@ -81,7 +76,7 @@ function App() {
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      e.preventDefault(); // Previene el salto de línea por defecto en el textarea/input
+      e.preventDefault();
       sendMessage();
     }
   };
@@ -89,9 +84,10 @@ function App() {
   return (
     <div className="app">
       <div className="title-container">
-        <h1 className="title">THE POKER BOT</h1>
+        {/* --- ¡RUTA DE IMAGEN CORREGIDA A .png! --- */}
+        <img src="/i_love_poker_logo_.png" alt="The Poker Bot Logo" className="title-image" />
+        {/* --- FIN RUTA DE IMAGEN --- */}
       </div>
-      {/* Adjuntamos la referencia al div de la caja de chat */}
       <div className="chat-box" ref={chatBoxRef}>
         {messages.slice(1).map((msg, idx) => ( // Usamos slice(1) para no mostrar el mensaje system inicial
           <div key={idx} className={`message ${msg.role}`}>
@@ -107,7 +103,7 @@ function App() {
           onKeyDown={handleKeyDown}
           placeholder="Escribí tu pregunta sobre póker..."
         />
-        <button onClick={sendMessage} disabled={loading}>Enviar</button> {/* Deshabilitamos el botón mientras carga */}
+        <button onClick={sendMessage} disabled={loading}>Enviar</button>
       </div>
     </div>
   );
