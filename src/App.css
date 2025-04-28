@@ -221,7 +221,7 @@ button:hover {
 .home-link {
   position: fixed; /* ¡Debe estar fixed para posicionarse respecto a la ventana! */
   top: 1rem; /* 1rem desde el borde superior de la ventana */
-  left: 1rem; /* 1rem desde el borde izquierdo de la ventana */
+  left: 0.5rem; /* <-- AJUSTADO: Puede necesitar más ajuste */
 
   /* --- NUEVOS ESTILOS PARA EL CÍRCULO --- */
   background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */

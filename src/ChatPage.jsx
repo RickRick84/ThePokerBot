@@ -23,7 +23,7 @@ const translations = {
     writing: 'Escrevendo...',
     openaiError: (code, message) => `Erro da OpenAI: ${code || 'Código desconhecido'} - ${message || 'Erro desconhecido'}`,
     fetchError: 'Ocorreu um erro ao conectar com a API.',
-    invalidOpenAIResponse: 'Não foi possível obter uma resposta válida da OpenAI.',
+    invalidOpenAIResponse: 'Não foi possível obter una resposta válida da OpenAI.',
   },
   en: {
     system: 'Respond only about poker in English. If asked anything else, say you only talk about poker.',
@@ -179,5 +179,3 @@ function ChatPage() { // Nombre del componente
 }
 
 export default ChatPage; // Exportamos el componente como ChatPage
-
-
