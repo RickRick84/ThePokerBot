@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom'; // Importamos useParams para obtener parámetros de la URL
+import { useParams, Link } from 'react-router-dom'; // Importamos Link aquí
+import { FaHome } from 'react-icons/fa'; // Importamos el ícono de casita (Font Awesome)
 import './App.css'; // Importamos el CSS principal
 
-// Objeto simple para gestionar las traducciones
+// Objeto simple para gestionar las traducciones (asegúrate de que este objeto esté completo con tus traducciones)
 const translations = {
   es: {
     system: 'Responde solo sobre póker en español. Si te preguntan otra cosa, decí que solo hablás de póker.',
@@ -37,18 +38,16 @@ const translations = {
 };
 
 
-function ChatPage() { // Cambiamos el nombre de la función a ChatPage
-  const { lang } = useParams(); // Obtenemos el parámetro 'lang' de la URL (ej: 'es', 'pt', 'en')
-  const [currentLang, setCurrentLang] = useState(lang || 'es'); // Usamos el idioma de la URL, o 'es' por defecto
+function ChatPage() { // Nombre del componente
+  const { lang } = useParams();
+  const [currentLang, setCurrentLang] = useState(lang || 'es');
 
   // Obtenemos las traducciones para el idioma actual, o español si no se encuentra
   const t = translations[currentLang] || translations['es'];
 
 
   const [messages, setMessages] = useState([
-    // El primer mensaje es para instruir al modelo, usando la traducción adecuada
     { role: 'system', content: t.system },
-    // El segundo mensaje es el de bienvenida visible para el usuario, usando la traducción
     { role: 'assistant', content: t.welcome }
   ]);
   const [input, setInput] = useState('');
@@ -63,16 +62,12 @@ function ChatPage() { // Cambiamos el nombre de la función a ChatPage
     }
   }, [messages]);
 
-  // Efecto para actualizar el idioma y el mensaje de bienvenida si cambia el parámetro de la URL
+  // Efecto para actualizar el idioma si cambia el parámetro de la URL
   useEffect(() => {
-      setCurrentLang(lang || 'es'); // Actualizamos el estado del idioma
-      // Podrías querer reiniciar la conversación o traducir los mensajes existentes aquí
-      // si el usuario cambia el idioma desde la URL. Por ahora, solo actualizamos el estado
-      // y el mensaje de bienvenida se regenerará al montar.
-      // Reiniciar conversación al cambiar idioma (opcional, descomentar si lo quieres así)
+      setCurrentLang(lang || 'es');
+      // Si quieres reiniciar la conversación al cambiar de idioma en la URL, descomenta lo siguiente:
       // setMessages([ { role: 'system', content: translations[lang]?.system || translations['es'].system }, { role: 'assistant', content: translations[lang]?.welcome || translations['es'].welcome } ]);
-
-  }, [lang]); // Este efecto se ejecuta cada vez que el parámetro 'lang' de la URL cambia
+  }, [lang]);
 
 
   const sendMessage = async () => {
@@ -113,20 +108,20 @@ function ChatPage() { // Cambiamos el nombre de la función a ChatPage
         console.error("❌ Error en la respuesta de OpenAI:", data.error);
         setMessages(currentMessages => [...currentMessages, {
           role: 'assistant',
-          content: t.openaiError(data.error.code, data.error.message) // Usamos traducción para errores
+          content: t.openaiError(data.error.code, data.error.message)
         }]);
       } else {
         console.error("❌ Formato inesperado de respuesta de OpenAI:", data);
         setMessages(currentMessages => [...currentMessages, {
           role: 'assistant',
-          content: t.invalidOpenAIResponse // Usamos traducción para errores
+          content: t.invalidOpenAIResponse
         }]);
       }
     } catch (error) {
       console.error("❌ Error en fetch:", error);
       setMessages(currentMessages => [...currentMessages, {
         role: 'assistant',
-        content: t.fetchError // Usamos traducción para errores
+        content: t.fetchError
       }]);
     } finally {
       setLoading(false);
@@ -141,9 +136,15 @@ function ChatPage() { // Cambiamos el nombre de la función a ChatPage
   };
 
   return (
-    // Reutilizamos la clase 'app' para mantener el centrado fijo y el background
-    <div className="app">
-      {/* Reutilizamos la estructura y estilos para el logo */}
+    // Contenedor principal con estilo fijo y centrado (asegúrate de que App.css tenga position: relative;)
+    <div className="app"> {/* Reutiliza la clase 'app' */}
+      {/* Enlace con ícono de Home para volver a la página principal */}
+      {/* Este Link navegará a la ruta "/", que es donde está HomePage */}
+      <Link to="/" className="home-link"> {/* <-- Añadido aquí el Link y la clase */}
+        <FaHome size={25} /> {/* <-- Usamos el componente del ícono. Ajusta el 'size' si quieres. */}
+      </Link>
+
+      {/* Estructura y estilos para el logo */}
       <div className="title-container">
         <img src="/i_love_poker_logo_.png" alt="The Poker Bot Logo" className="title-image" />
       </div>
@@ -155,7 +156,7 @@ function ChatPage() { // Cambiamos el nombre de la función a ChatPage
             <span>{msg.content}</span>
           </div>
         ))}
-        {loading && <div className="message assistant"><span>{t.writing}</span></div>} {/* Usamos texto "Escribiendo..." traducido */}
+        {loading && <div className="message assistant"><span>{t.writing}</span></div>}
       </div>
 
       {/* La barra de entrada */}
@@ -164,8 +165,9 @@ function ChatPage() { // Cambiamos el nombre de la función a ChatPage
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-        placeholder={t.placeholder} /* Usamos placeholder traducido */ />
-        <button onClick={sendMessage} disabled={loading}>{t.sendButton}</button> {/* Usamos texto del botón traducido */}
+          placeholder={t.placeholder}
+        />
+        <button onClick={sendMessage} disabled={loading}>{t.sendButton}</button>
       </div>
     </div>
   );

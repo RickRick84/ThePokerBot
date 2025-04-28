@@ -32,6 +32,10 @@ body {
   left: 50%;
   transform: translate(-50%, -50%); /* Centrado */
 
+  /* IMPORTANTE: Añadimos relative para que los elementos con 'position: absolute' dentro (.home-link) se posicionen respecto a este contenedor */
+  position: relative; /* <-- ¡Asegúrate de que esta línea esté aquí! */
+
+
   /* Altura máxima del contenedor fijo (asegura que no se salga de la pantalla) */
   max-height: 95vh; /* Mantenemos un max-height de seguridad */
   overflow-y: auto; /* Scroll si el contenido de .app excede max-height */
@@ -209,6 +213,23 @@ button:hover {
   overflow-y: visible !important; /* Oculta el scroll */
   height: auto !important; /* Permite que la altura se ajuste al contenido */
   max-height: none !important; /* Asegura que no haya un max-height que fuerce scroll */
+}
+
+/* --- NUEVOS ESTILOS PARA EL ÍCONO DE HOME --- */
+.home-link {
+  position: absolute; /* Posiciona respecto al contenedor padre (.app) que tiene position: relative */
+  top: 1rem; /* 1rem desde el borde superior del .app */
+  left: 1rem; /* 1rem desde el borde izquierdo del .app */
+  color: #00ff88; /* Color del ícono */
+  cursor: pointer; /* Cursor de mano al pasar por encima */
+  transition: color 0.2s ease-in-out; /* Transición suave al pasar el mouse */
+  z-index: 10; /* Asegura que el ícono esté por encima de otros elementos si hay superposición */
+  /* Si el ícono se superpone con el logo u otro contenido, podrías necesitar ajustar el padding-top de .app */
+  /* Por ejemplo: .app { padding-top: 2.5rem; } */
+}
+
+.home-link:hover {
+  color: #00e07a; /* Color al pasar el mouse */
 }
 
 
