@@ -102,7 +102,7 @@ function App() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Escrib\u00ED tu pregunta sobre p\u00F3ker..."
+          placeholder="Escribe tu pregunta sobre póker..."
         />
         <button onClick={sendMessage} disabled={loading}>Enviar</button> {/* Deshabilitar en loading */}
       </div>
