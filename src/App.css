@@ -107,12 +107,13 @@ body {
 .input-bar {
   display: flex;
   gap: 0.4rem;
-  width: 100%; /* Mantiene 100% del padre */
-  /* max-width: 540px; // <-- ¡ELIMINAMOS ESTO! */
+  /* --- AJUSTADO: Usamos calc para definir el ancho --- */
+  width: calc(100% - 1.6rem); /* 100% del padre menos padding (1.2rem) y gap (0.4rem) */
+  /* max-width: 540px; // <-- Eliminada para simplificar */
   padding: 0.6rem;
   border-radius: 12px;
   align-items: center; /* Centrado vertical dentro de la barra */
-  box-sizing: border-box;
+  box-sizing: border-box; /* Padding incluido en el width */
   flex-shrink: 0;
   margin-top: 0.8rem;
   height: auto;
