@@ -8,15 +8,14 @@ body {
   background-attachment: fixed;
   color: #fff;
   min-height: 100vh;
-  display: flex; /* Usamos flexbox para centrar el .app contenedor */
+  display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 100vh; /* Aseguramos que body tenga 100% altura */
-  overflow-y: auto; /* Permitir scroll en body si el contenido excede 100vh, importante para la home */
-  overflow-x: hidden; /* Ocultar scroll horizontal en body */
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
-
 
 /* Contenedor principal - Estilos base (para ambos, se anularán para el chat) */
 .app {
@@ -25,24 +24,30 @@ body {
   align-items: center;
   padding: 1rem;
   width: 100%;
-  max-width: 600px; /* Limita el ancho del contenido */
+  max-width: 600px;
   box-sizing: border-box;
-
-  min-height: 100vh; /* Asegurar que ocupe al menos el alto de la ventana */
+  min-height: 100vh;
 }
 
 /* --- ESTILOS ESPECÍFICOS PARA LA PÁGINA DE CHAT --- */
-.app.chat-page-container { /* <-- Clase para la página de chat */
-    position: fixed; /* Posicionamiento fijo para el chat */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-height: 95vh;
-    height: 85vh;
-    overflow-y: auto;
+.app.chat-page-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-height: 95vh;
+  height: 85vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  width: 100%;
+  max-width: 600px;
+  box-sizing: border-box;
 }
 
-/* Contenedor e imagen del título (se mantiene igual, se centra dentro de su padre .app) */
+/* Contenedor e imagen del título */
 .title-container {
   width: 100%;
   max-width: 540px;
@@ -60,48 +65,69 @@ body {
   max-height: 250px;
 }
 
-
 /* Caja de chat */
 .chat-box {
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
   padding: 1rem;
-  /* --- AJUSTADO: Usar ancho fijo en lugar de 100% para estabilidad inicial --- */
-  width: 540px; /* <-- Ancho fijo */
-  max-width: 540px; /* <-- Mantener max-width */
-  /* --- FIN AJUSTADO --- */
-
-  /* Altura fija y Scroll siempre visible */
-  height: 650px;
-  overflow-y: scroll;
-  overflow-x: hidden; /* Ocultar scroll horizontal AQUI */
-
+  width: 540px;
+  max-width: 540px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   margin-bottom: 0.8rem;
   box-sizing: border-box;
+  min-width: 0; /* Permite que encoja si es necesario en flex */
+
+  /* Altura Fija REMOVIDA - Ahora usa flex-grow y overflow */
+  /* height: 650px; */
+
+  /* Permite que crezca para llenar el espacio y maneje su propio scroll */
   flex-grow: 1;
-  min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Mensajes */
 .message {
-  display: block;
-  width: 100%;
+  display: flex; /* Cambiado de block a flex */
+  flex-direction: column;
+  align-items: flex-start;
+
+  /* Dejar que el contenido determine el ancho, limitado por max-width */
+  /* width: 100%; */ /* Removido */
+  width: fit-content; /* O auto */
   max-width: 80%;
   padding: 0.7rem 1.2rem;
   border-radius: 20px;
   margin: 0.4rem 0;
-   word-break: break-word;
-   overflow-wrap: break-word;
-   overflow-x: hidden;
-   overflow-y: hidden;
+
+  /* Aseguramos que el texto se envuelva dentro de la burbuja */
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap; /* Asegura que los saltos de línea y espacios se respeten */
+
+  /* Eliminamos overflow en message para no ocultar contenido */
+  overflow: visible; /* O auto */
+  /* overflow-x: hidden; */ /* Removido */
+  /* overflow-y: hidden; */ /* Removido */
+
   font-size: 1rem;
   line-height: 1.4;
   box-sizing: border-box;
-   flex-shrink: 0;
+  flex-shrink: 0;
+}
+
+/* Estilos para el span dentro del mensaje - Asegura que el texto fluya */
+/* Nota: Los estilos inline en ChatPage.jsx tienen mayor prioridad,
+   pero estas reglas aseguran que el span por defecto no impida el envolvimiento. */
+.message span {
+    display: inline-block; /* O block */
+    /* Eliminar cualquier ancho o altura fija que pueda conflictuar */
+    /* width: auto; */
+    /* max-width: none; */
+    /* height: auto; */
 }
 
 .message.user {
@@ -116,36 +142,33 @@ body {
   color: #000;
 }
 
-
 /* Barra de entrada */
 .input-bar {
   display: flex;
   gap: 0.4rem;
-   /* --- AJUSTADO: Usar ancho fijo en lugar de 100% para estabilidad inicial --- */
-  width: 540px; /* <-- Ancho fijo */
-  max-width: 540px; /* <-- Mantener max-width */
-  /* --- FIN AJUSTADO --- */
+  width: 540px;
+  max-width: 540px;
   padding: 0.6rem;
   border-radius: 12px;
   align-items: center;
   box-sizing: border-box;
-  flex-shrink: 0; /* <-- Clave: Evita que la barra se encoja */
+  flex-shrink: 0;
   margin-top: 0.8rem;
   height: auto;
-  align-self: center; /* Centra la barra horizontalmente en el contenedor flex principal (.app) */
+  align-self: center;
 }
 
 /* Estilos para el input dentro de la barra */
 .input-bar input {
-  flex: 1; /* Permite que el input crezca para ocupar el espacio disponible */
+  flex: 1;
   padding: 0.8rem;
   border: none;
   border-radius: 25px;
   font-size: 1rem;
   background-color: #1e1e1e;
   color: #fff;
-  padding-right: 1.5rem; /* Espacio para un posible ícono */
-  min-width: 0; /* <-- Añadido: Permite que el input se encoja en flexbox si es necesario */
+  padding-right: 1.5rem;
+  min-width: 0;
 }
 
 /* Estilos para el botón dentro de la barra */
@@ -166,20 +189,31 @@ body {
   color: #00e07a;
 }
 
-/* --- Media Query para Teléfonos (Input Bar) --- */
+/* --- Media Query para Teléfonos --- */
 @media (max-width: 768px) {
-  /* --- AJUSTADO: En móviles, volver a 100% width para adaptarse --- */
-  .input-bar {
-    width: 100%; /* <-- Usar 100% en móviles */
-    max-width: none; /* Asegurar que max-width no interfiera */
-    gap: 0.1rem;
-    padding: 0.4rem;
+  /* Ajustar .app.chat-page-container para móviles si position: fixed causa problemas */
+  .app.chat-page-container {
+      position: relative;
+      top: auto;
+      left: auto;
+      transform: none;
+      height: auto;
+      max-height: unset;
+      overflow-y: auto;
   }
-   .chat-box {
-    width: 100%; /* <-- Usar 100% en móviles */
-    max-width: none; /* Asegurar que max-width no interfiera */
-   }
-  /* --- FIN AJUSTADO --- */
+
+  /* Ajustar ancho de chat-box e input-bar a 100% en móviles */
+  .input-bar,
+  .chat-box {
+    width: 100%;
+    max-width: none;
+  }
+
+  /* Ajustar gap y padding en input-bar para móviles */
+  .input-bar {
+      gap: 0.1rem;
+      padding: 0.4rem;
+  }
 
   .input-bar input {
     min-width: 80px;
@@ -192,7 +226,7 @@ body {
   }
 }
 
-/* Scroll personalizado - no cambiaron */
+/* Scroll personalizado */
 .chat-box::-webkit-scrollbar {
   width: 8px;
 }
@@ -208,16 +242,15 @@ body {
 }
 
 /* --- ESTILOS PARA LA PÁGINA DE INICIO --- */
-/* Estos estilos solo se aplican al div con clase 'app' EN LA PÁGINA DE INICIO */
 .app.homepage-container {
-   position: relative;
-   top: auto;
-   left: auto;
-   transform: none;
-   height: auto;
-   max-height: none;
-   overflow-y: visible;
-   justify-content: flex-start;
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    height: auto;
+    max-height: none;
+    overflow-y: visible;
+    justify-content: flex-start;
 }
 
 /* Contenedor de selector de idioma */
@@ -307,6 +340,5 @@ body {
   color: #888; // Adjust color as needed
   pointer-events: none; // Clicks pass through the icon to the input
 } */
-
 
 
