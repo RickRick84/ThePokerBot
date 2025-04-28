@@ -57,7 +57,7 @@ export default async function handler(req) {
       },
     ];
 
-    let initialResponseResult; // Usamos una variable para el resultado de la primera llamada
+    let initialResponseResult = null; // Inicializamos a null para evitar 'is not defined'
 
     try {
         // --- Primera llamada a OpenAI: con la pregunta del usuario y las herramientas disponibles ---
@@ -68,9 +68,9 @@ export default async function handler(req) {
           tool_choice: "auto",
           stream: false,
         });
-         // Asegurarse de que la respuesta tiene el formato esperado
-         if (!initialResponseResult || !initialResponseResult.choices || initialResponseResult.choices.length === 0) {
-             throw new Error("Unexpected format from OpenAI initial response.");
+         // Validar formato básico de la respuesta inicial de OpenAI
+         if (!initialResponseResult || !initialResponseResult.choices || initialResponseResult.choices.length === 0 || !initialResponseResult.choices[0].message) {
+             throw new Error("Unexpected or empty format from OpenAI initial response.");
          }
 
     } catch (firstCallError) {
@@ -88,7 +88,7 @@ export default async function handler(req) {
           });
     }
 
-    const responseMessage = initialResponseResult.choices[0].message; // Usamos la variable del resultado
+    const responseMessage = initialResponseResult.choices[0].message;
     const toolCalls = responseMessage.tool_calls;
 
     if (toolCalls && toolCalls.length > 0) {
@@ -205,7 +205,6 @@ export default async function handler(req) {
     });
   }
 }
-
 
 
 
