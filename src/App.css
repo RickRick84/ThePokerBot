@@ -54,7 +54,7 @@ body {
 .title-image { /* Estilos para la imagen dentro del contenedor */
   max-width: 100%; /* La imagen no excede el ancho del contenedor */
   height: auto; /* Mantiene la proporción de la imagen */
-  max-height: 180px; /* <-- ¡ALTURA DE IMAGEN REDUCIDA! Ajusta si es necesario. */
+  max-height: 250px; /* <-- Altura máxima del logo. Este es el tamaño que te gusta. */
 }
 
 /* Caja de chat */
@@ -66,8 +66,8 @@ body {
   max-width: 540px;
 
   /* Altura fija y Scroll siempre visible */
-  height: 650px; /* <-- Altura fija en píxeles. Ajusta si aún se corta. */
-  overflow-y: scroll; /* <-- La barra de scroll es SIEMPRE visible. */
+  height: 650px; /* <-- Altura fija en píxeles de la caja de chat. Ajusta si es necesario. */
+  overflow-y: scroll; /* <-- ¡La barra de scroll es SIEMPRE visible! */
 
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
@@ -157,6 +157,55 @@ button:hover {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
 }
+
+/* --- NUEVOS ESTILOS PARA LA PÁGINA DE INICIO Y SELECTOR DE IDIOMA --- */
+.language-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem; /* Espacio arriba */
+  padding: 1.5rem; /* Padding dentro del contenedor */
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 540px; /* Ancho máximo para que coincida con la caja de chat */
+  box-sizing: border-box;
+}
+
+.language-selector h2 {
+  margin-top: 0;
+  color: #fff; /* Color del texto del título del selector */
+  margin-bottom: 1.5rem; /* Espacio debajo del título */
+  font-size: 1.8rem; /* Tamaño de fuente */
+  text-align: center;
+}
+
+.language-selector button {
+  background-color: #00ff88; /* Color similar al botón de enviar */
+  color: #000;
+  border: none;
+  border-radius: 8px; /* Bordes redondeados */
+  padding: 0.9rem 2rem; /* Padding interno del botón */
+  font-size: 1.2rem; /* Tamaño de fuente del botón */
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  margin-bottom: 1rem; /* Espacio entre botones */
+  width: 80%; /* Ancho de los botones */
+  max-width: 250px; /* Ancho máximo de los botones */
+  text-align: center;
+  text-transform: uppercase; /* Texto en mayúsculas */
+}
+
+.language-selector button:hover {
+  background-color: #00e07a; /* Color al pasar el mouse */
+}
+
+/* Estilo para el div de espacio en HomePage para mantener alineación visual */
+/* Puedes ajustar el height si es necesario */
+/* Se define inline en HomePage.jsx por ahora para simplificar */
 
 
 
