@@ -105,21 +105,48 @@ body {
 
 /* Barra de entrada */
 .input-bar {
-  /* --- AJUSTADO: Quitamos gap para manejar el espacio de otra forma --- */
-  /* gap: 0.4rem; // ELIMINADA */
-  width: 100%; /* 100% del padre (hasta max-width) */
-  max-width: 540px; /* Limita ancho en pantallas grandes */
-  padding: 0.6rem; /* Padding interno */
+  display: flex;
+  gap: 0.4rem; /* Default gap */
+  width: 100%; /* Take full width of parent up to max-width */
+  max-width: 540px; /* Limit width on larger screens */
+  padding: 0.6rem; /* Default padding */
   border-radius: 12px;
-  align-items: center; /* Centrado vertical dentro de la barra */
-  box-sizing: border-box; /* Padding incluido en el width */
+  align-items: center; /* Vertical centering within the bar */
+  box-sizing: border-box;
   flex-shrink: 0;
   margin-top: 0.8rem;
   height: auto;
-  /* Centrar horizontalmente usando align-self */
-  align-self: center;
-  display: flex; /* Aseguramos que sigue siendo flex */
+  align-self: center; /* Center this flex item horizontally */
 }
+
+/* --- Media Query para Teléfonos (Pantallas pequeñas) --- */
+@media (max-width: 768px) {
+  .input-bar {
+    /* width: 100%; // Se mantiene 100% */
+    /* max-width: none; // Asegurar que max-width no interfiera */
+    gap: 0.1rem; /* Reducir el gap en pantallas pequeñas */
+    padding: 0.4rem; /* Reducir un poco el padding */
+    /* align-self: center; // Se mantiene */
+  }
+  .input-bar input {
+    min-width: 80px; /* Asegurar que el input puede encoger hasta aquí */
+    /* Considerar ajustar padding-right del input si el texto del placeholder es largo */
+  }
+
+  /* --- AJUSTADO: Fijar el ancho del botón en móviles --- */
+  .input-bar button {
+    width: 95px; /* <-- AJUSTADO: Ancho fijo para el botón en móviles (ajustar si es necesario) */
+    flex-shrink: 0; /* Asegurar que no se encoja por debajo de este ancho fijo */
+    padding: 0.8rem 0; /* Ajustar padding si es necesario con ancho fijo, centramos texto */
+    text-align: center; /* Centrar texto dentro del botón fijo */
+  }
+  /* --- FIN AJUSTADO --- */
+
+  /* Puedes ajustar el padding del .app container en móviles si el contenido choca con los bordes */
+  /* .app { padding: 1rem 0.5rem; } */
+}
+/* --- FIN Media Query --- */
+
 
 input {
   flex: 1;
@@ -141,11 +168,8 @@ button {
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
-  flex-shrink: 0;
+  flex-shrink: 0; /* Important: Prevents button from shrinking below its content or min-width */
   flex-grow: 0;
-  /* --- AJUSTADO: Añadimos margen izquierdo al botón para crear el espacio --- */
-  margin-left: 0.4rem; /* Igual al valor anterior del gap */
-  /* --- FIN AJUSTADO --- */
 }
 
 button:hover {
@@ -248,15 +272,6 @@ button:hover {
   color: #00e07a; /* Color al pasar el mouse */
   background-color: rgba(0, 0, 0, 0.7); /* Slightly less transparent on hover */
 }
-
-/* --- Media Query para Teléfonos (Pantallas pequeñas) --- */
-@media (max-width: 768px) {
-  /* Puedes ajustar el padding del .app container en móviles si el contenido choca con los bordes */
-  /* .app { padding: 1rem 0.5rem; } */
-  /* Puedes ajustar el padding del .app container en móviles si el contenido choca con los bordes */
-  /* .app { padding: 1rem 0.5rem; } */
-}
-/* --- FIN Media Query --- */
 
 
 
