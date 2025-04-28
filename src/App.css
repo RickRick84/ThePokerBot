@@ -116,8 +116,9 @@ body {
   flex-shrink: 0;
   margin-top: 0.8rem;
   height: auto;
-  /* Alineamos a la derecha */
-  align-self: flex-end;
+  /* --- AJUSTADO: Quitamos la alineación a la derecha. Se centrará por align-items en .app --- */
+  /* align-self: flex-end; // ELIMINADA */
+  /* --- FIN AJUSTADO --- */
 }
 
 input {
@@ -218,7 +219,7 @@ button:hover {
 
 /* --- ESTILOS PARA EL ÍCONO DE HOME --- */
 .home-link {
-  position: fixed; /* ¡Ahora debe estar fixed si el elemento está fuera del div.app en ChatPage.jsx */
+  position: fixed; /* ¡Debe estar fixed para posicionarse respecto a la ventana! */
   top: 1rem; /* 1rem desde el borde superior de la ventana */
   left: 1rem; /* 1rem desde el borde izquierdo de la ventana */
 

@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { FaHome } from 'react-icons/fa'; // Importamos el ícono de casita
 import './App.css';
 
-// Objeto simple para gestionar las traducciones (asegúrate de que este objeto esté completo con tus traducciones)
+// Objeto simple para gestionar las traducciones
 const translations = {
   es: {
     system: 'Responde solo sobre póker en español. Si te preguntan otra cosa, decí que solo hablás de póker.',
