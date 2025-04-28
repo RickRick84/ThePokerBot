@@ -32,8 +32,7 @@ body {
   left: 50%;
   transform: translate(-50%, -50%); /* ESTO crea el problema para fixed/absolute internos */
 
-  /* Eliminamos position: relative; */
-  /* position: relative; <-- ¡Asegúrate de que esta línea NO ESTÉ aquí! */
+  /* Asegúrate de que position: relative; NO ESTÉ aquí */
 
 
   /* Altura máxima del contenedor fijo (asegura que no se salga de la pantalla) */
@@ -180,7 +179,7 @@ button:hover {
   box-sizing: border-box;
 }
 
-.language-selector h2 {
+.language-selector h2 { /* Mantenemos la regla por si la quieres reutilizar, aunque el elemento h2 no estará */
   margin-top: 0;
   color: #fff; /* Color del texto del título del selector */
   margin-bottom: 1.5rem; /* Espacio debajo del título */
@@ -219,20 +218,31 @@ button:hover {
 
 /* --- ESTILOS PARA EL ÍCONO DE HOME --- */
 .home-link {
-  /* --- Posicionamiento fijo respecto a la ventana --- */
-  position: fixed; /* ¡Ahora debe estar fixed! */
+  position: fixed; /* ¡Ahora debe estar fixed si el elemento está fuera del div.app en ChatPage.jsx */
   top: 1rem; /* 1rem desde el borde superior de la ventana */
   left: 1rem; /* 1rem desde el borde izquierdo de la ventana */
-  /* --- FIN AJUSTADO --- */
+
+  /* --- NUEVOS ESTILOS PARA EL CÍRCULO --- */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  backdrop-filter: blur(8px); /* Apply blur effect */
+  width: 40px; /* Fixed width for the circle */
+  height: 40px; /* Fixed height for the circle */
+  border-radius: 50%; /* Make it a circle */
+  display: flex; /* Use flexbox to center the icon */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  /* --- FIN NUEVOS ESTILOS --- */
+
 
   color: #00ff88; /* Color del ícono */
   cursor: pointer; /* Cursor de mano al pasar por encima */
-  transition: color 0.2s ease-in-out; /* Transición suave al pasar el mouse */
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out; /* Transición suave al pasar el mouse */
   z-index: 1000; /* Asegura que esté por encima de todo */
 }
 
 .home-link:hover {
   color: #00e07a; /* Color al pasar el mouse */
+  background-color: rgba(0, 0, 0, 0.7); /* Slightly less transparent on hover */
 }
 
 

@@ -11,31 +11,29 @@ function HomePage() {
     navigate(`/chat/${lang}`); // Navegamos a la ruta del chat, incluyendo el idioma en la URL
   };
 
-  return (
+  return ( // <-- Aquí empieza el return con (
     // Asegúrate de que aquí sigue la clase 'homepage-app'
     <div className="app homepage-app"> {/* <-- Asegúrate de tener ambas clases aquí */}
       {/* Reutilizamos la estructura y estilos para el logo */}
       <div className="title-container">
         <img src="/i_love_poker_logo_.png" alt="The Poker Bot Logo" className="title-image" />
-      </div>
+      </div> {/* <-- Cierre correcto de title-container */}
 
       {/* Contenedor para los botones de selección de idioma */}
       <div className="language-selector">
-        <h2>Selecciona tu idioma</h2>
+        {/* --- ELIMINADO: Quitamos el título "Selecciona tu idioma" --- */}
+        {/* <h2>Selecciona tu idioma</h2> */}
+        {/* --- FIN ELIMINADO --- */}
         {/* Botones para cada idioma */}
         <button onClick={() => handleLanguageSelect('es')}>ESPAÑOL</button>
         <button onClick={() => handleLanguageSelect('pt')}>PORTUGUÊS</button>
         <button onClick={() => handleLanguageSelect('en')}>ENGLISH</button>
-      </div>
+      </div> {/* <-- Cierre correcto de language-selector */}
 
-      {/* --- ELIMINADO: Quitamos el div de espacio que podría causar problemas de layout --- */}
-      {/* <div style={{ height: '650px', marginTop: '0.8rem', maxWidth: '540px', width: '100%' }}> */}
-         {/* Puedes ajustar el 'height' aquí para que visualmente se alinee mejor */}
-      {/* </div> */}
-      {/* --- FIN ELIMINADO --- */}
+      {/* Removed the spacing div previously */}
 
-    </div>
-  );
+    </div> // <-- Cierre correcto del div.app homepage-app
+  ); // <-- ¡Aquí el paréntesis de cierre del return!
 }
 
 export default HomePage; // Exportamos el componente
