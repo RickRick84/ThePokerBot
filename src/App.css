@@ -23,7 +23,7 @@ body {
   align-items: center;
   padding: 1rem;
   width: 100%;
-  max-width: 600px;
+  max-width: 600px; /* Limita el ancho del bloque */
   box-sizing: border-box;
 
   /* Posicionamiento Fijo y Centrado */
@@ -107,18 +107,17 @@ body {
 .input-bar {
   display: flex;
   gap: 0.4rem;
-  width: 100%;
-  max-width: 540px;
+  width: 100%; /* Mantiene 100% del padre */
+  /* max-width: 540px; // <-- ¡ELIMINAMOS ESTO! */
   padding: 0.6rem;
   border-radius: 12px;
-  align-items: center; /* Keep align-items for vertical centering within the bar */
+  align-items: center; /* Centrado vertical dentro de la barra */
   box-sizing: border-box;
   flex-shrink: 0;
   margin-top: 0.8rem;
   height: auto;
-  /* --- AJUSTADO: Usamos margin: auto para centrar horizontalmente --- */
-  margin: 0 auto; /* Esto centra el bloque horizontalmente dentro de su contenedor flex */
-  /* Asegúrate de que align-self NO ESTÉ aquí */
+  /* --- AJUSTADO: Centrar horizontalmente usando align-self --- */
+  align-self: center; /* Centra este item flex horizontalmente dentro del padre (.app) */
   /* --- FIN AJUSTADO --- */
 }
 
@@ -221,8 +220,8 @@ button:hover {
 /* --- ESTILOS PARA EL ÍCONO DE HOME --- */
 .home-link {
   position: fixed; /* ¡Debe estar fixed para posicionarse respecto a la ventana! */
-  top: 1.5rem; /* <-- AJUSTADO: Un poco más abajo */
-  left: 1.5rem; /* <-- AJUSTADO: Un poco más a la derecha */
+  top: 1.5rem; /* 1.5rem desde el borde superior de la ventana */
+  left: 1.5rem; /* 1.5rem desde el borde izquierdo de la ventana */
 
   /* --- NUEVOS ESTILOS PARA EL CÍRCULO --- */
   background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
