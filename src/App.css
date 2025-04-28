@@ -105,21 +105,20 @@ body {
 
 /* Barra de entrada */
 .input-bar {
-  display: flex;
-  gap: 0.4rem;
-  /* --- AJUSTADO: Usamos calc para definir el ancho --- */
-  width: calc(100% - 1.6rem); /* 100% del padre menos padding (1.2rem) y gap (0.4rem) */
-  /* max-width: 540px; // <-- Eliminada para simplificar */
-  padding: 0.6rem;
+  /* --- AJUSTADO: Quitamos gap para manejar el espacio de otra forma --- */
+  /* gap: 0.4rem; // ELIMINADA */
+  width: 100%; /* 100% del padre (hasta max-width) */
+  max-width: 540px; /* Limita ancho en pantallas grandes */
+  padding: 0.6rem; /* Padding interno */
   border-radius: 12px;
   align-items: center; /* Centrado vertical dentro de la barra */
   box-sizing: border-box; /* Padding incluido en el width */
   flex-shrink: 0;
   margin-top: 0.8rem;
   height: auto;
-  /* --- AJUSTADO: Centrar horizontalmente usando align-self --- */
-  align-self: center; /* Centra este item flex horizontalmente dentro del padre (.app) */
-  /* --- FIN AJUSTADO --- */
+  /* Centrar horizontalmente usando align-self */
+  align-self: center;
+  display: flex; /* Aseguramos que sigue siendo flex */
 }
 
 input {
@@ -144,6 +143,9 @@ button {
   transition: background-color 0.2s ease-in-out;
   flex-shrink: 0;
   flex-grow: 0;
+  /* --- AJUSTADO: Añadimos margen izquierdo al botón para crear el espacio --- */
+  margin-left: 0.4rem; /* Igual al valor anterior del gap */
+  /* --- FIN AJUSTADO --- */
 }
 
 button:hover {
@@ -246,6 +248,15 @@ button:hover {
   color: #00e07a; /* Color al pasar el mouse */
   background-color: rgba(0, 0, 0, 0.7); /* Slightly less transparent on hover */
 }
+
+/* --- Media Query para Teléfonos (Pantallas pequeñas) --- */
+@media (max-width: 768px) {
+  /* Puedes ajustar el padding del .app container en móviles si el contenido choca con los bordes */
+  /* .app { padding: 1rem 0.5rem; } */
+  /* Puedes ajustar el padding del .app container en móviles si el contenido choca con los bordes */
+  /* .app { padding: 1rem 0.5rem; } */
+}
+/* --- FIN Media Query --- */
 
 
 
