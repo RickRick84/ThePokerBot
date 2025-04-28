@@ -13,7 +13,7 @@ export default async function handler(req) {
   try {
     requestBody = await req.json();
   } catch (e) {
-    console.error("Error parsing request body:", e);
+    console.error("Error parsing request body:", e); // <-- console.error mantenido
     return new Response(JSON.stringify({ error: "Invalid request body: Must be JSON." }), {
       status: 400,
       headers: { 'Content-Type': 'application/json' },
@@ -35,7 +35,7 @@ export default async function handler(req) {
          return new Response('Bad Request: Invalid message format in messages array.', { status: 400 });
     }
 
-    console.log("Received messages for function calling:", messages);
+    // console.log("Received messages for function calling:", messages); // <-- console.log eliminado
 
     const tools = [
       {
@@ -79,7 +79,7 @@ export default async function handler(req) {
          }
 
     } catch (firstCallError) {
-         console.error('Error in first OpenAI call (function calling decision):', firstCallError);
+         console.error('Error in first OpenAI call (function calling decision):', firstCallError); // <-- console.error mantenido
          let errorMsg = "Error en la primera llamada a OpenAI para decidir herramienta.";
          if (firstCallError.response) {
              errorMsg += ` Status: ${firstCallError.response.status}`;
@@ -106,7 +106,7 @@ export default async function handler(req) {
                  throw new Error("Invalid query format from OpenAI tool arguments.");
              }
         } catch (e) {
-            console.error("Error parsing tool call arguments:", e);
+            console.error("Error parsing tool call arguments:", e); // <-- console.error mantenido
             return new Response(JSON.stringify({ error: `Error procesando argumentos de la función de búsqueda: ${e.message}` }), {
                 status: 500,
                 headers: { 'Content-Type': 'application/json' },
@@ -115,11 +115,11 @@ export default async function handler(req) {
 
         const searchQuery = functionArgs.query;
 
-        console.log(`🤖 Modelo decidió llamar a search_web con query: "${searchQuery}"`);
+        // console.log(`🤖 Modelo decidió llamar a search_web con query: "${searchQuery}"`); // <-- console.log eliminado
 
         // --- AQUÍ IRÍA LA LÓGICA REAL DE BÚSQUEDA WEB ---
         const simulatedSearchResults = `[Resultados de búsqueda para "${searchQuery}"]: El ganador de la WSOP Main Event 2024 fue John Smith. Otros resultados recientes relevantes para poker: ...`;
-        console.log("🔍 Simulando resultados de búsqueda:", simulatedSearchResults);
+        // console.log("🔍 Simulando resultados de búsqueda:", simulatedSearchResults); // <-- console.log eliminado
         // --- FIN SIMULACIÓN ---
 
 
@@ -134,9 +134,7 @@ export default async function handler(req) {
           },
         ];
 
-        // >>> LÍNEAS DE LOG ELIMINADAS AQUÍ PARA EVITAR INTERFERENCIA CON EL STREAM <<<
-        // console.log("🔄 Re-enviando a OpenAI con resultados de búsqueda...");
-        // console.log("Valor de messagesWithToolResults antes de la segunda llamada:", messagesWithToolResults);
+        // >>> TODOS LOS console.log DE ESTA SECCIÓN HAN SIDO ELIMINADOS <<<
 
         // >>> ESTE ES EL BLOQUE TRY QUE DEBE CONTENER LA LÓGICA DE PIPEO <<<
         try {
@@ -162,7 +160,7 @@ export default async function handler(req) {
                      controller.enqueue(value);
                    }
                  } catch (error) {
-                   console.error("Error reading or piping OpenAI stream:", error); // <-- Log de error mantenido
+                   console.error("Error reading or piping OpenAI stream:", error); // <-- console.error mantenido
                    controller.error(error);
                  } finally {
                    controller.close();
@@ -181,7 +179,7 @@ export default async function handler(req) {
              });
 
         } catch (secondCallError) {
-             console.error('Error in second OpenAI call (with tool results):', secondCallError); // <-- Log de error mantenido
+             console.error('Error in second OpenAI call (with tool results):', secondCallError); // <-- console.error mantenido
              let errorMsg = "Error en la segunda llamada a OpenAI con resultados de búsqueda.";
              if (secondCallError.response) {
                  errorMsg += ` Status: ${secondCallError.response.status}`;
@@ -202,13 +200,13 @@ export default async function handler(req) {
                status: 500,
                headers: { 'Content-Type': 'application/json' },
            });
-           console.error(errorResponse.body); // <-- Log de error mantenido
+           console.error(errorResponse.body); // <-- console.error mantenido
            return errorResponse;
       }
 
     } else {
         // --- Si OpenAI NO decidió llamar a una herramienta, la primera respuesta es la final ---
-        console.log("🤖 Modelo no llamó a herramienta, enviando respuesta directa (no stream)."); // <-- Log de acción mantenido
+        // console.log("🤖 Modelo no llamó a herramienta, enviando respuesta directa (no stream)."); // <-- console.log eliminado
 
          const finalData = {
              choices: [{ message: responseMessage, index: 0, finish_reason: 'stop' }],
@@ -223,7 +221,7 @@ export default async function handler(req) {
     }
 
   } catch (error) {
-    console.error('Error general durante la interacción con OpenAI (Function Calling):', error); // <-- Log de error mantenido
+    console.error('Error general durante la interacción con OpenAI (Function Calling):', error); // <-- console.error mantenido
 
     let errorMessage = 'Ocurrió un error general al procesar la solicitud con la API.';
     let statusCode = 500;
