@@ -54,7 +54,7 @@ body {
 .title-image { /* Estilos para la imagen dentro del contenedor */
   max-width: 100%; /* La imagen no excede el ancho del contenedor */
   height: auto; /* Mantiene la proporción de la imagen */
-  max-height: 250px; /* <-- Altura máxima de la imagen. AJUSTA ESTE VALOR para el tamaño deseado. */
+  max-height: 180px; /* <-- ¡ALTURA DE IMAGEN REDUCIDA! Ajusta si es necesario. */
 }
 
 /* Caja de chat */
@@ -66,8 +66,8 @@ body {
   max-width: 540px;
 
   /* Altura fija y Scroll siempre visible */
-  height: 650px; /* <-- Altura fija en píxeles. AJUSTA ESTE VALOR (ej: 600px, 700px) al tamaño que buscas "desde el principio". */
-  overflow-y: scroll; /* <-- ¡Esto hace que la barra de scroll sea SIEMPRE visible! */
+  height: 650px; /* <-- Altura fija en píxeles. Ajusta si aún se corta. */
+  overflow-y: scroll; /* <-- La barra de scroll es SIEMPRE visible. */
 
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);

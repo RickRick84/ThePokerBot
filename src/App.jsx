@@ -51,16 +51,16 @@ function App() {
 
       if (data.choices && data.choices.length > 0) {
         const reply = data.choices[0].message;
-        setMessages(currentMessages => [...currentMessages, reply]); // Usamos la forma de actualización con función
+        setMessages(currentMessages => [...currentMessages, reply]); // Usamos la forma de actualizaci\u00F3n con funci\u00F3n
       } else if (data.error) {
         console.error("❌ Error en la respuesta de OpenAI:", data.error);
-        setMessages(currentMessages => [...currentMessages, { // Usamos forma de actualización con función
+        setMessages(currentMessages => [...currentMessages, { // Usamos forma de actualizaci\u00F3n con funci\u00F3n
           role: 'assistant',
           content: `Error de OpenAI: ${data.error.code || 'Código desconocido'} - ${data.error.message || 'Error desconocido'}`
         }]);
       } else {
         console.error("❌ Formato inesperado de respuesta de OpenAI:", data);
-        setMessages(currentMessages => [...currentMessages, { // Usamos forma de actualización con función
+        setMessages(currentMessages => [...currentMessages, { // Usamos forma de actualizaci\u00F3n con funci\u00F3n
           role: 'assistant',
           content: 'No se pudo obtener una respuesta v\u00E1lida de OpenAI.'
         }]);
@@ -83,7 +83,7 @@ function App() {
     }
   };
 
-  return (
+  return ( // Aquí empieza el return con (
     <div className="app">
       <div className="title-container">
         {/* Elemento de imagen para el título */}
@@ -102,14 +102,14 @@ function App() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Escribe tu pregunta sobre póker..."
+          placeholder="Escribí tu pregunta sobre póker..." // Texto corregido aquí
         />
         <button onClick={sendMessage} disabled={loading}>Enviar</button> {/* Deshabilitar en loading */}
       </div>
     </div>
-  );
-}
+  ); // Aquí termina el return con );
+} // Aquí cierra la función App con }
 
-export default App;
+export default App; // export default App;
 
 
