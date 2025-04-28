@@ -28,15 +28,6 @@ body {
   max-width: 600px; /* Limita el ancho del contenido */
   box-sizing: border-box;
 
-  /* --- AJUSTADO: Eliminar posicionamiento fijo de la regla general --- */
-  /* position: fixed; */
-  /* top: 50%; */
-  /* left: 50%; */
-  /* transform: translate(-50%, -50%); */
-  /* height: 85vh; */ /* Altura definida para flex grow */
-  /* overflow-y: auto; */ /* Scroll si el contenido de .app excede max-height */
-  /* --- FIN AJUSTADO --- */
-
   /* Altura mínima para que el footer no suba */
   min-height: 100vh; /* Asegurar que ocupe al menos el alto de la ventana */
 
@@ -44,7 +35,7 @@ body {
 
 /* --- ESTILOS ESPECÍFICOS PARA LA PÁGINA DE CHAT --- */
 /* Estos estilos solo se aplican al div con clase 'app' EN LA PÁGINA DE CHAT */
-/* Asumimos que el div principal en ChatPage.jsx tiene CLASE "app" */
+/* Asumimos que el div principal en ChatPage.jsx tiene CLASE "app chat-page-container" */
 .app.chat-page-container { /* <-- Nueva clase combinada para la página de chat */
     position: fixed; /* Posicionamiento fijo para el chat */
     top: 50%;
@@ -108,22 +99,23 @@ body {
   padding: 0.7rem 1.2rem;
   border-radius: 20px;
   margin: 0.4rem 0;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  overflow-x: hidden;
+   /* Mantener el quiebre de palabra para que el texto largo no se salga */
+   word-break: break-word; /* Propiedad más moderna y efectiva */
+   overflow-wrap: break-word; /* Alias para word-break, buena práctica incluir ambos */
+   overflow-x: hidden; /* <-- CLAVE: Oculta desborde horizontal que pueda romper alineación */
   font-size: 1rem;
   line-height: 1.4;
   box-sizing: border-box;
 }
 
 .message.user {
-  align-self: flex-end;
+  align-self: flex-end; /* <-- CLAVE: Alinea mensajes de usuario a la derecha */
   background-color: #00e0ff;
   color: #000;
 }
 
 .message.assistant {
-  align-self: flex-start;
+  align-self: flex-start; /* <-- CLAVE: Alinea mensajes del asistente a la izquierda */
   background-color: #00ff88;
   color: #000;
 }
@@ -248,6 +240,25 @@ body {
   color: #00e07a;
   background-color: rgba(0, 0, 0, 0.7);
 }
+
+/* --- ESTILOS PARA EL FOOTER (si decides agregar uno) --- */
+/* footer {
+  margin-top: 2rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  text-align: center;
+  padding-bottom: 1rem;
+} */
+
+/* Estilos para el logo dentro del input (si lo implementas) */
+/* .input-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888; // Adjust color as needed
+  pointer-events: none; // Clicks pass through the icon to the input
+} */
 
 
 
