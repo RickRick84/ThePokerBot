@@ -57,18 +57,23 @@ export default async function handler(req) {
       },
     ];
 
-    let initialResponseResult = null; // Inicializamos a null para evitar 'is not defined'
+    let initialResponseResult = null;
 
     try {
         // --- Primera llamada a OpenAI: con la pregunta del usuario y las herramientas disponibles ---
-        initialResponseResult = await openai.chat.completions.create({ // Asignamos el resultado aquí
+        initialResponseResult = await openai.chat.completions.create({
           model: model,
-          messages: messages,
+          // --- ¡Aquí es donde agregamos el mensaje del sistema! ---
+          messages: [
+              { role: 'system', content: 'Eres un asistente experto en póker que responde en español. Tienes acceso a una herramienta de búsqueda web para obtener información actual sobre torneos, jugadores, resultados y noticias del mundo del póker. Siempre que una pregunta requiera información más allá de tu conocimiento de entrenamiento, utiliza la herramienta de búsqueda antes de responder. Si te preguntan algo no relacionado con el póker, responde amablemente que solo puedes ayudar con temas de póker.' },
+              ...messages // Desestructuramos el array 'messages' que viene del frontend
+          ],
+          // --- Fin Adición del Mensaje del Sistema ---
           tools: tools,
           tool_choice: "auto",
           stream: false,
         });
-         // Validar formato básico de la respuesta inicial de OpenAI
+
          if (!initialResponseResult || !initialResponseResult.choices || initialResponseResult.choices.length === 0 || !initialResponseResult.choices[0].message) {
              throw new Error("Unexpected or empty format from OpenAI initial response.");
          }
@@ -146,7 +151,7 @@ export default async function handler(req) {
              console.error('Error in second OpenAI call (with tool results):', secondCallError);
              let errorMsg = "Error en la segunda llamada a OpenAI con resultados de búsqueda.";
              if (secondCallError.response) {
-                 errorMsg += ` Status: ${secondCallError.response.status}`;
+                 errorMsg += ` Status: ${secondCallCallError.response.status}`;
                  if (secondCallError.response.data) errorMsg += ` Data: ${JSON.stringify(secondCallError.response.data)}`;
              } else if (secondCallError.message) {
                  errorMsg += ` Message: ${secondCallError.message}`;
@@ -205,6 +210,5 @@ export default async function handler(req) {
     });
   }
 }
-
 
 
