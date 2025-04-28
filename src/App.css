@@ -111,13 +111,14 @@ body {
   max-width: 540px;
   padding: 0.6rem;
   border-radius: 12px;
-  align-items: center;
+  align-items: center; /* Keep align-items for vertical centering within the bar */
   box-sizing: border-box;
   flex-shrink: 0;
   margin-top: 0.8rem;
   height: auto;
-  /* --- AJUSTADO: Quitamos la alineación a la derecha. Se centrará por align-items en .app --- */
-  /* align-self: flex-end; // ELIMINADA */
+  /* --- AJUSTADO: Usamos margin: auto para centrar horizontalmente --- */
+  margin: 0 auto; /* Esto centra el bloque horizontalmente dentro de su contenedor flex */
+  /* Asegúrate de que align-self NO ESTÉ aquí */
   /* --- FIN AJUSTADO --- */
 }
 
@@ -220,8 +221,8 @@ button:hover {
 /* --- ESTILOS PARA EL ÍCONO DE HOME --- */
 .home-link {
   position: fixed; /* ¡Debe estar fixed para posicionarse respecto a la ventana! */
-  top: 1rem; /* 1rem desde el borde superior de la ventana */
-  left: 0.5rem; /* <-- AJUSTADO: Puede necesitar más ajuste */
+  top: 1.5rem; /* <-- AJUSTADO: Un poco más abajo */
+  left: 1.5rem; /* <-- AJUSTADO: Un poco más a la derecha */
 
   /* --- NUEVOS ESTILOS PARA EL CÍRCULO --- */
   background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
