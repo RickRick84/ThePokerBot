@@ -27,7 +27,7 @@ function HomePage() {
 
   return (
     // Asegúrate de que aquí sigue la clase 'homepage-app'
-    <div className="app homepage-app">
+    <div className="app homepage-container">
       {/* Reutilizamos la estructura y estilos para el logo */}
       <div className="title-container">
         <img src="/i_love_poker_logo_.png" alt="The Poker Bot Logo" className="title-image" />

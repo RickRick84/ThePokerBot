@@ -207,7 +207,7 @@ function ChatPage() { // Nombre del componente
       </Link>
 
       {/* Contenedor principal con estilo fijo y centrado */}
-      <div className="app">
+      <div className="app chat-page-container">
 
         {/* Estructura y estilos para el logo */}
         <div className="title-container">
