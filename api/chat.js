@@ -1,11 +1,18 @@
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
 export default async function handler(req, res) {
   if (req.method === 'OPTIONS') {
-    // Respuesta rápida para las preflight CORS requests
-    return res.status(200).send('OK');
+    res.status(200).send('OK');
+    return;
   }
 
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    res.status(405).json({ error: 'Method not allowed' });
+    return;
   }
 
   try {

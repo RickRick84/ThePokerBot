@@ -22,7 +22,7 @@ const translations = {
     sendButton: 'Enviar',
     writing: 'Escrevendo...',
     openaiError: (code, message) => `Erro da OpenAI: ${code || 'Código desconhecido'} - ${message || 'Erro desconhecido'}`,
-    fetchError: 'Ocorreu um erro ao conectar com a API.',
+    fetchError: 'Ocurrió un error al conectar con la API.',
     invalidOpenAIResponse: 'Não foi possível obter una resposta válida da OpenAI.',
   },
   en: {
@@ -56,6 +56,7 @@ function ChatPage() { // Nombre del componente
   const chatBoxRef = useRef(null);
   const lastMessageRef = useRef(null); // <-- Referencia al último mensaje para scrollear a él
 
+
   // Creamos una referencia a un objeto de Audio para el sonido del botón Enviar
   const sendAudioRef = useRef(new Audio('/sounds/button-click.mp3')); // <-- Asegúrate que esta ruta y nombre de archivo sean correctos
 
@@ -68,17 +69,27 @@ function ChatPage() { // Nombre del componente
   };
 
 
-  // Efecto para scrollear al final cuando los mensajes cambian
+  // Efecto para scrollear al inicio del último mensaje cuando los mensajes cambian
   useEffect(() => {
-    if (lastMessageRef.current) {
-      // <-- AJUSTADO: Scrollear al inicio del último mensaje
-      lastMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } else if (chatBoxRef.current) {
-       // Si por alguna razón no tenemos referencia al último mensaje (ej: primer mensaje),
-       // scrolleamos al fondo del chatbox (comportamiento original)
+    // Solo scrollear si tenemos mensajes después del inicial del sistema
+    // y la carga ha terminado (esto asume backend NO-STREAMING)
+    if (!loading && messages.length > 1) {
+      // Usamos un pequeño timeout para asegurarnos de que el DOM se actualizó con el último mensaje
+      const timeoutId = setTimeout(() => {
+         if (lastMessageRef.current) {
+           // <-- AJUSTADO: Scrollear al inicio del último mensaje con un pequeño delay para asegurar renderizado
+           lastMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+         } else if (chatBoxRef.current) {
+            // Fallback: si no hay referencia al último mensaje, scrollear al fondo
+            chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+         }
+      }, 50); // Un pequeño delay (50ms), puedes ajustarlo si es necesario. Puedes probar con 100 o 200 si 50 no es suficiente.
+       return () => clearTimeout(timeoutId); // Limpiar el timeout si los mensajes cambian de nuevo rápido
+    } else if (chatBoxRef.current && messages.length <= 1) {
+       // Comportamiento original al inicio del chat o solo con el mensaje del sistema
        chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }
-  }, [messages]); // Depende de los mensajes
+  }, [messages, loading]); // Este efecto se ejecuta cada vez que la lista de mensajes o el estado de carga cambia
 
 
   // Efecto para actualizar el idioma si cambia el parámetro de la URL
@@ -89,15 +100,16 @@ function ChatPage() { // Nombre del componente
   }, [lang]);
 
 
-  // Lógica principal para enviar el mensaje (sin sonido)
+  // Lógica principal para enviar el mensaje (funciona con backend NO-STREAMING)
   const sendMessageLogic = async () => {
     if (!input.trim()) return;
 
     const userMessage = { role: 'user', content: input };
-    const newMessages = [...messages, userMessage];
-    setMessages(newMessages);
+    // Agregamos el mensaje del usuario
+    setMessages(currentMessages => [...currentMessages, userMessage]);
     setInput('');
     setLoading(true);
+
 
     try {
       const url = '/api/chat';
@@ -105,12 +117,13 @@ function ChatPage() { // Nombre del componente
 
       const payload = {
         model: 'gpt-4-turbo',
-        messages: newMessages,
+        messages: [...messages, userMessage], // Enviar todos los mensajes incluyendo el último del usuario
         temperature: 0.7,
       };
 
       console.log("📤 Enviando a backend:", payload);
 
+      // Realizar la solicitud fetch
       const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -119,47 +132,67 @@ function ChatPage() { // Nombre del componente
         body: JSON.stringify(payload),
       });
 
-      const data = await response.json();
+      // Verificar si la respuesta es un error HTTP
+      if (!response.ok) {
+          const errorData = await response.json();
+          console.error('❌ Error en la respuesta del backend:', response.status, errorData);
+          // Mostrar un mensaje de error en el chat
+          setMessages(currentMessages => [...currentMessages, {
+              role: 'assistant',
+              content: errorData.error || `HTTP error! status: ${response.status}`
+          }]);
+          return; // Salir de la función si hay un error
+      }
 
-      if (data.choices && data.choices.length > 0) {
+
+      // --- PROCESAR LA RESPUESTA JSON (esperamos un JSON completo) ---
+      const data = await response.json(); // Esperamos el JSON completo
+
+      if (data.choices && data.choices.length > 0 && data.choices[0].message) {
         const reply = data.choices[0].message;
+        // Agregamos la respuesta completa del asistente
         setMessages(currentMessages => [...currentMessages, reply]);
       } else if (data.error) {
         console.error("❌ Error en la respuesta de OpenAI:", data.error);
-        setMessages(currentMessages => [...currentMessages, {
-          role: 'assistant',
-          content: t.openaiError(data.error.code, data.error.message)
-        }]);
+         setMessages(currentMessages => [...currentMessages, {
+            role: 'assistant',
+            content: t.openaiError(data.error.code, data.error.message)
+         }]);
       } else {
         console.error("❌ Formato inesperado de respuesta de OpenAI:", data);
-        setMessages(currentMessages => [...currentMessages, {
-          role: 'assistant',
-          content: t.invalidOpenAIResponse
-        }]);
+         setMessages(currentMessages => [...currentMessages, {
+            role: 'assistant',
+            content: t.invalidOpenAIResponse
+         }]);
       }
+
     } catch (error) {
       console.error("❌ Error en fetch:", error);
-      setMessages(currentMessages => [...currentMessages, {
-        role: 'assistant',
-        content: t.fetchError
-      }]);
+      // Mostrar un mensaje de error general de conexión o fetch
+       setMessages(currentMessages => [...currentMessages, {
+          role: 'assistant',
+          content: t.fetchError
+       }]);
+
     } finally {
-      setLoading(false);
+      setLoading(false); // Terminar carga
     }
   };
 
-  // Handler para el click del botón
+  // Handler para el click del botón (llama a la lógica de envío)
   const handleButtonClick = () => {
-      playSendSound(); // <-- Reproduce el sonido
-      sendMessageLogic(); // <-- Llama a la lógica de envío
+      playSendSound(); // Reproduce el sonido
+      sendMessageLogic(); // Llama a la lógica de envío
   }
 
-  // Handler para la tecla Enter en el input
+  // Handler para la tecla Enter en el input (llama a la lógica de envío)
   const handleKeyDownOptimized = (e) => {
       if (e.key === 'Enter') {
         e.preventDefault(); // Previene la acción por defecto del Enter
-        playSendSound(); // <-- Reproduce el sonido
-        sendMessageLogic(); // <-- Llama a la lógica de envío
+        if (!loading) { // Solo enviar si no estamos cargando ya
+           playSendSound(); // Reproduce el sonido
+           sendMessageLogic(); // Llama a la lógica de envío
+        }
       }
   }
 
@@ -170,11 +203,11 @@ function ChatPage() { // Nombre del componente
       {/* Enlace con ícono de Home */}
       {/* Asegúrate que el tamaño y posición aquí sea el que te gustó */}
       <Link to="/" className="home-link">
-        <FaHome size={15} /> {/* <-- Verifica este tamaño */}
+        <FaHome size={15} /> {/* Verifica este tamaño */}
       </Link>
 
       {/* Contenedor principal con estilo fijo y centrado */}
-      <div className="app"> {/* Reutiliza la clase 'app' */}
+      <div className="app">
 
         {/* Estructura y estilos para el logo */}
         <div className="title-container">
@@ -193,11 +226,12 @@ function ChatPage() { // Nombre del componente
               <span>{msg.content}</span>
             </div>
           ))}
-          {loading && (
-             <div className="message assistant" ref={messages.slice(1).length === 0 ? lastMessageRef : null}> {/* También asigna la ref al mensaje de "Escribiendo" si es el primero */}
-               <span>{t.writing}</span>
-             </div>
-          )}
+           {/* Mensaje de "Escribiendo..." (visible mientras loading sea true) */}
+           {loading && (
+               <div className="message assistant">
+                 <span>{t.writing}</span>
+               </div>
+           )}
         </div>
 
         {/* La barra de entrada */}
@@ -205,10 +239,10 @@ function ChatPage() { // Nombre del componente
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDownOptimized} // <-- Usamos el nuevo handler con sonido
+            onKeyDown={handleKeyDownOptimized}
             placeholder={t.placeholder}
+            disabled={loading} // Deshabilitar input mientras carga
           />
-          {/* <-- Usamos el nuevo handler con sonido en el botón */}
           <button onClick={handleButtonClick} disabled={loading}>{t.sendButton}</button>
         </div>
       </div>
