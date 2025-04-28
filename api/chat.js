@@ -9,17 +9,11 @@ const openai = new OpenAI({
 });
 
 export default async function handler(req) {
-  if (req.method !== 'POST') {
-    return new Response('Method Not Allowed', { status: 405 });
-  }
-
   let requestBody;
   try {
-    // Intentar parsear el body de la solicitud como JSON
     requestBody = await req.json();
   } catch (e) {
     console.error("Error parsing request body:", e);
-    // Devolver un error si el body no es JSON válido
     return new Response(JSON.stringify({ error: "Invalid request body: Must be JSON." }), {
       status: 400,
       headers: { 'Content-Type': 'application/json' },
@@ -33,7 +27,6 @@ export default async function handler(req) {
       return new Response('Bad Request: Messages are required and must be an array.', { status: 400 });
     }
 
-    // Validar estructura básica de los mensajes para evitar errores posteriores
     const isValidMessages = messages.every(msg =>
         typeof msg === 'object' && msg !== null && typeof msg.role === 'string' && typeof msg.content === 'string'
     );
@@ -41,7 +34,6 @@ export default async function handler(req) {
     if (!isValidMessages) {
          return new Response('Bad Request: Invalid message format in messages array.', { status: 400 });
     }
-
 
     console.log("Received messages for function calling:", messages);
 
@@ -65,12 +57,11 @@ export default async function handler(req) {
       },
     ];
 
-    let responseMessage;
-    let toolCalls;
+    let initialResponseResult; // Usamos una variable para el resultado de la primera llamada
 
     try {
         // --- Primera llamada a OpenAI: con la pregunta del usuario y las herramientas disponibles ---
-        const initialResponse = await openai.chat.completions.create({
+        initialResponseResult = await openai.chat.completions.create({ // Asignamos el resultado aquí
           model: model,
           messages: messages,
           tools: tools,
@@ -78,16 +69,12 @@ export default async function handler(req) {
           stream: false,
         });
          // Asegurarse de que la respuesta tiene el formato esperado
-         if (!initialResponse || !initialResponse.choices || initialResponse.choices.length === 0) {
+         if (!initialResponseResult || !initialResponseResult.choices || initialResponseResult.choices.length === 0) {
              throw new Error("Unexpected format from OpenAI initial response.");
          }
 
-        responseMessage = initialResponse.choices[0].message;
-        toolCalls = responseMessage.tool_calls;
-
     } catch (firstCallError) {
          console.error('Error in first OpenAI call (function calling decision):', firstCallError);
-         // Si la primera llamada falla, devolvemos un error
          let errorMsg = "Error en la primera llamada a OpenAI para decidir herramienta.";
          if (firstCallError.response) {
              errorMsg += ` Status: ${firstCallError.response.status}`;
@@ -96,13 +83,14 @@ export default async function handler(req) {
              errorMsg += ` Message: ${firstCallError.message}`;
          }
           return new Response(JSON.stringify({ error: errorMsg }), {
-              status: firstCallError.status || 500, // Usar el status de la respuesta de OpenAI si está disponible
+              status: firstCallError.status || 500,
               headers: { 'Content-Type': 'application/json' },
           });
     }
 
+    const responseMessage = initialResponseResult.choices[0].message; // Usamos la variable del resultado
+    const toolCalls = responseMessage.tool_calls;
 
-    // --- Verificar si OpenAI decidió llamar a una herramienta ---
     if (toolCalls && toolCalls.length > 0) {
       const firstToolCall = toolCalls[0];
       if (firstToolCall.function.name === "search_web") {
@@ -114,7 +102,6 @@ export default async function handler(req) {
              }
         } catch (e) {
             console.error("Error parsing tool call arguments:", e);
-            // Enviar un error específico si los argumentos no se parsean
             return new Response(JSON.stringify({ error: `Error procesando argumentos de la función de búsqueda: ${e.message}` }), {
                 status: 500,
                 headers: { 'Content-Type': 'application/json' },
@@ -148,17 +135,15 @@ export default async function handler(req) {
              const finalResponseStream = await openai.chat.completions.create({
                model: model,
                messages: messagesWithToolResults,
-               stream: true, // <--- La respuesta final SÍ puede ser un stream
+               stream: true,
              });
 
-             // Devolver el stream de la respuesta final al cliente
              return new Response(finalResponseStream, {
                headers: { 'Content-Type': 'text/event-stream' },
              });
 
         } catch (secondCallError) {
              console.error('Error in second OpenAI call (with tool results):', secondCallError);
-             // Enviar un error específico si falla la segunda llamada
              let errorMsg = "Error en la segunda llamada a OpenAI con resultados de búsqueda.";
              if (secondCallError.response) {
                  errorMsg += ` Status: ${secondCallError.response.status}`;
@@ -167,11 +152,10 @@ export default async function handler(req) {
                  errorMsg += ` Message: ${secondCallError.message}`;
              }
               return new Response(JSON.stringify({ error: errorMsg }), {
-                  status: secondCallError.status || 500, // Usar el status de la respuesta de OpenAI si está disponible
+                  status: secondCallError.status || 500,
                   headers: { 'Content-Type': 'application/json' },
               });
         }
-
 
       } else {
            const errorResponse = new Response(JSON.stringify({ error: `Modelo intentó usar una herramienta desconocida: ${firstToolCall.function.name}` }), {
@@ -188,14 +172,13 @@ export default async function handler(req) {
 
          const finalData = {
              choices: [{ message: responseMessage, index: 0, finish_reason: 'stop' }],
-             model: initialResponse.model,
-             id: initialResponse.id,
+             model: initialResponseResult.model,
+             id: initialResponseResult.id,
          };
 
-         // Devolvemos una respuesta JSON (no stream) que el frontend pueda manejar como si fuera un stream terminado
          return new Response(JSON.stringify(finalData), {
             status: 200,
-            headers: { 'Content-Type': 'application/json' }, // Importante: Aquí es application/json
+            headers: { 'Content-Type': 'application/json' },
          });
     }
 
@@ -216,7 +199,6 @@ export default async function handler(req) {
       statusCode = 500;
     }
 
-    // Devolver una respuesta JSON con el error
     return new Response(JSON.stringify({ error: errorMessage }), {
       status: statusCode,
       headers: { 'Content-Type': 'application/json' },
