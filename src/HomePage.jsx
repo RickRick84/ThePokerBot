@@ -26,11 +26,13 @@ function HomePage() {
   };
 
   return (
-    // Asegúrate de que aquí sigue la clase 'homepage-app'
-    <div className="app homepage-container">
-      {/* Reutilizamos la estructura y estilos para el logo */}
+    // Asegúrate de que aquí sigue la clase 'homepage-app' - Nota: en tu App.css se usa .app.homepage-container
+    <div className="app homepage-container"> {/* Usamos .app y .homepage-container consistentemente con CSS */}
+      {/* Reutilizamos la estructura y estilos para el título, pero eliminamos la etiqueta img del logo */}
       <div className="title-container">
-        <img src="/i_love_poker_logo_.png" alt="The Poker Bot Logo" className="title-image" />
+        {/* La imagen del logo ahora está en el background-image del body */}
+        {/* <img src="/i_love_poker_logo_.png" alt="The Poker Bot Logo" className="title-image" /> */} {/* ELIMINADO */}
+        {/* Si necesitas algún texto de título, iría aquí dentro de title-container */}
       </div>
 
       {/* Contenedor para los botones de selección de idioma */}
