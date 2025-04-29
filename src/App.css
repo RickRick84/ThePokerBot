@@ -3,9 +3,10 @@ body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
   background-image: url('/bg.jpg');
-  background-size: contain; /* CAMBIADO: La imagen se ajusta para caber completamente */
+  background-size: contain; /* La imagen se ajusta para caber completamente */
   background-position: center; /* Centra la imagen en el fondo */
-  background-attachment: fixed; /* MANTIENE: La imagen de fondo no se mueve al hacer scroll */
+  background-attachment: fixed; /* La imagen de fondo no se mueve al hacer scroll */
+  background-repeat: no-repeat; /* AÑADIDO: La imagen NO se repite */
   color: #fff;
   min-height: 100vh;
   display: flex;
