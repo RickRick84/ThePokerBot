@@ -245,7 +245,7 @@ body {
       max-width: none;
       padding: 1rem; /* Padding interno */
       /* MARGIN-TOP AQUI ES CLAVE PARA BAJAR EL BLOQUE EN EL HOME */
-      margin-top: 25vh; /* AJUSTA ESTE VALOR (ej: 15vh, 20vh, 25vh) PARA BAJAR EL BLOQUE EN EL HOME */
+      margin-top: 18vh; /* AJUSTA ESTE VALOR (ej: 15vh, 20vh, 25vh) PARA BAJAR EL BLOQUE EN EL HOME */
       /* Propiedades de centrado si .app.homepage-container es flex */
       justify-content: center; /* Centrar contenido verticalmente */
       align-items: center; /* Centrar contenido horizontalmente */
