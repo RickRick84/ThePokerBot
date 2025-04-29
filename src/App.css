@@ -15,7 +15,15 @@ body {
   height: 100vh; /* Altura del body fuera de media query */
   overflow-y: auto;
   overflow-x: hidden;
+  /* Añadir box-sizing global por si acaso */
+  box-sizing: border-box;
 }
+
+/* Aplicar box-sizing a todos los elementos para un modelo de caja más predecible */
+*, *::before, *::after {
+  box-sizing: inherit; /* Hereda el box-sizing del body (border-box) */
+}
+
 
 /* Contenedor principal - Estilos base (para ambos, se anularán para el chat) */
 .app {
@@ -25,7 +33,7 @@ body {
   padding: 1rem;
   width: 100%;
   max-width: 600px;
-  box-sizing: border-box;
+  /* box-sizing ya heredado */
   min-height: 100vh;
 }
 
@@ -44,7 +52,8 @@ body {
   padding: 1rem;
   width: 100%;
   max-width: 600px;
-  box-sizing: border-box;
+  /* box-sizing ya heredado */
+  min-height: 100vh;
 }
 
 /* Contenedor e imagen del título */
@@ -57,6 +66,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  /* box-sizing ya heredado */
 }
 
 .title-image {
@@ -77,11 +87,11 @@ body {
   display: flex;
   flex-direction: column;
   margin-bottom: 0.8rem;
-  box-sizing: border-box;
+  /* box-sizing ya heredado */
   min-width: 0;
   flex-grow: 1;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: hidden; /* Asegurar que no hay scroll horizontal */
 }
 
 /* Mensajes */
@@ -100,7 +110,7 @@ body {
   overflow: visible;
   font-size: 1rem;
   line-height: 1.4;
-  box-sizing: border-box;
+  /* box-sizing ya heredado */
   flex-shrink: 0;
 }
 
@@ -130,7 +140,7 @@ body {
   padding: 0.6rem;
   border-radius: 12px;
   align-items: center;
-  box-sizing: border-box;
+  /* box-sizing ya heredado */
   flex-shrink: 0;
   margin-top: 0.8rem;
   height: auto;
@@ -143,11 +153,12 @@ body {
   padding: 0.8rem;
   border: none;
   border-radius: 25px;
-  font-size: 1rem;
+  font-size: 1em; /* Usar em para escalado relativo */
   background-color: #1e1e1e;
   color: #fff;
   padding-right: 1.5rem;
   min-width: 0;
+  /* box-sizing ya heredado */
 }
 
 /* Estilos para el botón dentro de la barra */
@@ -162,6 +173,7 @@ body {
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
   flex-shrink: 0;
   flex-grow: 0;
+  /* box-sizing ya heredado */
 }
 
 .input-bar button:hover {
@@ -170,77 +182,103 @@ body {
 
 /* --- Media Query para Teléfonos --- */
 @media (max-width: 768px) {
-  /* Ajustar el body en móvil para que sea un contenedor flex de altura completa y centre a sus hijos (como .app) */
-  body {
-        justify-content: center; /* Centrar los hijos (como .app) verticalmente */
-        align-items: center; /* Centrar los hijos (como .app) horizontalmente */
-        height: 100vh; /* Asegurar que body tenga la altura completa de la ventana para centrar */
-        min-height: 100vh; /* Reforzar altura mínima */
-        display: flex; /* Asegurar que body es un contenedor flex */
-        flex-direction: column; /* Asegurar que los hijos se apilan verticalmente */
-   }
+    /* Asegurarnos de que el html y body ocupen el 100% de la altura del viewport y no permitan overflow horizontal */
+    html, body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden; /* Muy importante para evitar scroll horizontal por desbordamiento */
+        height: 100vh; /* Asegurar altura completa del viewport */
+        min-height: 100vh; /* Asegurar altura mínima */
+        /* justify-content y align-items se definen aquí si body es flex */
+        display: flex; /* body es flex container */
+        flex-direction: column; /* los hijos de body (el div#root que contiene .app) se apilan */
+        justify-content: center; /* centrar #root */
+        align-items: center; /* centrar #root */
+    }
 
-  /* Ajustes de Chat Page en móvil (Revisión de Flexbox para llenar espacio) */
-  .app.chat-page-container {
-      position: relative; /* Posicionamiento relativo en móvil */
-      top: auto;
-      left: auto;
-      transform: none;
-      /* CLAVE: Asegurar altura completa de la ventana para que el chat-box y el input-bar distribuyan el espacio */
-      height: 100vh; /* Contenedor toma la altura completa de la ventana */
-      min-height: 100vh; /* Asegurar altura mínima también */
-      max-height: unset; /* Anular cualquier max-height fijo del desktop */
-      overflow-y: hidden; /* El padre no hace scroll principal, el chat-box sí */
-      /* Asegurar que sea un contenedor flex vertical para que chat-box crezca */
-      display: flex;
-      flex-direction: column; /* Los elementos hijos (.chat-box, .input-bar) se apilan verticalmente */
-      align-items: stretch; /* Estirar hijos (.chat-box, .input-bar) para que tomen todo el ancho */
-      width: 100%;
-      max-width: none;
-      padding: 0.5rem; /* Padding alrededor de todo el contenido del chat */
-  }
 
-  /* Asegurar que chat-box e input-bar sean ancho completo en móvil */
-  .input-bar,
-  .chat-box {
-    width: 100%;
-    max-width: none;
-  }
+    /* Ajustes generales para .app en móvil */
+     .app {
+        width: 100%;
+        max-width: 100%; /* Asegurar que no excede el ancho */
+        padding: 0.5rem; /* Padding general */
+        /* box-sizing ya heredado */
+        /* min-height: 100vh; REMOVED - HANDLED BY BODY*/
+        height: 100vh; /* app container takes full height */
+     }
 
-  /* Propiedades de flex y overflow para la caja de chat */
-  .chat-box {
-      flex-grow: 1; /* La caja de chat toma todo el espacio vertical disponible */
-      overflow-y: auto; /* Permite scroll DENTRO de la caja de chat */
-      width: 100%; /* Asegurar ancho completo */
-      max-width: none; /* Anular max-width fijo */
-      /* Añadir padding inferior para que el último mensaje no quede escondido por la barra de input */
-      padding-bottom: 70px; /* Ajusta este valor si la barra de input es más alta */
-      /* Otras propiedades que ya tenías */
-      background-color: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(8px);
-      padding: 1rem;
-      border-radius: 12px;
-      margin-bottom: 0; /* Eliminar margen inferior para que la barra de input quede pegada si es necesario */
-      box-sizing: border-box;
-      min-width: 0; /* Permitir encoger en flex */
-      min-height: 0; /* Importante para que flex-grow funcione correctamente */
-  }
 
-  /* Propiedades de tamaño y posicionamiento para la barra de input (flexible) */
-  .input-bar {
-      flex-shrink: 0; /* La barra de input no se encoge, mantiene su tamaño */
-      width: 100%; /* Ancho completo */
-      max-width: none; /* Anular max-width fijo */
-      display: flex;
-      gap: 0.4rem;
-      padding: 0.6rem; /* Padding interno */
-      align-items: center;
-      box-sizing: border-box;
-      /* Mantener el margen superior para separarla del chat-box */
-      margin-top: 0.5rem; /* Ajusta este valor si necesitas más o menos espacio */
-      height: auto; /* Altura automática */
-      align-self: stretch; /* Estirar horizontalmente si el padre es flex columna y tiene align-items: stretch */
-       background-color: transparent; /* O un color si quieres que tape el fondo */
+    /* Ajustes de Chat Page en móvil (Revisión de Dimensiones y Flexbox) */
+    .app.chat-page-container {
+        position: relative; /* Posicionamiento relativo para contener elementos absolutos si fuera necesario (aunque usamos flex mayormente) */
+        top: auto;
+        left: auto;
+        transform: none;
+        /* CLAVE: Asegurar altura completa del viewport */
+        height: 100vh;
+        min-height: 100vh;
+        max-height: unset;
+        overflow-y: hidden; /* El padre no hace scroll principal */
+        /* Asegurar que sea un contenedor flex vertical */
+        display: flex;
+        flex-direction: column; /* Los hijos se apilan verticalmente */
+        align-items: stretch; /* Estirar hijos (.chat-box, .input-bar) para que tomen todo el ancho */
+        width: 100%;
+        max-width: 100%; /* Asegurar que no excede el ancho */
+        padding: 0.5rem; /* Padding alrededor de todo el contenido del chat */
+        /* box-sizing ya heredado */
+    }
+
+    /* Contenedor del título dentro del chat, asegurar tamaño y margen */
+    .app.chat-page-container .title-container {
+        width: 100%; /* Asegurar ancho completo */
+        max-width: 100%; /* Asegurar que no excede */
+        margin-bottom: 0.5rem; /* Margen más pequeño en móvil si es necesario */
+        flex-shrink: 0; /* No encoger */
+        /* box-sizing ya heredado */
+    }
+
+    /* Imagen del título dentro del chat */
+     .app.chat-page-container .title-image {
+        max-height: 80px; /* Ajustar tamaño máximo de la imagen en móvil */
+        width: auto; /* Ancho automático basado en altura */
+     }
+
+
+    /* Propiedades de flex y overflow para la caja de chat */
+    .chat-box {
+        flex-grow: 1; /* La caja de chat toma todo el espacio vertical disponible */
+        overflow-y: auto; /* Permite scroll DENTRO de la caja de chat */
+        width: 100%; /* Asegurar ancho completo */
+        max-width: 100%; /* Anular max-width fijo */
+        /* Añadir padding inferior para que el último mensaje no quede escondido por la barra de input */
+        padding-bottom: 70px; /* Ajusta este valor para que sea suficiente espacio para tu input bar */
+        /* Otras propiedades que ya tenías */
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(8px);
+        padding: 1rem;
+        border-radius: 12px;
+        margin-bottom: 0; /* Eliminar margen inferior si la barra de input queda pegada */
+        /* box-sizing ya heredado */
+        min-width: 0; /* Permitir encoger en flex */
+        min-height: 0; /* Importante para que flex-grow funcione correctamente */
+    }
+
+    /* Propiedades de tamaño para la barra de input (flexible) */
+    .input-bar {
+        flex-shrink: 0; /* La barra de input no se encoge, mantiene su tamaño */
+        width: 100%; /* Ancho completo */
+        max-width: 100%; /* Asegurar que no excede el ancho */
+        display: flex;
+        gap: 0.4rem;
+        padding: 0.6rem; /* Padding interno */
+        align-items: center;
+        /* box-sizing ya heredado */
+        /* Mantener el margen superior para separarla del chat-box */
+        margin-top: 0.5rem; /* Ajusta este valor si necesitas más o menos espacio */
+        height: auto; /* Altura automática */
+        align-self: stretch; /* Estirar horizontalmente si el padre es flex columna y tiene align-items: stretch */
+         background-color: transparent; /* O un color si quieres que tape el fondo */
     }
 
     /* Ajustes para los elementos dentro de la barra de input */
@@ -251,10 +289,11 @@ body {
       padding: 0.8rem; /* Padding interno */
       border: none; /* Sin borde */
       border-radius: 25px; /* Bordes redondeados */
-      font-size: 1rem; /* Tamaño de fuente */
+      font-size: 1em; /* Usar em para escalado relativo */
       background-color: #1e1e1e; /* Fondo */
       color: #fff; /* Color de texto */
       padding-right: 1.5rem; /* Espacio a la derecha */
+      /* box-sizing ya heredado */
     }
 
     .input-bar button {
@@ -270,14 +309,18 @@ body {
       font-weight: bold; /* Negrita */
       cursor: pointer; /* Cursor */
       transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out; /* Transición */
+      flex-shrink: 0;
+      flex-grow: 0;
+      /* box-sizing ya heredado */
     }
 
 
     /* AJUSTES PARA LA PÁGINA PRINCIPAL/HOME EN MÓVILES */
 
     /* Ajustar tamaño del logo en móviles */
+    /* Ya definimos el title-container y title-image genérico, ajustamos max-height en móvil */
     .title-image {
-      max-height: 150px;
+      max-height: 150px; /* Reducir tamaño en móvil */
     }
 
     /* Ajustar margen inferior del contenedor del título */
@@ -288,6 +331,7 @@ body {
     /* Ajustar padding del contenedor del selector de idioma */
     .language-selector {
       padding: 1rem;
+      /* box-sizing ya heredado */
     }
 
     /* Ajustar tamaño de fuente y margen del título del selector de idioma */
@@ -300,12 +344,13 @@ body {
     .language-selector button {
       padding: 0.7rem 1.5rem;
       font-size: 1.1rem;
+      /* box-sizing ya heredado */
     }
 
     /* Asegurarse de que el contenedor específico de la homepage ocupe todo el ancho y ajustar posicionamiento vertical */
     .app.homepage-container {
         width: 100%;
-        max-width: none;
+        max-width: 100%; /* Asegurar que no excede */
         padding: 1rem; /* Padding interno */
         /* MARGIN-TOP AQUI ES CLAVE PARA BAJAR EL BLOQUE EN EL HOME */
         margin-top: -150px; /* Valor que encontraste que funcionó para bajar el home */
@@ -315,6 +360,7 @@ body {
         /* Asegurarse de que no interfieren otras propiedades de altura aquí */
         height: auto; /* Dejar en auto para que el contenido defina la altura */
         min-height: auto; /* Asegurarse de que no forza altura mínima */
+        /* box-sizing ya heredado */
     }
 
      /* --- ESTILOS PARA EL ÍCONO DE HOME (DENTRO DE MEDIA QUERY) --- */
@@ -324,6 +370,7 @@ body {
          left: 0.5rem; /* Ejemplo: Ajusta la posición left */
          width: 20px; /* Ejemplo: Ajusta el tamaño si es necesario */
          height: 20px; /* Ejemplo: Ajusta el tamaño si es necesario */
+         /* box-sizing ya heredado */
      }
 
 
@@ -356,6 +403,7 @@ body {
     max-height: none;
     overflow-y: visible;
     justify-content: flex-start; /* Puede ser anulado en la media query */
+    /* box-sizing ya heredado */
 }
 
 /* Contenedor de selector de idioma */
@@ -371,7 +419,7 @@ body {
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   width: 100%;
   max-width: 540px;
-  box-sizing: border-box;
+  /* box-sizing ya heredado */
 }
 
 .language-selector h2 {
@@ -391,7 +439,7 @@ body {
   font-size: 1.2rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out;
   margin-bottom: 1rem;
   width: 80%;
   max-width: 250px;
@@ -420,6 +468,7 @@ color: #00ff88;
 cursor: pointer;
 transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 z-index: 1000;
+/* box-sizing ya heredado */
 }
 
 .home-link:hover {
