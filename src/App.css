@@ -159,7 +159,7 @@ body {
   padding: 0.8rem 1.2rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
   flex-shrink: 0;
   flex-grow: 0;
 }
@@ -252,7 +252,7 @@ body {
     border-radius: 10px; /* Bordes redondeados */
     font-weight: bold; /* Negrita */
     cursor: pointer; /* Cursor */
-    transition: background-color 0.2s ease-in-out; /* Transición */
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out; /* Transición */
   }
 
   /* AJUSTES PARA LA PÁGINA PRINCIPAL/HOME EN MÓVILES */
@@ -420,20 +420,20 @@ background-color: rgba(0, 0, 0, 0.7);
 
 /* --- ESTILOS PARA EL FOOTER (si decides agregar uno) --- */
 /* footer {
-  margin-top: 2rem;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.9rem;
-  text-align: center;
-  padding-bottom: 1rem;
+  margin-top: 2rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  text-align: center;
+  padding-bottom: 1rem;
 } */
 
 /* Estilos para el logo dentro del input (si lo implementas) */
 /* .input-icon {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #888; // Adjust color as needed
-  pointer-events: none; // Clicks pass through the icon to the input
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888; // Adjust color as needed
+  pointer-events: none; // Clicks pass through the icon to the input
 } */
 
