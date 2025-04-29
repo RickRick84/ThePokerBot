@@ -170,6 +170,10 @@ body {
 
 /* Ajustes de Chat Page en móvil */
 .app.chat-page-container {
+  /* ... otras reglas ... */
+  background-color: blue !important; /* TEMPORAL: Fondo azul muy visible */
+  /* ... otras reglas ... */
+
   position: relative; /* Posicionamiento relativo en móvil */
   top: auto;
   left: auto;
