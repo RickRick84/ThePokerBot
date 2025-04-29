@@ -230,6 +230,8 @@ body {
         width: 100%;
         max-width: 100%;
         padding: 0; /* Padding manejado por los hijos */
+        /* AÑADIDO: Margen negativo para ajustar la posición vertical del bloque del chat, similar al Home */
+        margin-top: -100px; /* AJUSTA ESTE VALOR si necesitas que suba o baje más */
     }
 
     /* Contenedor del título dentro del chat - Sigue siendo flex-shrink 0 */
@@ -257,7 +259,7 @@ body {
     .chat-box {
         flex-grow: 1; /* Sigue creciendo para llenar espacio DENTRO del chat-page-container */
         flex-shrink: 1; /* Permitir encoger si es necesario */
-        flex-basis: 0; /* <-- Probamos 0 de nuevo, a ver si evita que empiece pequeño */
+        flex-basis: auto; /* <-- Probamos auto de nuevo, a ver si evita que empiece pequeño */
         overflow-y: auto; /* Permite scroll */
         width: 100%;
         max-width: 100%;
@@ -305,6 +307,7 @@ body {
       min-width: 0;
     }
 
+    /* Estilos para el botón dentro de la barra */
     .input-bar button {
       width: 95px;
       flex-shrink: 0;
@@ -412,7 +415,7 @@ body {
   font-size: 1.2rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out;
   margin-bottom: 1rem;
   width: 80%;
   max-width: 250px;
