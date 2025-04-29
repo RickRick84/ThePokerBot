@@ -39,41 +39,52 @@ body {
 
 /* --- ESTILOS ESPECÍFICOS PARA LA PÁGINA DE CHAT --- */
 .app.chat-page-container {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-height: 95vh;
-  height: 85vh;
-  overflow-y: auto;
-  display: flex;
+  position: relative;
+  top: 0%;
+  left: 0%;
+  transform: none;
+  max-height: unset;
+  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
+  display: block;
   flex-direction: column;
+  flex-shrink: 1;
+  flex-grow: 1;
+  flex-basis: auto;
   align-items: center;
-  padding: 1rem;
+  padding: 0;
+  margin-top: 0;
   width: 100%;
-  max-width: 600px;
+  max-width: 100%;
   /* box-sizing ya heredado */
   min-height: 100vh;
 }
 
 /* Contenedor e imagen del título */
 .title-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   width: 100%;
-  max-width: 540px;
-  margin: 0 auto 1.5rem auto;
-  flex-shrink: 0;
+  max-width: 100%;
   height: auto;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem; /* Espacio debajo del título */
+  background-color: rgba(0, 0, 0, 0.8);
+  flex-shrink: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 10;
   /* box-sizing ya heredado */
 }
 
 /* Imagen del título */
 .title-image {
-  max-width: 100%;
-  height: auto;
-  max-height: 250px;
+  width: auto;
+  max-height: 150px;
 }
 
 /* Caja de chat */
@@ -261,19 +272,19 @@ body {
 
     /* Propiedades de flex y overflow para la caja de chat - Es el Flex Item que crece */
     .chat-box {
-        position: static; /* Vuelve a flujo normal */
-        flex-grow: 1; /* Sigue creciendo para llenar espacio DENTRO del chat-page-container */
-        flex-shrink: 1;
-        flex-basis: auto; /* o 0 */
-        overflow-y: auto; /* Permite scroll */
+        position: absolute; /* Vuelve a flujo normal */
+        top: 160px;
+        bottom: 80px;
+        left: 0;
+        right: 0;
         width: 100%;
         max-width: 100%;
         padding: 1rem; /* Padding interno */
-        padding-bottom: 70px; /* Espacio para barra de input */
+        overflow-y: auto; /* Permite scroll */
         background-color: rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(8px);
         border-radius: 12px;
-        margin-bottom: 0;
+        margin: 0;
         min-width: 0;
         min-height: 1px; /* A veces, un min-height muy pequeño ayuda */
         display: flex; /* Es flex para apilar mensajes */
@@ -284,23 +295,21 @@ body {
 
     /* Propiedades de tamaño para la barra de input - Es un Flex Item */
     .input-bar {
-        position: static; /* Vuelve a flujo normal */
-        flex-shrink: 0; /* NO debe encoger */
-        flex-grow: 0; /* NO debe crecer */
-        flex-basis: auto; /* Tamaño base automático */
+        position: absolute; /* Vuelve a flujo normal */
+        bottom: 0; /* Pegado abajo del contenedor padre (.chat-page-container) */
+        left: 0;
+        right: 0; /* Estirado a ancho completo */
         width: 100%;
         max-width: 100%;
-        display: flex;
+        /* CALCULAR ALTURA: Padding + altura de contenido */
+        height: auto; /* Altura automática basada en padding y contenido */
+        padding: 0.8rem 0.6rem; /* Padding vertical y horizontal */
+        display: flex; /* Es flex para el input y botón */
         gap: 0.4rem;
-        padding: 0.6rem;
         align-items: center;
-        height: auto;
-        padding-top: 0.8rem; /* Espacio arriba */
-        padding-bottom: 0.8rem; /* Espacio abajo */
-        align-self: stretch;
-         background-color: rgba(0, 0, 0, 0.9);
-         border-radius: 0;
-        z-index: auto;
+        background-color: rgba(0, 0, 0, 0.9); /* Fondo para que se vea fijo abajo */
+        border-radius: 0;
+        z-index: 10; /* Para que esté por encima del chatbox */
     }
 
     /* Ajustes para los elementos dentro de la barra de input */
