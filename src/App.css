@@ -213,10 +213,10 @@ body {
      }
 
 
-    /* Ajustes de Chat Page en móvil - Ahora es un hijo de .app con Flexbox interno */
+    /* Ajustes de Chat Page en móvil - Vuelve a ser un hijo de .app con Flexbox interno */
     .app.chat-page-container {
         position: relative; /* Mantenemos relative por si acaso */
-        top: auto;
+        top: auto; /* Eliminamos top/bottom/left/right de absolute */
         left: auto;
         transform: none;
         flex-grow: 1; /* Toma el espacio disponible en el app */
@@ -231,8 +231,8 @@ body {
         width: 100%;
         max-width: 100%;
         padding: 0; /* Padding manejado por los hijos */
-        /* <-- APLICAMOS el mismo margin-top negativo que el Home para posicionar el bloque del chat */
-        margin-top: -150px; /* Valor del margin-top del Home */
+        /* Eliminamos el margin-top negativo que aplicamos aquí */
+        margin-top: 0;
     }
 
     /* Contenedor del título dentro del chat - Es un Flex Item */
@@ -244,14 +244,12 @@ body {
         flex-basis: auto;
         height: auto;
         padding-top: 0.5rem;
-        /* Usamos margin-bottom para que coincida con el espaciado de Home */
-        padding-bottom: 0; /* Aseguramos que el padding inferior no interfiera con el margin-bottom */
-        margin-bottom: 1.5rem; /* <-- Usamos el mismo margin-bottom que en el Home */
+        padding-bottom: 0.5rem; /* Espacio debajo del título */
         display: flex;
         justify-content: center;
         align-items: center;
-        z-index: auto;
-        background-color: transparent;
+        z-index: auto; /* Restaurar z-index */
+        background-color: transparent; /* Restaurar fondo si se puso */
     }
 
     /* Imagen del título dentro del chat - Mantenemos el tamaño correcto */
@@ -265,7 +263,7 @@ body {
     .chat-box {
         position: static; /* Vuelve a flujo normal */
         flex-grow: 1; /* Sigue creciendo para llenar espacio DENTRO del chat-page-container */
-        flex-shrink: 1; /* Permitir encoger si es necesario */
+        flex-shrink: 1;
         flex-basis: auto; /* o 0 */
         overflow-y: auto; /* Permite scroll */
         width: 100%;
@@ -287,8 +285,8 @@ body {
     /* Propiedades de tamaño para la barra de input - Es un Flex Item */
     .input-bar {
         position: static; /* Vuelve a flujo normal */
-        flex-shrink: 0; /* NO encoger */
-        flex-grow: 0; /* NO crecer */
+        flex-shrink: 0; /* NO debe encoger */
+        flex-grow: 0; /* NO debe crecer */
         flex-basis: auto; /* Tamaño base automático */
         width: 100%;
         max-width: 100%;
