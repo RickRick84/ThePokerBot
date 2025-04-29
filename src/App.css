@@ -234,7 +234,7 @@ body {
   .app.homepage-container {
     width: 100%;
     max-width: none;
-    padding: 3rem; /* Asegura un padding interno */
+    padding: 1rem; /* Asegura un padding interno */
     /* --- CLAVE: Añadir espacio en la parte superior --- */
     padding-top: 3rem; /* O un valor mayor, como 4rem o 5rem, para empujar el contenido hacia abajo */
     /* margin-top: 2rem; */ /* O podrías usar margin-top en lugar de padding-top */
