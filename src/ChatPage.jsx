@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function Chat() {
+function ChatPage() {
   return (
     <div className="chat-page-container">
        <Link to="/" className="home-link">
@@ -24,4 +24,4 @@ function Chat() {
   );
 }
 
-export default Chat;
+export default ChatPage;

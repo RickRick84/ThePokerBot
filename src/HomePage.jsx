@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function Home() {
+function HomePage() {
   return (
     <div className="homepage-container">
       <div className="language-selector">
@@ -15,4 +15,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default HomePage;
