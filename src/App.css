@@ -78,12 +78,7 @@ body {
   flex-direction: column;
   margin-bottom: 0.8rem;
   box-sizing: border-box;
-  min-width: 0; /* Permite que encoja si es necesario en flex */
-
-  /* Altura Fija REMOVIDA - Ahora usa flex-grow y overflow */
-  /* height: 650px; */
-
-  /* Permite que crezca para llenar el espacio y maneje su propio scroll */
+  min-width: 0;
   flex-grow: 1;
   overflow-y: auto;
   overflow-x: hidden;
@@ -91,43 +86,27 @@ body {
 
 /* Mensajes */
 .message {
-  display: flex; /* Cambiado de block a flex */
+  display: flex;
   flex-direction: column;
   align-items: flex-start;
-
-  /* Dejar que el contenido determine el ancho, limitado por max-width */
-  /* width: 100%; */ /* Removido */
-  width: fit-content; /* O auto */
+  width: fit-content;
   max-width: 80%;
   padding: 0.7rem 1.2rem;
   border-radius: 20px;
   margin: 0.4rem 0;
-
-  /* Aseguramos que el texto se envuelva dentro de la burbuja */
   word-break: break-word;
   overflow-wrap: break-word;
-  white-space: pre-wrap; /* Asegura que los saltos de línea y espacios se respeten */
-
-  /* Eliminamos overflow en message para no ocultar contenido */
-  overflow: visible; /* O auto */
-  /* overflow-x: hidden; */ /* Removido */
-  /* overflow-y: hidden; */ /* Removido */
-
+  white-space: pre-wrap;
+  overflow: visible;
   font-size: 1rem;
   line-height: 1.4;
   box-sizing: border-box;
   flex-shrink: 0;
 }
 
-/* Estilos para el span dentro del mensaje - Asegura que el texto fluya */
-/* Nota: Los estilos inline en ChatPage.jsx tienen mayor prioridad,
-   pero estas reglas aseguran que el span por defecto no impida el envolvimiento. */
+/* Estilos para el span dentro del mensaje */
 .message span {
-    display: inline-block; /* O block */
-    /* Eliminar cualquier ancho o altura fija que pueda conflictuar */
-    /* width: auto; */
-    /* max-width: none; */
-    /* height: auto; */
+    display: inline-block;
 }
 
 .message.user {
@@ -191,7 +170,7 @@ body {
 
 /* --- Media Query para Teléfonos --- */
 @media (max-width: 768px) {
-  /* Ajustar .app.chat-page-container para móviles si position: fixed causa problemas */
+  /* Ajustes de Chat Page en móvil */
   .app.chat-page-container {
       position: relative;
       top: auto;
@@ -202,14 +181,12 @@ body {
       overflow-y: auto;
   }
 
-  /* Ajustar ancho de chat-box e input-bar a 100% en móviles */
   .input-bar,
   .chat-box {
     width: 100%;
     max-width: none;
   }
 
-  /* Ajustar gap y padding en input-bar para móviles */
   .input-bar {
       gap: 0.1rem;
       padding: 0.4rem;
@@ -224,7 +201,42 @@ body {
     padding: 0.8rem 0;
     text-align: center;
   }
-}
+
+  /* AJUSTES AGREGADOS PARA LA PÁGINA PRINCIPAL/HOME EN MÓVILES */
+  .title-image {
+    max-height: 150px;
+  }
+
+  .title-container {
+    margin-bottom: 1.5rem;
+  }
+
+  .language-selector {
+    padding: 1rem;
+  }
+
+  .language-selector h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .language-selector button {
+    padding: 0.7rem 1.5rem;
+    font-size: 1.1rem;
+  }
+
+  .app {
+      width: 100%;
+      padding: 0.5rem;
+      max-width: none;
+  }
+
+  .app.homepage-container {
+      width: 100%;
+      max-width: none;
+      padding: 1rem;
+  }
+} /* Fin Media Query */
 
 /* Scroll personalizado */
 .chat-box::-webkit-scrollbar {
