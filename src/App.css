@@ -3,7 +3,7 @@ body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
   background-image: url('/bg.jpg');
-  background-size: contain;
+  background-size: cover; /* Cambiado a cover para mejor ajuste de la imagen */
   background-position: center;
   background-attachment: fixed;
   background-repeat: no-repeat;
@@ -19,13 +19,12 @@ body {
   box-sizing: border-box;
 }
 
-/* Aplicar box-sizing a todos los elementos para un modelo de caja más predecible */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: inherit;
 }
 
-
-/* Contenedor principal - Estilos base (para ambos, se anularán para el chat) */
 .app {
   display: flex;
   flex-direction: column;
@@ -37,7 +36,6 @@ body {
   min-width: 0;
 }
 
-/* --- ESTILOS ESPECÍFICOS PARA LA PÁGINA DE CHAT --- */
 .app.chat-page-container {
   position: relative;
   top: 0%;
@@ -61,7 +59,6 @@ body {
   min-width: 0;
 }
 
-/* Contenedor e imagen del título */
 .title-container {
   position: absolute;
   top: 0;
@@ -82,7 +79,6 @@ body {
   min-width: 0;
 }
 
-/* Caja de chat */
 .chat-box {
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
@@ -101,7 +97,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Mensajes */
 .message {
   display: flex;
   flex-direction: column;
@@ -120,9 +115,8 @@ body {
   flex-shrink: 0;
 }
 
-/* Estilos para el span dentro del mensaje */
 .message span {
-    display: inline-block;
+  display: inline-block;
 }
 
 .message.user {
@@ -137,7 +131,6 @@ body {
   color: #000;
 }
 
-/* Barra de entrada */
 .input-bar {
   display: flex;
   gap: 0.4rem;
@@ -154,7 +147,6 @@ body {
   min-width: 0;
 }
 
-/* Estilos para el input dentro de la barra */
 .input-bar input {
   flex: 1;
   padding: 0.8rem;
@@ -167,7 +159,6 @@ body {
   min-width: 0;
 }
 
-/* Estilos para el botón dentro de la barra */
 .input-bar button {
   background-color: #00ff88;
   color: #000;
@@ -185,194 +176,192 @@ body {
   color: #00e07a;
 }
 
-/* --- Media Query para Teléfonos --- */
 @media (max-width: 768px) {
-    html, body {
-        width: 100%;
-        max-width: 100%;
-        overflow-x: hidden;
-        height: 100vh;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background-size: cover;
-    }
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+  }
 
-     .app {
-        width: 100%;
-        max-width: 100%;
-        padding: 0.5rem;
-        height: 100vh;
-        min-height: 100vh;
-        min-width: 0;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: stretch;
-        margin-top: 0;
-     }
+  .app {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.5rem;
+    height: 100vh;
+    min-height: 100vh;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    margin-top: 0;
+  }
 
-    .app.chat-page-container {
-        position: relative;
-        top: auto;
-        left: auto;
-        transform: none;
-        flex-grow: 1;
-        flex-shrink: 1;
-        flex-basis: auto;
-        height: auto;
-        min-height: 0;
-        min-width: 0;
-        overflow-y: hidden;
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        width: 100%;
-        max-width: 100%;
-        padding: 0;
-        margin-top: 0;
-    }
+  .app.chat-page-container {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    height: auto;
+    min-height: 0;
+    min-width: 0;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin-top: 0;
+  }
 
-    .app.chat-page-container .title-container {
-        position: static;
-        width: 100%;
-        max-width: 100%;
-        flex-shrink: 0;
-        flex-basis: auto;
-        height: auto;
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: auto;
-        background-color: transparent;
-        min-height: 0;
-        min-width: 0;
-    }
+  .app.chat-page-container .title-container {
+    position: static;
+    width: 100%;
+    max-width: 100%;
+    flex-shrink: 0;
+    flex-basis: auto;
+    height: auto;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: auto;
+    background-color: transparent;
+    min-height: 0;
+    min-width: 0;
+  }
 
-    .chat-box {
-        position: static;
-        width: 100%;
-        max-width: 100%;
-        padding: 1rem;
-        overflow-y: auto;
-        background-color: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(8px);
-        border-radius: 12px;
-        margin: 0;
-        min-width: 0;
-        min-height: 0;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        flex-grow: 1;
-        flex-shrink: 1;
-        flex-basis: auto;
-    }
+  .chat-box {
+    position: static;
+    width: 100%;
+    max-width: 100%;
+    padding: 1rem;
+    overflow-y: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    margin: 0;
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+  }
 
-    .input-bar {
-        position: static;
-        width: 100%;
-        max-width: 100%;
-        height: auto;
-        padding: 0.8rem 0.6rem;
-        display: flex;
-        gap: 0.4rem;
-        align-items: center;
-        background-color: rgba(0, 0, 0, 0.9);
-        border-radius: 0;
-        z-index: 10;
-        flex-shrink: 0;
-        flex-grow: 0;
-        flex-basis: auto;
-        min-height: 0;
-        min-width: 0;
-    }
+  .input-bar {
+    position: static;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    padding: 0.8rem 0.6rem;
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.9);
+    border-radius: 0;
+    z-index: 10;
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-basis: auto;
+    min-height: 0;
+    min-width: 0;
+  }
 
-    .input-bar input {
-      flex: 1;
-      padding: 0.8rem;
-      border: none;
-      border-radius: 25px;
-      font-size: 1em;
-      background-color: #1e1e1e;
-      color: #fff;
-      padding-right: 1.5rem;
-      min-width: 0;
-    }
+  .input-bar input {
+    flex: 1;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 25px;
+    font-size: 1em;
+    background-color: #1e1e1e;
+    color: #fff;
+    padding-right: 1.5rem;
+    min-width: 0;
+  }
 
-    .input-bar button {
-      width: 95px;
-      flex-shrink: 0;
-      padding: 0.8rem 0;
-      text-align: center;
-      background-color: #00ff88;
-      color: #000;
-      border: none;
-      border-radius: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-    }
+  .input-bar button {
+    width: 95px;
+    flex-shrink: 0;
+    padding: 0.8rem 0;
+    text-align: center;
+    background-color: #00ff88;
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  }
 
-    .app.homepage-container {
-        position: relative;
-        top: auto;
-        left: auto;
-        transform: none;
-        flex-grow: 1;
-        flex-shrink: 1;
-        flex-basis: auto;
-        height: auto;
-        min-height: auto;
-        min-width: 0;
-        overflow-y: visible;
-        width: 100%;
-        max-width: 100%;
-        padding: 1rem;
-        margin-top: -150px;
-        justify-content: center;
-        align-items: center;
-    }
+  .app.homepage-container {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    height: auto;
+    min-height: auto;
+    min-width: 0;
+    overflow-y: visible;
+    width: 100%;
+    max-width: 100%;
+    padding: 1rem;
+    margin-top: -150px;
+    justify-content: center;
+    align-items: center;
+  }
 
-     .title-image {
-       max-height: 150px;
-       width: auto;
-     }
+  .title-image {
+    max-height: 150px;
+    width: auto;
+  }
 
-     .title-container {
-       margin-bottom: 1.5rem;
-     }
+  .title-container {
+    margin-bottom: 1.5rem;
+  }
 
-     .language-selector {
-       padding: 1rem;
-        margin-top: 80px;
-        min-height: 0;
-        min-width: 0;
-     }
+  .language-selector {
+    padding: 1rem;
+    margin-top: 80px;
+    min-height: 0;
+    min-width: 0;
+  }
 
-     .language-selector h2 {
-       font-size: 1.5rem;
-       margin-bottom: 1rem;
-     }
+  .language-selector h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
 
-     .language-selector button {
-       padding: 0.8rem 1.5rem;
-       font-size: 1.1rem;
-     }
-
-
-     .home-link {
-         top: 0.5rem;
-         left: 0.5rem;
-         width: 20px;
-         height: 20px;
-     }
+  .language-selector button {
+    padding: 0.8rem 1.5rem;
+    font-size: 1.1rem;
+  }
 
 
+  .home-link {
+    top: 0.5rem;
+    left: 0.5rem;
+    width: 20px;
+    height: 20px;
+  }
 }
 
 /* Scroll personalizado */
@@ -386,22 +375,22 @@ body {
 }
 
 .chat-box::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
 }
 
 /* --- ESTILOS PARA LA PÁGINA DE INICIO --- (outside media query) */
 .app.homepage-container {
-    position: relative;
-    top: auto;
-    left: auto;
-    transform: none;
-    height: auto;
-    max-height: none;
-    overflow-y: visible;
-    justify-content: flex-start;
-    min-height: auto;
-    min-width: 0;
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
+  height: auto;
+  max-height: none;
+  overflow-y: visible;
+  justify-content: flex-start;
+  min-height: auto;
+  min-width: 0;
 }
 
 /* Contenedor de selector de idioma (outside media query) */
@@ -452,26 +441,26 @@ body {
 
 /* --- ESTILOS PARA EL ÍCONO DE HOME --- (outside media query) */
 .home-link {
-position: fixed;
-top: 0.8rem;
-left: 0.8rem;
-background-color: rgba(0, 0, 0, 0.5);
-backdrop-filter: blur(8px);
-width: 25px;
-height: 25px;
-border-radius: 50%;
-display: flex;
-justify-content: center;
-align-items: center;
-color: #00ff88;
-cursor: pointer;
-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-z-index: 1000;
+  position: fixed;
+  top: 0.8rem;
+  left: 0.8rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #00ff88;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  z-index: 1000;
 }
 
 .home-link:hover {
-color: #00e07a;
-background-color: rgba(0, 0, 0, 0.7);
+  color: #00e07a;
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 /* --- ESTILOS PARA EL FOOTER (si decides agregar uno) --- */
