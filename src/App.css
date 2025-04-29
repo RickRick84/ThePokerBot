@@ -252,7 +252,6 @@ body {
     /* display: block; */
     justify-content: flex-start; /* Esto alinea el contenido de los hijos (como .app) al inicio verticalmente */
 align-items: flex-start; /* Esto alinea el contenido de los hijos al inicio horizontalmente */
-height: auto; /* Deja que la altura sea determinada por el contenido */
 min-height: 100vh; /* Pero asegúrate de que siga ocupando al menos toda la ventana */
 /* Si tu body tenía display: flex fuera de la media query para centrar globalmente,
    quizás necesites anularlo en móvil con: display: block; */
@@ -266,7 +265,7 @@ min-height: 100vh; /* Pero asegúrate de que siga ocupando al menos toda la vent
  }
 
 
-/* Asegurar que el contenedor específico de la homepage también ocupe todo el ancho y tenga margen superior si es necesario */
+/* Asegurar que el contenedor específico de la homepage también ocupe todo el ancho y tenga margen superior*/
 .app.homepage-container {
     width: 100%;
     max-width: none;
