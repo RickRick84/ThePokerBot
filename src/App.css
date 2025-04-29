@@ -172,35 +172,35 @@ body {
 @media (max-width: 768px) {
   /* Ajustes de Chat Page en móvil */
   .app.chat-page-container {
-      position: relative;
-      top: auto;
-      left: auto;
-      transform: none;
-      height: auto;
-      max-height: unset;
-      overflow-y: auto;
-  }
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    height: auto;
+    max-height: unset;
+    overflow-y: auto;
+}
 
-  .input-bar,
-  .chat-box {
-    width: 100%;
-    max-width: none;
-  }
+.input-bar,
+.chat-box {
+  width: 100%;
+  max-width: none;
+}
 
-  .input-bar {
-      gap: 0.1rem;
-      padding: 0.4rem;
-  }
+.input-bar {
+    gap: 0.1rem;
+    padding: 0.4rem;
+}
 
-  .input-bar input {
-    min-width: 80px;
-  }
-  .input-bar button {
-    width: 95px;
-    flex-shrink: 0;
-    padding: 0.8rem 0;
-    text-align: center;
-  }
+.input-bar input {
+  min-width: 80px;
+}
+.input-bar button {
+  width: 95px;
+  flex-shrink: 0;
+  padding: 0.8rem 0;
+  text-align: center;
+}
 
   /* AJUSTES AGREGADOS PARA LA PÁGINA PRINCIPAL/HOME EN MÓVILES */
   .title-image {
