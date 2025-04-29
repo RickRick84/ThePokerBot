@@ -248,6 +248,7 @@ body {
     /* Propiedades de flex y overflow para la caja de chat */
     .chat-box {
         flex-grow: 1; /* La caja de chat toma todo el espacio vertical disponible */
+        flex-basis: 0; /* <-- Añadido: Tamaño base cero para mejor comportamiento de flex-grow */
         overflow-y: auto; /* Permite scroll DENTRO de la caja de chat */
         width: 100%; /* Asegurar ancho completo */
         max-width: 100%; /* Anular max-width fijo */
@@ -439,7 +440,7 @@ body {
   font-size: 1.2rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
   margin-bottom: 1rem;
   width: 80%;
   max-width: 250px;
