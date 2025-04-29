@@ -12,7 +12,7 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 100vh;
+  height: 100vh; /* Altura del body fuera de media query */
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -172,109 +172,101 @@ body {
 @media (max-width: 768px) {
   /* Ajustes de Chat Page en móvil */
   .app.chat-page-container {
-    position: relative;
-    top: auto;
-    left: auto;
-    transform: none;
-    height: auto;
-    max-height: unset;
-    overflow-y: auto;
-}
+      position: relative;
+      top: auto;
+      left: auto;
+      transform: none;
+      height: auto;
+      max-height: unset;
+      overflow-y: auto;
+  }
 
-.input-bar,
-.chat-box {
-  width: 100%;
-  max-width: none;
-}
+  .input-bar,
+  .chat-box {
+    width: 100%;
+    max-width: none;
+  }
 
-.input-bar {
-    gap: 0.1rem;
-    padding: 0.4rem;
-}
+  .input-bar {
+      gap: 0.1rem;
+      padding: 0.4rem;
+  }
 
-.input-bar input {
-  min-width: 80px;
-}
-.input-bar button {
-  width: 95px;
-  flex-shrink: 0;
-  padding: 0.8rem 0;
-  text-align: center;
-}
+  .input-bar input {
+    min-width: 80px;
+  }
+  .input-bar button {
+    width: 95px;
+    flex-shrink: 0;
+    padding: 0.8rem 0;
+    text-align: center;
+  }
 
-  /* AJUSTES AGREGADOS PARA LA PÁGINA PRINCIPAL/HOME EN MÓVILES */
+  /* AJUSTES PARA LA PÁGINA PRINCIPAL/HOME EN MÓVILES */
+
+  /* Ajustar tamaño del logo en móviles */
   .title-image {
     max-height: 150px;
   }
 
+  /* Ajustar margen inferior del contenedor del título */
   .title-container {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem; /* Usar 1.5rem consistentemente */
   }
 
+  /* Ajustar padding del contenedor del selector de idioma */
   .language-selector {
     padding: 1rem;
   }
 
+  /* Ajustar tamaño de fuente y margen del título del selector de idioma */
   .language-selector h2 {
     font-size: 1.5rem;
     margin-bottom: 1rem;
   }
 
+  /* Ajustar padding de los botones de idioma */
   .language-selector button {
     padding: 0.7rem 1.5rem;
     font-size: 1.1rem;
   }
 
+  /* Asegurarse de que el contenedor principal .app ocupe todo el ancho en móvil */
+  /* Esta regla aplica tanto al .app.homepage-container como al .app.chat-page-container si no tienen más especificidad */
   .app {
       width: 100%;
       padding: 0.5rem;
       max-width: none;
   }
 
+  /* Asegurarse de que el contenedor específico de la homepage ocupe todo el ancho y ajustar posicionamiento vertical */
   .app.homepage-container {
-    width: 100%;
-    max-width: none;
-    padding: 1rem; /* Asegura un padding interno */
-    /* --- CLAVE: Añadir espacio en la parte superior --- */
-    padding-top: 3rem; /* O un valor mayor, como 4rem o 5rem, para empujar el contenido hacia abajo */
-    /* margin-top: 2rem; */ /* O podrías usar margin-top en lugar de padding-top */
-    justify-content: flex-start; /* Asegura alineación al inicio verticalmente */
-    align-items: flex-start; /* Asegura alineación al inicio horizontalmente */
-  /* AJUSTES FUNDAMENTALES PARA CONTENEDORES EN HOME MÓVIL */
+      width: 100%;
+      max-width: none;
+      padding: 1rem; /* Padding interno */
+      /* MARGIN-TOP AQUI ES CLAVE PARA BAJAR EL BLOQUE EN EL HOME */
+      margin-top: 25vh; /* AJUSTA ESTE VALOR (ej: 15vh, 20vh, 25vh) PARA BAJAR EL BLOQUE EN EL HOME */
+      /* Propiedades de centrado si .app.homepage-container es flex */
+      justify-content: center; /* Centrar contenido verticalmente */
+      align-items: center; /* Centrar contenido horizontalmente */
+      /* Asegurarse de que no interfieren otras propiedades de altura aquí */
+      height: auto; /* Dejar en auto para que el contenido defina la altura */
+      min-height: auto; /* Asegurarse de que no forza altura mínima */
+  }
 
-  /* Ajustar el body en móvil para evitar centrado vertical no deseado */
-  body {
-    justify-content: flex-start; /* Alinear contenido al inicio verticalmente */
-    align-items: flex-start; /* Alinear contenido al inicio horizontalmente */
-    height: auto; /* Dejar que la altura sea determinada por el contenido */
-    min-height: 100vh; /* Pero asegurar que al menos ocupe toda la ventana */
-    /* Si body tenía display: flex para centrado global, quizás necesites anularlo: */
-    /* display: block; */
-    justify-content: flex-start; /* Esto alinea el contenido de los hijos (como .app) al inicio verticalmente */
-align-items: flex-start; /* Esto alinea el contenido de los hijos al inicio horizontalmente */
-min-height: 100vh; /* Pero asegúrate de que siga ocupando al menos toda la ventana */
-/* Si tu body tenía display: flex fuera de la media query para centrar globalmente,
-   quizás necesites anularlo en móvil con: display: block; */
-}
-
-/* Asegurar que el contenedor principal .app ocupe todo el ancho en móvil */
- .app {
-     width: 100%;
-     max-width: none;
-     padding: 1rem; /* Asegurar padding */
- }
+   /* Ajustar el body en móvil para que sea un contenedor flex de altura completa y centre a sus hijos (como .app) */
+   body {
+        justify-content: center; /* Centrar los hijos (como .app) verticalmente */
+        align-items: center; /* Centrar los hijos (como .app) horizontalmente */
+        height: 100vh; /* Asegurar que body tenga la altura completa de la ventana para centrar */
+        min-height: 100vh; /* Reforzar altura mínima */
+        display: flex; /* Asegurar que body es un contenedor flex */
+        flex-direction: column; /* Asegurar que los hijos se apilan verticalmente */
+   }
 
 
-/* Asegurar que el contenedor específico de la homepage también ocupe todo el ancho y tenga margen superior*/
-.app.homepage-container {
-    width: 100%;
-    max-width: none;
-    padding: 3rem; /* Asegurar padding */
-    margin-top: 40vh; /* Ejemplo: Añadir un margen arriba para separar del borde superior */
-    justify-content: flex-start; /* Asegurar alineación al inicio */
-    align-items: flex-start; /* Asegurar alineación al inicio */
-}}
 } /* Fin Media Query */
+
 
 /* Scroll personalizado */
 .chat-box::-webkit-scrollbar {
@@ -292,6 +284,7 @@ min-height: 100vh; /* Pero asegúrate de que siga ocupando al menos toda la vent
 }
 
 /* --- ESTILOS PARA LA PÁGINA DE INICIO --- */
+/* Estos estilos aplican fuera de la media query */
 .app.homepage-container {
     position: relative;
     top: auto;
@@ -300,7 +293,7 @@ min-height: 100vh; /* Pero asegúrate de que siga ocupando al menos toda la vent
     height: auto;
     max-height: none;
     overflow-y: visible;
-    justify-content: flex-start;
+    justify-content: flex-start; /* Puede ser anulado en la media query */
 }
 
 /* Contenedor de selector de idioma */
@@ -350,45 +343,44 @@ min-height: 100vh; /* Pero asegúrate de que siga ocupando al menos toda la vent
 
 /* --- ESTILOS PARA EL ÍCONO DE HOME --- */
 .home-link {
-  position: fixed;
-  top: 0.8rem;
-  left: 0.8rem;
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(8px);
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #00ff88;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-  z-index: 1000;
+position: fixed;
+top: 0.8rem;
+left: 0.8rem;
+background-color: rgba(0, 0, 0, 0.5);
+backdrop-filter: blur(8px);
+width: 25px;
+height: 25px;
+border-radius: 50%;
+display: flex;
+justify-content: center;
+align-items: center;
+color: #00ff88;
+cursor: pointer;
+transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+z-index: 1000;
 }
 
 .home-link:hover {
-  color: #00e07a;
-  background-color: rgba(0, 0, 0, 0.7);
+color: #00e07a;
+background-color: rgba(0, 0, 0, 0.7);
 }
 
 /* --- ESTILOS PARA EL FOOTER (si decides agregar uno) --- */
 /* footer {
-  margin-top: 2rem;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.9rem;
-  text-align: center;
-  padding-bottom: 1rem;
+  margin-top: 2rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  text-align: center;
+  padding-bottom: 1rem;
 } */
 
 /* Estilos para el logo dentro del input (si lo implementas) */
 /* .input-icon {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #888; // Adjust color as needed
-  pointer-events: none; // Clicks pass through the icon to the input
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888; // Adjust color as needed
+  pointer-events: none; // Clicks pass through the icon to the input
 } */
-
 
