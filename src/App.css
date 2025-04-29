@@ -1,122 +1,127 @@
-/* Estilos Generales (aplicados a todo el body, a menos que se anulen) */
+/* === GLOBAL === */
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
   background-image: url('/bg.jpg');
-  background-size: cover; /* Cambiado a cover para mejor ajuste de la imagen */
+  background-size: cover;
   background-position: center;
   background-attachment: fixed;
   background-repeat: no-repeat;
   color: #fff;
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  height: 100vh;
-  overflow-y: auto;
   overflow-x: hidden;
-  box-sizing: border-box;
 }
 
+/* === RESET === */
 *,
 *::before,
 *::after {
-  box-sizing: inherit;
+  box-sizing: border-box;
 }
 
+/* === ROOT WRAPPER === */
 .app {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh;
   padding: 1rem;
+}
+
+/* === HOME === */
+.homepage-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 600px;
+  padding: 1rem;
+}
+
+.language-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.language-selector h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.language-selector p {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.language-selector button {
+  background-color: #00ff88;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  padding: 0.9rem 2rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0.4rem 0;
+  width: 80%;
+  max-width: 250px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s ease-in-out;
+}
+
+.language-selector button:hover {
+  color: #00e07a;
+}
+
+/* === CHAT === */
+.chat-page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
   max-width: 600px;
   min-height: 100vh;
-  min-width: 0;
-}
-
-.app.chat-page-container {
-  position: relative;
-  top: 0%;
-  left: 0%;
-  transform: none;
-  max-height: unset;
-  min-height: 100vh;
-  height: 100vh;
-  overflow: hidden;
-  display: block;
-  flex-direction: column;
-  flex-shrink: 1;
-  flex-grow: 1;
-  flex-basis: auto;
-  align-items: center;
-  padding: 0;
-  margin-top: 0;
-  width: 100%;
-  max-width: 100%;
-  min-height: 100vh;
-  min-width: 0;
-}
-
-.title-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  background-color: rgba(0, 0, 0, 0.8);
-  flex-shrink: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-  min-height: 0;
-  min-width: 0;
+  padding: 1rem;
 }
 
 .chat-box {
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
   padding: 1rem;
-  width: 540px;
+  width: 100%;
   max-width: 540px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
-  margin-bottom: 0.8rem;
-  min-width: 0;
-  min-height: 0;
   flex-grow: 1;
   overflow-y: auto;
-  overflow-x: hidden;
+  margin-bottom: 1rem;
 }
 
 .message {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: fit-content;
   max-width: 80%;
   padding: 0.7rem 1.2rem;
   border-radius: 20px;
   margin: 0.4rem 0;
   word-break: break-word;
-  overflow-wrap: break-word;
-  white-space: pre-wrap;
-  overflow: visible;
   font-size: 1rem;
   line-height: 1.4;
-  flex-shrink: 0;
-}
-
-.message span {
-  display: inline-block;
 }
 
 .message.user {
@@ -131,20 +136,12 @@ body {
   color: #000;
 }
 
+/* === INPUT BAR === */
 .input-bar {
   display: flex;
-  gap: 0.4rem;
-  width: 540px;
+  width: 100%;
   max-width: 540px;
-  padding: 0.6rem;
-  border-radius: 12px;
-  align-items: center;
-  flex-shrink: 0;
-  margin-top: 0.8rem;
-  height: auto;
-  align-self: center;
-  min-height: 0;
-  min-width: 0;
+  gap: 0.5rem;
 }
 
 .input-bar input {
@@ -152,11 +149,9 @@ body {
   padding: 0.8rem;
   border: none;
   border-radius: 25px;
-  font-size: 1em;
   background-color: #1e1e1e;
   color: #fff;
-  padding-right: 1.5rem;
-  min-width: 0;
+  font-size: 1rem;
 }
 
 .input-bar button {
@@ -164,282 +159,17 @@ body {
   color: #000;
   border: none;
   border-radius: 10px;
-  padding: 0.8rem 1.2rem;
+  padding: 0 1.5rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-  flex-shrink: 0;
-  flex-grow: 0;
+  transition: all 0.2s ease-in-out;
 }
 
 .input-bar button:hover {
   color: #00e07a;
 }
 
-@media (max-width: 768px) {
-  html,
-  body {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-    height: 100vh;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-size: cover;
-  }
-
-  .app {
-    width: 100%;
-    max-width: 100%;
-    padding: 0.5rem;
-    height: 100vh;
-    min-height: 100vh;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: stretch;
-    margin-top: 0;
-  }
-
-  .app.chat-page-container {
-    position: relative;
-    top: auto;
-    left: auto;
-    transform: none;
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: auto;
-    height: auto;
-    min-height: 0;
-    min-width: 0;
-    overflow-y: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    width: 100%;
-    max-width: 100%;
-    padding: 0;
-    margin-top: 0;
-  }
-
-  .app.chat-page-container .title-container {
-    position: static;
-    width: 100%;
-    max-width: 100%;
-    flex-shrink: 0;
-    flex-basis: auto;
-    height: auto;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: auto;
-    background-color: transparent;
-    min-height: 0;
-    min-width: 0;
-  }
-
-  .chat-box {
-    position: static;
-    width: 100%;
-    max-width: 100%;
-    padding: 1rem;
-    overflow-y: auto;
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(8px);
-    border-radius: 12px;
-    margin: 0;
-    min-width: 0;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: auto;
-  }
-
-  .input-bar {
-    position: static;
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    padding: 0.8rem 0.6rem;
-    display: flex;
-    gap: 0.4rem;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.9);
-    border-radius: 0;
-    z-index: 10;
-    flex-shrink: 0;
-    flex-grow: 0;
-    flex-basis: auto;
-    min-height: 0;
-    min-width: 0;
-  }
-
-  .input-bar input {
-    flex: 1;
-    padding: 0.8rem;
-    border: none;
-    border-radius: 25px;
-    font-size: 1em;
-    background-color: #1e1e1e;
-    color: #fff;
-    padding-right: 1.5rem;
-    min-width: 0;
-  }
-
-  .input-bar button {
-    width: 95px;
-    flex-shrink: 0;
-    padding: 0.8rem 0;
-    text-align: center;
-    background-color: #00ff88;
-    color: #000;
-    border: none;
-    border-radius: 10px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-  }
-
-  .app.homepage-container {
-    position: relative;
-    top: auto;
-    left: auto;
-    transform: none;
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: auto;
-    height: auto;
-    min-height: auto;
-    min-width: 0;
-    overflow-y: visible;
-    width: 100%;
-    max-width: 100%;
-    padding: 1rem;
-    margin-top: -150px;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .title-image {
-    max-height: 150px;
-    width: auto;
-  }
-
-  .title-container {
-    margin-bottom: 1.5rem;
-  }
-
-  .language-selector {
-    padding: 1rem;
-    margin-top: 80px;
-    min-height: 0;
-    min-width: 0;
-  }
-
-  .language-selector h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .language-selector button {
-    padding: 0.8rem 1.5rem;
-    font-size: 1.1rem;
-  }
-
-
-  .home-link {
-    top: 0.5rem;
-    left: 0.5rem;
-    width: 20px;
-    height: 20px;
-  }
-}
-
-/* Scroll personalizado */
-.chat-box::-webkit-scrollbar {
-  width: 8px;
-}
-
-.chat-box::-webkit-scrollbar-thumb {
-  background: #00e0ff;
-  border-radius: 10px;
-}
-
-.chat-box::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-}
-
-/* --- ESTILOS PARA LA PÁGINA DE INICIO --- (outside media query) */
-.app.homepage-container {
-  position: relative;
-  top: auto;
-  left: auto;
-  transform: none;
-  height: auto;
-  max-height: none;
-  overflow-y: visible;
-  justify-content: flex-start;
-  min-height: auto;
-  min-width: 0;
-}
-
-/* Contenedor de selector de idioma (outside media query) */
-.language-selector {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 2rem;
-  padding: 1.5rem;
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(8px);
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-  width: 100%;
-  max-width: 540px;
-  min-height: 0;
-  min-width: 0;
-}
-
-.language-selector h2 {
-  margin-top: 0;
-  color: #fff;
-  margin-bottom: 1.5rem;
-  font-size: 1.8rem;
-  text-align: center;
-}
-
-.language-selector button {
-  background-color: #00ff88;
-  color: #000;
-  border: none;
-  border-radius: 8px;
-  padding: 0.9rem 2rem;
-  font-size: 1.2rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-  margin-bottom: 1rem;
-  width: 80%;
-  max-width: 250px;
-  text-align: center;
-  text-transform: uppercase;
-}
-
-.language-selector button:hover {
-  color: #00e07a;
-}
-
-/* --- ESTILOS PARA EL ÍCONO DE HOME --- (outside media query) */
+/* === HOME ICON === */
 .home-link {
   position: fixed;
   top: 0.8rem;
@@ -454,8 +184,8 @@ body {
   align-items: center;
   color: #00ff88;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
   z-index: 1000;
+  font-size: 1.2rem;
 }
 
 .home-link:hover {
@@ -463,8 +193,17 @@ body {
   background-color: rgba(0, 0, 0, 0.7);
 }
 
-/* --- ESTILOS PARA EL FOOTER (si decides agregar uno) --- */
-/* footer { ... } */
+/* === SCROLL PERSONALIZADO === */
+.chat-box::-webkit-scrollbar {
+  width: 8px;
+}
 
-/* Estilos para el logo dentro del input (si lo implementas) */
-/* .input-icon { ... } */
+.chat-box::-webkit-scrollbar-thumb {
+  background: #00e0ff;
+  border-radius: 10px;
+}
+
+.chat-box::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
