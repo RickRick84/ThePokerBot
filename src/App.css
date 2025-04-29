@@ -235,7 +235,35 @@ body {
       width: 100%;
       max-width: none;
       padding: 1rem;
-  }
+  /* AJUSTES FUNDAMENTALES PARA CONTENEDORES EN HOME MÓVIL */
+
+  /* Ajustar el body en móvil para evitar centrado vertical no deseado */
+  body {
+    justify-content: flex-start; /* Alinear contenido al inicio verticalmente */
+    align-items: flex-start; /* Alinear contenido al inicio horizontalmente */
+    height: auto; /* Dejar que la altura sea determinada por el contenido */
+    min-height: 100vh; /* Pero asegurar que al menos ocupe toda la ventana */
+    /* Si body tenía display: flex para centrado global, quizás necesites anularlo: */
+    /* display: block; */
+}
+
+/* Asegurar que el contenedor principal .app ocupe todo el ancho en móvil */
+ .app {
+     width: 100%;
+     max-width: none;
+     padding: 1rem; /* Asegurar padding */
+ }
+
+
+/* Asegurar que el contenedor específico de la homepage también ocupe todo el ancho y tenga margen superior si es necesario */
+.app.homepage-container {
+    width: 100%;
+    max-width: none;
+    padding: 1rem; /* Asegurar padding */
+    margin-top: 2rem; /* Ejemplo: Añadir un margen arriba para separar del borde superior */
+    justify-content: flex-start; /* Asegurar alineación al inicio */
+    align-items: flex-start; /* Asegurar alineación al inicio */
+}}
 } /* Fin Media Query */
 
 /* Scroll personalizado */
