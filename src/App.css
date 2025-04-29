@@ -1,4 +1,4 @@
-/* Estilos Generales (aplicados a todo el body, a menos que se anulen) */
+/* Estilos Generales (aplicados a todo el body, a menos que se anulan) */
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
@@ -209,94 +209,101 @@ body {
         flex-direction: column; /* Los hijos de app (HomePage o ChatPage) se apilan */
         justify-content: flex-start; /* Alinear el contenido de app al inicio */
         align-items: stretch; /* Estirar hijos de app a ancho completo */
+        /* Quitar el margin-top negativo de .app si lo tenía para que el chat-page-container posicionado absoltuto funcione bien */
+        margin-top: 0;
      }
 
 
-    /* Ajustes de Chat Page en móvil - Ahora es un hijo de .app que debe tomar espacio */
+    /* Ajustes de Chat Page en móvil - Ahora es un contenedor relativo de altura completa para posicionar sus hijos */
     .app.chat-page-container {
-        position: relative; /* Puede ser útil si hay elementos posiconados dentro */
-        top: auto;
-        left: auto;
+        position: relative; /* CONTENEDOR RELATIVO para posicionar hijos */
+        top: 0; /* Alineado arriba en el .app contenedor */
+        left: 0;
         transform: none;
-        flex-grow: 1; /* ChatPage Container toma el espacio disponible en el app */
+        flex-grow: 1; /* Crece en el app container (aunque sus hijos sean absolutos) */
         flex-shrink: 1;
         flex-basis: auto; /* o 0 */
-        height: auto; /* Altura automática como flex item */
-        min-height: 0; /* Importante para flex-grow */
-        overflow-y: hidden; /* El contenedor de la página no hace scroll */
-        display: flex; /* ChatPage Container también es un flex container para sus elementos internos */
-        flex-direction: column; /* Elementos internos (titulo, chatbox, inputbar) se apilan */
-        align-items: stretch; /* Estirar elementos internos a ancho completo */
+        height: 100vh; /* Ocupa la altura completa del viewport */
+        min-height: 100vh;
+        max-height: unset;
+        overflow-y: hidden; /* El contenedor de la página NO hace scroll */
+        display: block; /* Usamos block layout ya que los hijos principales son absolutos */
         width: 100%;
         max-width: 100%;
-        padding: 0; /* Padding manejado por los hijos */
-        /* AÑADIDO: Margen negativo para ajustar la posición vertical del bloque del chat, similar al Home */
-        margin-top: -100px; /* AJUSTA ESTE VALOR si necesitas que suba o baje más */
+        padding: 0; /* Padding manejado por los hijos posicionados */
+        /* margin-top negativo eliminado si estaba aquí para esta estrategia */
+        margin-top: 0;
     }
 
-    /* Contenedor del título dentro del chat - Sigue siendo flex-shrink 0 */
+    /* Contenedor del título dentro del chat - POSICIONADO ABSOLUTO ARRIBA */
     .app.chat-page-container .title-container {
+        position: absolute; /* Posicionado absoltuto dentro de .chat-page-container */
+        top: 0; /* Pegado arriba */
+        left: 0;
+        right: 0; /* Estirado a ancho completo */
         width: 100%;
         max-width: 100%;
-        flex-shrink: 0; /* Asegurar que no encoge */
-        flex-basis: auto; /* Tamaño base basado en contenido */
-        height: auto; /* Altura automática basada en contenido */
+        /* CALCULAR ALTURA: max-height de imagen + padding */
+        height: auto; /* Altura automática basada en padding y contenido */
         padding-top: 0.5rem;
-        padding-bottom: 0.5rem; /* Espacio debajo del título */
-        display: flex;
+        padding-bottom: 0.5rem;
+        display: flex; /* Sigue siendo flex para centrar la imagen */
         justify-content: center;
         align-items: center;
+        flex-shrink: 0; /* No debería encoger en un layout block, pero lo mantenemos */
+        background-color: rgba(0, 0, 0, 0.8); /* Fondo para que se vea fijo arriba */
+        z-index: 10; /* Para que esté por encima del chatbox */
     }
 
-    /* Imagen del título dentro del chat - AJUSTADO AL TAMAÑO DE HOME */
+    /* Imagen del título dentro del chat - AJUSTADO AL TAMAÑO DE HOME Y CENTRADO */
      .app.chat-page-container .title-image {
-        max-height: 150px; /* AJUSTADO: Tamaño para que sea igual que en Home móvil */
+        max-height: 150px; /* AJUSTADO: Tamaño igual que en Home móvil */
         width: auto;
      }
 
 
-    /* Propiedades de flex y overflow para la caja de chat - Ajustando Flexbox para estabilidad */
+    /* Propiedades de flex y overflow para la caja de chat - POSICIONADO ABSOLUTO PARA LLENAR ESPACIO */
     .chat-box {
-        flex-grow: 1; /* Sigue creciendo para llenar espacio DENTRO del chat-page-container */
-        flex-shrink: 1; /* Permitir encoger si es necesario */
-        flex-basis: auto; /* <-- Probamos auto de nuevo, a ver si evita que empiece pequeño */
-        overflow-y: auto; /* Permite scroll */
+        position: absolute; /* Posicionado absoltuto dentro de .chat-page-container */
+        top: 170px; /* <-- AJUSTA ESTE VALOR: Posición desde arriba (Altura de title-container + espacio) */
+        bottom: 80px; /* <-- AJUSTA ESTE VALOR: Posición desde abajo (Altura de input-bar + espacio) */
+        left: 0;
+        right: 0; /* Estirado a ancho completo */
         width: 100%;
         max-width: 100%;
         padding: 1rem; /* Padding interno */
-        padding-bottom: 70px; /* Espacio para barra de input */
+        overflow-y: auto; /* Permite scroll */
         background-color: rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(8px);
         border-radius: 12px;
-        margin-bottom: 0;
-        min-width: 0;
-        min-height: 0; /* Importante para flex-grow */
-        /*min-height: 1px;*/ /* A veces, un min-height muy pequeño ayuda a la distribución flex */
+        /* Los márgenes y flex-grow/shrink/basis ya no aplican de la misma forma con Absolute */
+        margin: 0;
+        display: flex; /* Sigue siendo flex para apilar mensajes */
+        flex-direction: column;
     }
 
-    /* Propiedades de tamaño para la barra de input - Ahora es un flex item normal DENTRO del chat-page-container */
+    /* Propiedades de tamaño para la barra de input - POSICIONADO ABSOLUTO ABAJO */
     .input-bar {
-        flex-shrink: 0; /* NO debe encoger */
-        flex-grow: 0; /* NO debe crecer */
-        flex-basis: auto; /* Tamaño base automático */
+        position: absolute; /* Posicionado absoltuto dentro de .chat-page-container */
+        bottom: 0; /* Pegado abajo */
+        left: 0;
+        right: 0; /* Estirado a ancho completo */
         width: 100%;
         max-width: 100%;
-        display: flex;
+        /* CALCULAR ALTURA: Padding + altura de contenido */
+        height: auto; /* Altura automática basada en padding y contenido */
+        padding: 0.8rem 0.6rem; /* Padding vertical y horizontal */
+        display: flex; /* Es flex para el input y botón */
         gap: 0.4rem;
-        padding: 0.6rem;
         align-items: center;
-        height: auto;
-        padding-top: 0.8rem; /* Espacio arriba */
-        padding-bottom: 0.8rem; /* Espacio abajo */
-        align-self: stretch;
-         background-color: rgba(0, 0, 0, 0.9);
-         border-radius: 0;
+        background-color: rgba(0, 0, 0, 0.9); /* Fondo para que se vea fijo abajo */
+        border-radius: 0;
+        z-index: 10; /* Para que esté por encima del chatbox */
     }
 
     /* Ajustes para los elementos dentro de la barra de input */
     .input-bar input {
-      min-width: 80px;
-      flex: 1;
+      flex: 1; /* Ocupa espacio restante */
       padding: 0.8rem;
       border: none;
       border-radius: 25px;
@@ -309,7 +316,7 @@ body {
 
     /* Estilos para el botón dentro de la barra */
     .input-bar button {
-      width: 95px;
+      width: 95px; /* Ancho fijo */
       flex-shrink: 0;
       padding: 0.8rem 0;
       text-align: center;
@@ -324,11 +331,11 @@ body {
 
     /* AJUSTES PARA LA PÁGINA PRINCIPAL/HOME EN MÓVILES - Ahora es un hijo de .app */
     .app.homepage-container {
-        position: relative;
+        position: relative; /* HOME Sigue siendo relativo para que funcione su margin-top */
         top: auto;
         left: auto;
         transform: none;
-        flex-grow: 1; /* Home Page Container también puede crecer si es necesario, pero con height:auto y margin-top, su tamaño es fijo */
+        flex-grow: 1;
         flex-shrink: 1;
         flex-basis: auto;
         height: auto; /* Altura automática basada en contenido */
@@ -415,7 +422,7 @@ body {
   font-size: 1.2rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
   margin-bottom: 1rem;
   width: 80%;
   max-width: 250px;
