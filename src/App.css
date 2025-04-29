@@ -2,11 +2,11 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  background-image: url('/bg.jpg');
-  background-size: contain; /* La imagen se ajusta para caber completamente */
-  background-position: center; /* Centra la imagen en el fondo */
+  background-image: url('/bg.jpg'); /* Asegúrate que la ruta y el nombre del archivo sean correctos */
+  background-size: cover; /* CAMBIADO: La imagen se escala para CUBRIR toda el área */
+  background-position: center; /* Mantiene la imagen centrada */
   background-attachment: fixed; /* La imagen de fondo no se mueve al hacer scroll */
-  background-repeat: no-repeat; /* AÑADIDO: La imagen NO se repite */
+  background-repeat: no-repeat; /* MANTIENE: Asegura que no se repita si 'cover' deja algún hueco mínimo */
   color: #fff;
   min-height: 100vh;
   display: flex;
