@@ -271,7 +271,7 @@ min-height: 100vh; /* Pero asegúrate de que siga ocupando al menos toda la vent
     width: 100%;
     max-width: none;
     padding: 1rem; /* Asegurar padding */
-    margin-top: 4rem; /* Ejemplo: Añadir un margen arriba para separar del borde superior */
+    margin-top: 6rem; /* Ejemplo: Añadir un margen arriba para separar del borde superior */
     justify-content: flex-start; /* Asegurar alineación al inicio */
     align-items: flex-start; /* Asegurar alineación al inicio */
 }}
