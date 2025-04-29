@@ -170,77 +170,76 @@ body {
 
 /* --- Media Query para Teléfonos --- */
 @media (max-width: 768px) {
-    /* Ajustar el body en móvil para que sea un contenedor flex de altura completa y centre a sus hijos (como .app) */
-    body {
+  /* Ajustar el body en móvil para que sea un contenedor flex de altura completa y centre a sus hijos (como .app) */
+  body {
         justify-content: center; /* Centrar los hijos (como .app) verticalmente */
         align-items: center; /* Centrar los hijos (como .app) horizontalmente */
         height: 100vh; /* Asegurar que body tenga la altura completa de la ventana para centrar */
         min-height: 100vh; /* Reforzar altura mínima */
         display: flex; /* Asegurar que body es un contenedor flex */
         flex-direction: column; /* Asegurar que los hijos se apilan verticalmente */
-    }
+   }
 
-    /* Ajustes generales para .app en móvil */
-     .app {
-        width: 100%;
-        padding: 0.5rem;
-        max-width: none;
-     }
+  /* Ajustes de Chat Page en móvil (Revisión de Flexbox para llenar espacio) */
+  .app.chat-page-container {
+      position: relative; /* Posicionamiento relativo en móvil */
+      top: auto;
+      left: auto;
+      transform: none;
+      /* CLAVE: Asegurar altura completa de la ventana para que el chat-box y el input-bar distribuyan el espacio */
+      height: 100vh; /* Contenedor toma la altura completa de la ventana */
+      min-height: 100vh; /* Asegurar altura mínima también */
+      max-height: unset; /* Anular cualquier max-height fijo del desktop */
+      overflow-y: hidden; /* El padre no hace scroll principal, el chat-box sí */
+      /* Asegurar que sea un contenedor flex vertical para que chat-box crezca */
+      display: flex;
+      flex-direction: column; /* Los elementos hijos (.chat-box, .input-bar) se apilan verticalmente */
+      align-items: stretch; /* Estirar hijos (.chat-box, .input-bar) para que tomen todo el ancho */
+      width: 100%;
+      max-width: none;
+      padding: 0.5rem; /* Padding alrededor de todo el contenido del chat */
+  }
 
+  /* Asegurar que chat-box e input-bar sean ancho completo en móvil */
+  .input-bar,
+  .chat-box {
+    width: 100%;
+    max-width: none;
+  }
 
-    /* Ajustes de Chat Page en móvil (Revisión de Flexbox para llenar espacio) */
-    .app.chat-page-container {
-        position: relative; /* Posicionamiento relativo en móvil */
-        top: auto;
-        left: auto;
-        transform: none;
-        /* CLAVE: Asegurar altura completa de la ventana para que el chat-box y el input-bar distribuyan el espacio */
-        height: 100vh; /* Contenedor toma la altura completa de la ventana */
-        min-height: 100vh; /* Asegurar altura mínima también */
-        max-height: unset; /* Anular cualquier max-height fijo del desktop */
-        overflow-y: hidden; /* El padre no hace scroll principal, el chat-box sí */
-        /* Asegurar que sea un contenedor flex vertical para que chat-box crezca */
-        display: flex;
-        flex-direction: column; /* Los elementos hijos (.chat-box, .input-bar) se apilan verticalmente */
-        align-items: stretch; /* Estirar hijos (.chat-box, .input-bar) para que tomen todo el ancho */
-        width: 100%;
-        max-width: none;
-        padding: 0.5rem; /* Padding alrededor de todo el contenido del chat */
-    }
+  /* Propiedades de flex y overflow para la caja de chat */
+  .chat-box {
+      flex-grow: 1; /* La caja de chat toma todo el espacio vertical disponible */
+      overflow-y: auto; /* Permite scroll DENTRO de la caja de chat */
+      width: 100%; /* Asegurar ancho completo */
+      max-width: none; /* Anular max-width fijo */
+      /* Añadir padding inferior para que el último mensaje no quede escondido por la barra de input */
+      padding-bottom: 70px; /* Ajusta este valor si la barra de input es más alta */
+      /* Otras propiedades que ya tenías */
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
+      padding: 1rem;
+      border-radius: 12px;
+      margin-bottom: 0; /* Eliminar margen inferior para que la barra de input quede pegada si es necesario */
+      box-sizing: border-box;
+      min-width: 0; /* Permitir encoger en flex */
+      min-height: 0; /* Importante para que flex-grow funcione correctamente */
+  }
 
-    /* Propiedades de flex y overflow para la caja de chat */
-    .chat-box {
-        flex-grow: 1; /* La caja de chat toma todo el espacio vertical disponible */
-        overflow-y: auto; /* Permite scroll DENTRO de la caja de chat */
-        width: 100%; /* Asegurar ancho completo */
-        max-width: none; /* Anular max-width fijo */
-        /* Añadir padding inferior para que el último mensaje no quede escondido por la barra de input */
-        padding-bottom: 70px; /* Ajusta este valor si la barra de input es más alta */
-        /* Otras propiedades que ya tenías */
-        background-color: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(8px);
-        padding: 1rem;
-        border-radius: 12px;
-        margin-bottom: 0; /* Eliminar margen inferior para que la barra de input quede pegada si es necesario */
-        box-sizing: border-box;
-        min-width: 0; /* Permitir encoger en flex */
-        min-height: 0; /* Importante para que flex-grow funcione correctamente */
-    }
-
-    /* Propiedades de tamaño y posicionamiento para la barra de input (flexible) */
-    .input-bar {
-        flex-shrink: 0; /* La barra de input no se encoge, mantiene su tamaño */
-        width: 100%; /* Ancho completo */
-        max-width: none; /* Anular max-width fijo */
-        display: flex;
-        gap: 0.4rem;
-        padding: 0.6rem; /* Padding interno */
-        align-items: center;
-        box-sizing: border-box;
-        /* Mantener el margen superior para separarla del chat-box */
-        margin-top: 0.5rem; /* Ajusta este valor si necesitas más o menos espacio */
-        height: auto; /* Altura automática */
-        align-self: stretch; /* Estirar horizontalmente si el padre es flex columna y tiene align-items: stretch */
+  /* Propiedades de tamaño y posicionamiento para la barra de input (flexible) */
+  .input-bar {
+      flex-shrink: 0; /* La barra de input no se encoge, mantiene su tamaño */
+      width: 100%; /* Ancho completo */
+      max-width: none; /* Anular max-width fijo */
+      display: flex;
+      gap: 0.4rem;
+      padding: 0.6rem; /* Padding interno */
+      align-items: center;
+      box-sizing: border-box;
+      /* Mantener el margen superior para separarla del chat-box */
+      margin-top: 0.5rem; /* Ajusta este valor si necesitas más o menos espacio */
+      height: auto; /* Altura automática */
+      align-self: stretch; /* Estirar horizontalmente si el padre es flex columna y tiene align-items: stretch */
          background-color: transparent; /* O un color si quieres que tape el fondo */
     }
 
