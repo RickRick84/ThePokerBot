@@ -232,9 +232,14 @@ body {
   }
 
   .app.homepage-container {
-      width: 100%;
-      max-width: none;
-      padding: 1rem;
+    width: 100%;
+    max-width: none;
+    padding: 1rem; /* Asegura un padding interno */
+    /* --- CLAVE: Añadir espacio en la parte superior --- */
+    padding-top: 3rem; /* O un valor mayor, como 4rem o 5rem, para empujar el contenido hacia abajo */
+    /* margin-top: 2rem; */ /* O podrías usar margin-top en lugar de padding-top */
+    justify-content: flex-start; /* Asegura alineación al inicio verticalmente */
+    align-items: flex-start; /* Asegura alineación al inicio horizontalmente */
   /* AJUSTES FUNDAMENTALES PARA CONTENEDORES EN HOME MÓVIL */
 
   /* Ajustar el body en móvil para evitar centrado vertical no deseado */
@@ -245,6 +250,12 @@ body {
     min-height: 100vh; /* Pero asegurar que al menos ocupe toda la ventana */
     /* Si body tenía display: flex para centrado global, quizás necesites anularlo: */
     /* display: block; */
+    justify-content: flex-start; /* Esto alinea el contenido de los hijos (como .app) al inicio verticalmente */
+align-items: flex-start; /* Esto alinea el contenido de los hijos al inicio horizontalmente */
+height: auto; /* Deja que la altura sea determinada por el contenido */
+min-height: 100vh; /* Pero asegúrate de que siga ocupando al menos toda la ventana */
+/* Si tu body tenía display: flex fuera de la media query para centrar globalmente,
+   quizás necesites anularlo en móvil con: display: block; */
 }
 
 /* Asegurar que el contenedor principal .app ocupe todo el ancho en móvil */
