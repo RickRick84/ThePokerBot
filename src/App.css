@@ -2,11 +2,11 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  background-image: url('/bg.jpg'); /* Asegúrate que la ruta y el nombre del archivo sean correctos */
-  background-size: cover; /* CAMBIADO: La imagen se escala para CUBRIR toda el área */
-  background-position: center; /* Mantiene la imagen centrada */
-  background-attachment: fixed; /* La imagen de fondo no se mueve al hacer scroll */
-  background-repeat: no-repeat; /* MANTIENE: Asegura que no se repita si 'cover' deja algún hueco mínimo */
+  background-image: url('/bg.jpg');
+  background-size: contain; /* CAMBIADO: Usa 'contain' por defecto (para web) */
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   color: #fff;
   min-height: 100vh;
   display: flex;
@@ -195,7 +195,7 @@ body {
 /* --- Media Query para Teléfonos --- */
 @media (max-width: 768px) {
   /* Asegurarnos de que el html y body ocupen el 100% de la altura del viewport y no permitan overflow horizontal */
-  html, body {
+  html, body { /* <-- La regla html, body dentro de la media query */
       width: 100%;
       max-width: 100%;
       overflow-x: hidden; /* Muy importante para evitar scroll horizontal por desbordamiento */
@@ -206,8 +206,8 @@ body {
       flex-direction: column;
       justify-content: center; /* RESTAURADO para centrar el .app contenedor */
       align-items: center;
+      background-size: cover; /* <-- ESTA LÍNEA ES LA IMPORTANTE AQUÍ */
   }
-
 
   /* Ajustes generales para .app en móvil - Ahora es el contenedor principal Flex de altura completa */
    .app {
@@ -222,7 +222,6 @@ body {
       align-items: stretch; /* Estirar hijos de app a ancho completo */
       margin-top: 0; /* Aseguramos que no tenga margen negativo si se aplicó antes */
    }
-
 
   /* Ajustes de Chat Page en móvil - Vuelve a ser un hijo de .app con Flexbox interno */
   .app.chat-page-container {
