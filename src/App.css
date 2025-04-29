@@ -170,6 +170,16 @@ body {
 
 /* --- Media Query para Teléfonos --- */
 @media (max-width: 768px) {
+  /* Ajustar el body en móvil para que sea un contenedor flex de altura completa y centre a sus hijos (como .app) */
+  body {
+        justify-content: center; /* Centrar los hijos (como .app) verticalmente */
+        align-items: center; /* Centrar los hijos (como .app) horizontalmente */
+        height: 100vh; /* Asegurar que body tenga la altura completa de la ventana para centrar */
+        min-height: 100vh; /* Reforzar altura mínima */
+        display: flex; /* Asegurar que body es un contenedor flex */
+        flex-direction: column; /* Asegurar que los hijos se apilan verticalmente */
+   }
+
   /* Ajustes de Chat Page en móvil */
   .app.chat-page-container {
       position: relative; /* Posicionamiento relativo en móvil */
@@ -255,6 +265,7 @@ body {
     transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out; /* Transición */
   }
 
+
   /* AJUSTES PARA LA PÁGINA PRINCIPAL/HOME EN MÓVILES */
 
   /* Ajustar tamaño del logo en móviles */
@@ -298,7 +309,7 @@ body {
       max-width: none;
       padding: 1rem; /* Padding interno */
       /* MARGIN-TOP AQUI ES CLAVE PARA BAJAR EL BLOQUE EN EL HOME */
-      margin-top: -150px; /* AJUSTA ESTE VALOR (ej: 15vh, 20vh, 25vh) PARA BAJAR EL BLOQUE EN EL HOME */
+      margin-top: -150px; /* Valor que encontraste que funcionó para bajar el home */
       /* Propiedades de centrado si .app.homepage-container es flex */
       justify-content: center; /* Centrar contenido verticalmente */
       align-items: center; /* Centrar contenido horizontalmente */
@@ -307,14 +318,13 @@ body {
       min-height: auto; /* Asegurarse de que no forza altura mínima */
   }
 
-   /* Ajustar el body en móvil para que sea un contenedor flex de altura completa y centre a sus hijos (como .app) */
-   body {
-        justify-content: center; /* Centrar los hijos (como .app) verticalmente */
-        align-items: center; /* Centrar los hijos (como .app) horizontalmente */
-        height: 100vh; /* Asegurar que body tenga la altura completa de la ventana para centrar */
-        min-height: 100vh; /* Reforzar altura mínima */
-        display: flex; /* Asegurar que body es un contenedor flex */
-        flex-direction: column; /* Asegurar que los hijos se apilan verticalmente */
+   /* --- ESTILOS PARA EL ÍCONO DE HOME (DENTRO DE MEDIA QUERY) --- */
+   /* Si quieres ajustar su posición en móvil, hazlo aquí */
+   .home-link {
+       top: 0.5rem; /* Ejemplo: Ajusta la posición top */
+       left: 0.5rem; /* Ejemplo: Ajusta la posición left */
+       width: 20px; /* Ejemplo: Ajusta el tamaño si es necesario */
+       height: 20px; /* Ejemplo: Ajusta el tamaño si es necesario */
    }
 
 
