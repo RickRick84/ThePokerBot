@@ -1,4 +1,4 @@
-/* Estilos Generales (aplicados a todo el body, a menos que se anulan) */
+/* Estilos Generales (aplicados a todo el body, a menos que se anulen) */
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
@@ -209,101 +209,104 @@ body {
         flex-direction: column; /* Los hijos de app (HomePage o ChatPage) se apilan */
         justify-content: flex-start; /* Alinear el contenido de app al inicio */
         align-items: stretch; /* Estirar hijos de app a ancho completo */
-        /* Quitar el margin-top negativo de .app si lo tenía para que el chat-page-container posicionado absoltuto funcione bien */
-        margin-top: 0;
+        margin-top: 0; /* Aseguramos que no tenga margen negativo si se aplicó antes */
      }
 
 
-    /* Ajustes de Chat Page en móvil - Ahora es un contenedor relativo de altura completa para posicionar sus hijos */
+    /* Ajustes de Chat Page en móvil - Vuelve a ser un hijo de .app con Flexbox interno */
     .app.chat-page-container {
-        position: relative; /* CONTENEDOR RELATIVO para posicionar hijos */
-        top: 0; /* Alineado arriba en el .app contenedor */
-        left: 0;
+        position: relative; /* Mantenemos relative por si acaso, pero el layout es Flex */
+        top: auto; /* Eliminamos top/bottom/left/right de absolute */
+        left: auto;
         transform: none;
-        flex-grow: 1; /* Crece en el app container (aunque sus hijos sean absolutos) */
+        flex-grow: 1; /* Toma el espacio disponible en el app */
         flex-shrink: 1;
-        flex-basis: auto; /* o 0 */
-        height: 100vh; /* Ocupa la altura completa del viewport */
-        min-height: 100vh;
-        max-height: unset;
+        flex-basis: auto;
+        height: auto; /* Altura automática como flex item */
+        min-height: 0;
         overflow-y: hidden; /* El contenedor de la página NO hace scroll */
-        display: block; /* Usamos block layout ya que los hijos principales son absolutos */
+        display: flex; /* **VUELVE A SER FLEX** para distribuir sus elementos internos */
+        flex-direction: column; /* Elementos internos (titulo, chatbox, inputbar) se apilan */
+        align-items: stretch; /* Estirar elementos internos a ancho completo */
         width: 100%;
         max-width: 100%;
-        padding: 0; /* Padding manejado por los hijos posicionados */
-        /* margin-top negativo eliminado si estaba aquí para esta estrategia */
+        padding: 0; /* Padding manejado por los hijos */
+        /* Eliminamos el margin-top negativo que aplicamos aquí */
         margin-top: 0;
     }
 
-    /* Contenedor del título dentro del chat - POSICIONADO ABSOLUTO ARRIBA */
+    /* Contenedor del título dentro del chat - Vuelve a ser un Flex Item */
     .app.chat-page-container .title-container {
-        position: absolute; /* Posicionado absoltuto dentro de .chat-page-container */
-        top: 0; /* Pegado arriba */
-        left: 0;
-        right: 0; /* Estirado a ancho completo */
+        position: static; /* Vuelve a flujo normal */
+        top: auto; left: auto; right: auto; /* Eliminamos posicionamiento absoluto */
         width: 100%;
         max-width: 100%;
-        /* CALCULAR ALTURA: max-height de imagen + padding */
-        height: auto; /* Altura automática basada en padding y contenido */
+        flex-shrink: 0; /* No encoge */
+        flex-basis: auto;
+        height: auto;
         padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-        display: flex; /* Sigue siendo flex para centrar la imagen */
+        padding-bottom: 0.5rem; /* Espacio debajo del título */
+        display: flex;
         justify-content: center;
         align-items: center;
-        flex-shrink: 0; /* No debería encoger en un layout block, pero lo mantenemos */
-        background-color: rgba(0, 0, 0, 0.8); /* Fondo para que se vea fijo arriba */
-        z-index: 10; /* Para que esté por encima del chatbox */
+        z-index: auto; /* Restaurar z-index */
+        background-color: transparent; /* Restaurar fondo si se puso */
     }
 
-    /* Imagen del título dentro del chat - AJUSTADO AL TAMAÑO DE HOME Y CENTRADO */
+    /* Imagen del título dentro del chat - Mantenemos el tamaño correcto */
      .app.chat-page-container .title-image {
-        max-height: 150px; /* AJUSTADO: Tamaño igual que en Home móvil */
+        max-height: 150px; /* Tamaño igual que en Home móvil */
         width: auto;
      }
 
 
-    /* Propiedades de flex y overflow para la caja de chat - POSICIONADO ABSOLUTO PARA LLENAR ESPACIO */
+    /* Propiedades de flex y overflow para la caja de chat - Vuelve a ser Flex Item que crece */
     .chat-box {
-        position: absolute; /* Posicionado absoltuto dentro de .chat-page-container */
-        top: 170px; /* <-- AJUSTA ESTE VALOR: Posición desde arriba (Altura de title-container + espacio) */
-        bottom: 80px; /* <-- AJUSTA ESTE VALOR: Posición desde abajo (Altura de input-bar + espacio) */
-        left: 0;
-        right: 0; /* Estirado a ancho completo */
+        position: static; /* Vuelve a flujo normal */
+        top: auto; bottom: auto; left: auto; right: auto; /* Eliminamos posicionamiento absoluto */
+        flex-grow: 1; /* Sigue creciendo para llenar espacio DENTRO del chat-page-container */
+        flex-shrink: 1;
+        flex-basis: auto; /* o 0 */
+        overflow-y: auto; /* Permite scroll */
         width: 100%;
         max-width: 100%;
         padding: 1rem; /* Padding interno */
-        overflow-y: auto; /* Permite scroll */
+        padding-bottom: 70px; /* Espacio para barra de input */
         background-color: rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(8px);
         border-radius: 12px;
-        /* Los márgenes y flex-grow/shrink/basis ya no aplican de la misma forma con Absolute */
-        margin: 0;
+        margin-bottom: 0;
+        min-width: 0;
+        min-height: 0; /* Importante para flex-grow */
         display: flex; /* Sigue siendo flex para apilar mensajes */
         flex-direction: column;
     }
 
-    /* Propiedades de tamaño para la barra de input - POSICIONADO ABSOLUTO ABAJO */
+    /* Propiedades de tamaño para la barra de input - Vuelve a ser Flex Item */
     .input-bar {
-        position: absolute; /* Posicionado absoltuto dentro de .chat-page-container */
-        bottom: 0; /* Pegado abajo */
-        left: 0;
-        right: 0; /* Estirado a ancho completo */
+        position: static; /* Vuelve a flujo normal */
+        bottom: auto; left: auto; right: auto; /* Eliminamos posicionamiento absoluto */
+        flex-shrink: 0; /* NO debe encoger */
+        flex-grow: 0; /* NO debe crecer */
+        flex-basis: auto; /* Tamaño base automático */
         width: 100%;
         max-width: 100%;
-        /* CALCULAR ALTURA: Padding + altura de contenido */
-        height: auto; /* Altura automática basada en padding y contenido */
-        padding: 0.8rem 0.6rem; /* Padding vertical y horizontal */
-        display: flex; /* Es flex para el input y botón */
+        display: flex;
         gap: 0.4rem;
+        padding: 0.6rem;
         align-items: center;
-        background-color: rgba(0, 0, 0, 0.9); /* Fondo para que se vea fijo abajo */
-        border-radius: 0;
-        z-index: 10; /* Para que esté por encima del chatbox */
+        height: auto;
+        padding-top: 0.8rem; /* Espacio arriba */
+        padding-bottom: 0.8rem; /* Espacio abajo */
+        align-self: stretch;
+         background-color: rgba(0, 0, 0, 0.9);
+         border-radius: 0;
+        z-index: auto; /* Restaurar z-index */
     }
 
     /* Ajustes para los elementos dentro de la barra de input */
     .input-bar input {
-      flex: 1; /* Ocupa espacio restante */
+      flex: 1;
       padding: 0.8rem;
       border: none;
       border-radius: 25px;
@@ -316,7 +319,7 @@ body {
 
     /* Estilos para el botón dentro de la barra */
     .input-bar button {
-      width: 95px; /* Ancho fijo */
+      width: 95px;
       flex-shrink: 0;
       padding: 0.8rem 0;
       text-align: center;
