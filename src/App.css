@@ -2,10 +2,10 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  background-image: url('/bg.jpg'); /* Confirma que esta línea está así */
-  background-size: cover; /* Confirma que esta línea está así */
-  background-position: center; /* Confirma que esta línea está así */
-  background-attachment: fixed; /* Confirma que esta línea está así */
+  background-image: url('/bg.jpg');
+  background-size: contain; /* CAMBIADO: La imagen se ajusta para caber completamente */
+  background-position: center; /* Centra la imagen en el fondo */
+  background-attachment: fixed; /* MANTIENE: La imagen de fondo no se mueve al hacer scroll */
   color: #fff;
   min-height: 100vh;
   display: flex;
