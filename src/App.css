@@ -183,13 +183,13 @@ body {
 
 /* --- Media Query para Teléfonos --- */
 @media (max-width: 768px) {
-    /* Restaurar estilos de body que funcionaban para el Home */
+    /* Asegurarnos de que el html y body ocupen el 100% de la altura del viewport y no permitan overflow horizontal */
     html, body {
         width: 100%;
         max-width: 100%;
-        overflow-x: hidden;
-        height: 100vh;
-        min-height: 100vh;
+        overflow-x: hidden; /* Muy importante para evitar scroll horizontal por desbordamiento */
+        height: 100vh; /* Asegurar altura completa del viewport */
+        min-height: 100vh; /* Asegurar altura mínima */
         /* Restauramos justify-content a center para que funcione con el margin negativo del Home */
         display: flex;
         flex-direction: column;
@@ -201,8 +201,8 @@ body {
     /* Ajustes generales para .app en móvil */
      .app {
         width: 100%;
-        max-width: 100%;
-        padding: 0.5rem;
+        max-width: 100%; /* Asegurar que no excede el ancho */
+        padding: 0.5rem; /* Padding general */
         height: 100vh; /* app container takes full height */
         /* Restauramos flex properties si fueron modificadas y rompieron el Home */
         display: flex;
@@ -212,32 +212,31 @@ body {
      }
 
 
-    /* Ajustes de Chat Page en móvil (Mantenemos la estructura flex, ajustamos detalles) */
+    /* Ajustes de Chat Page en móvil (Ajustando flex y espaciado para el chatbox) */
     .app.chat-page-container {
         position: relative;
         top: auto;
         left: auto;
         transform: none;
-        height: 100vh;
+        height: 100vh; /* Contenedor toma la altura completa de la ventana */
         min-height: 100vh;
         max-height: unset;
-        overflow-y: hidden;
+        overflow-y: hidden; /* El padre no hace scroll principal */
         display: flex;
-        flex-direction: column;
+        flex-direction: column; /* Los hijos se apilan verticalmente */
         align-items: stretch; /* Estirar hijos (.title-container, .chat-box, .input-bar) */
         width: 100%;
         max-width: 100%;
-        padding: 0.5rem;
+        padding: 0.5rem; /* Padding alrededor de todo el contenido del chat */
     }
 
-    /* Contenedor del título dentro del chat - Mantenemos ajustes de tamaño móvil */
+    /* Contenedor del título dentro del chat - Asegurar tamaño y flex-shrink */
     .app.chat-page-container .title-container {
         width: 100%;
         max-width: 100%;
-        /* margin-bottom: 0.5rem; *//* Quitamos margin-bottom si definimos padding inferior */
-        flex-shrink: 0;
-        flex-basis: auto;
-        height: auto;
+        flex-shrink: 0; /* Asegurar que no encoge */
+        flex-basis: auto; /* Tamaño base basado en contenido */
+        height: auto; /* Altura automática basada en contenido */
         padding-top: 0.5rem;
         padding-bottom: 0.5rem; /* Padding para separar del chat-box */
         display: flex;
@@ -247,42 +246,45 @@ body {
 
     /* Imagen del título dentro del chat */
      .app.chat-page-container .title-image {
-        max-height: 60px; /* Mantenemos tamaño pequeño en Chat móvil */
+        max-height: 60px; /* Tamaño pequeño en Chat móvil */
         width: auto;
      }
 
 
-    /* Propiedades de flex y overflow para la caja de chat - Mantenemos flex grow/basis */
+    /* Propiedades de flex y overflow para la caja de chat - EL FOCO ES AQUÍ */
     .chat-box {
         flex-grow: 1; /* Sigue creciendo para llenar espacio */
-        flex-shrink: 1; /* Puede encoger */
-        flex-basis: auto; /* Tamaño base automático */
-        overflow-y: auto;
+        flex-shrink: 1; /* Permitir encoger si es necesario (importante!) */
+        flex-basis: auto; /* Tamaño base automático - O podrías probar '0' si 'auto' no funciona bien*/
+        overflow-y: auto; /* Permite scroll DENTRO de la caja de chat */
         width: 100%;
         max-width: 100%;
-        padding: 1rem;
+        padding: 1rem; /* Padding interno */
         padding-bottom: 70px; /* Espacio para barra de input */
         background-color: rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(8px);
         border-radius: 12px;
-        /* margin-bottom: 0; *//* Quitamos si input bar tiene padding */
+        /* margin-bottom: 0; *//* Quitamos si input bar tiene padding superior */
         min-width: 0;
-        min-height: 0;
+        min-height: 0; /* Importante para que flex-grow funcione correctamente */
+        /* Posible ajuste: Si sigue gigante, probar una max-height, aunque no es lo ideal con flex-grow */
+        /* max-height: calc(100vh - [altura de title] - [altura de input bar] - [paddings/margins]); */
+        /* Por ahora, confiemos en flex-grow/shrink/basis */
     }
 
-    /* Propiedades de tamaño para la barra de input - Mantenemos ajustes de tamaño móvil */
+    /* Propiedades de tamaño para la barra de input - Asegurar tamaño y flex-shrink */
     .input-bar {
-        flex-shrink: 0;
-        flex-grow: 0;
-        flex-basis: auto;
+        flex-shrink: 0; /* NO debe encoger */
+        flex-grow: 0; /* NO debe crecer */
+        flex-basis: auto; /* Tamaño base automático basado en contenido + padding */
         width: 100%;
         max-width: 100%;
         display: flex;
         gap: 0.4rem;
         padding: 0.6rem;
         align-items: center;
-        /* margin-top: 0.5rem;*//* Quitamos si definimos padding superior */
-        height: auto;
+        /* margin-top: 0.5rem; *//* Quitamos si definimos padding superior */
+        height: auto; /* Altura automática basada en contenido + padding */
         padding-top: 0.8rem; /* Padding para separar del chat-box */
         padding-bottom: 0.8rem; /* Padding para la parte inferior */
         align-self: stretch;
