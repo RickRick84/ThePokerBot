@@ -183,116 +183,111 @@ body {
 
 /* --- Media Query para Teléfonos --- */
 @media (max-width: 768px) {
-    /* Asegurarnos de que el html y body ocupen el 100% de la altura del viewport y no permitan overflow horizontal */
+    /* Restaurar estilos de body que funcionaban para el Home */
     html, body {
         width: 100%;
         max-width: 100%;
-        overflow-x: hidden; /* Muy importante para evitar scroll horizontal por desbordamiento */
-        height: 100vh; /* Asegurar altura completa del viewport */
-        min-height: 100vh; /* Asegurar altura mínima */
-        /* justify-content y align-items se definen aquí si body es flex */
-        display: flex; /* body es flex container */
-        flex-direction: column; /* los hijos de body (el div#root que contiene .app) se apilan */
-        justify-content: flex-start; /* Alinear al inicio para que el contenido empiece arriba */
-        align-items: center; /* centrar #root */
+        overflow-x: hidden;
+        height: 100vh;
+        min-height: 100vh;
+        /* Restauramos justify-content a center para que funcione con el margin negativo del Home */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* RESTAURADO */
+        align-items: center;
     }
 
 
     /* Ajustes generales para .app en móvil */
      .app {
         width: 100%;
-        max-width: 100%; /* Asegurar que no excede el ancho */
-        padding: 0.5rem; /* Padding general */
-        /* box-sizing ya heredado */
-        /* min-height: 100vh; REMOVED - HANDLED BY BODY*/
+        max-width: 100%;
+        padding: 0.5rem;
         height: 100vh; /* app container takes full height */
-        display: flex; /* app is also a flex container */
-        flex-direction: column; /* its children (.title-container, .chat-page-container/homepage-container) stack */
-        justify-content: flex-start; /* align app content to the start */
-        align-items: center; /* center app content horizontally */
+        /* Restauramos flex properties si fueron modificadas y rompieron el Home */
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start; /* Alineamos el contenido DENTRO de app al inicio */
+        align-items: center;
      }
 
 
-    /* Ajustes de Chat Page en móvil (Dimensiones y Flexbox con alturas definidas para hermanos) */
+    /* Ajustes de Chat Page en móvil (Mantenemos la estructura flex, ajustamos detalles) */
     .app.chat-page-container {
         position: relative;
         top: auto;
         left: auto;
         transform: none;
-        /* CLAVE: Asegurar altura completa del viewport */
-        height: 100vh; /* Contenedor toma la altura completa de la ventana */
+        height: 100vh;
         min-height: 100vh;
         max-height: unset;
-        overflow-y: hidden; /* El padre no hace scroll principal */
+        overflow-y: hidden;
         display: flex;
-        flex-direction: column; /* Los hijos se apilan verticalmente */
+        flex-direction: column;
         align-items: stretch; /* Estirar hijos (.title-container, .chat-box, .input-bar) */
         width: 100%;
         max-width: 100%;
-        padding: 0.5rem; /* Padding alrededor de todo el contenido del chat */
+        padding: 0.5rem;
     }
 
-    /* Contenedor del título dentro del chat - DARLE UNA ALTURA FIJA O CONTROLADA */
-    /* Usaremos una altura basada en contenido + padding */
+    /* Contenedor del título dentro del chat - Mantenemos ajustes de tamaño móvil */
     .app.chat-page-container .title-container {
         width: 100%;
         max-width: 100%;
-        /*margin-bottom: 0.5rem;*//* Quitamos margin-bottom si definimos height */
-        flex-shrink: 0; /* No encoger */
-        flex-basis: auto; /* Basado en contenido */
-        height: auto; /* Altura automática basada en contenido */
-        padding-top: 0.5rem; /* Padding para separar de arriba */
+        /* margin-bottom: 0.5rem; *//* Quitamos margin-bottom si definimos padding inferior */
+        flex-shrink: 0;
+        flex-basis: auto;
+        height: auto;
+        padding-top: 0.5rem;
         padding-bottom: 0.5rem; /* Padding para separar del chat-box */
-        display: flex; /* Es flex para centrar la imagen */
+        display: flex;
         justify-content: center;
         align-items: center;
     }
 
     /* Imagen del título dentro del chat */
      .app.chat-page-container .title-image {
-        max-height: 60px; /* Ajustar tamaño máximo de la imagen en móvil (un poco más grande que antes) */
-        width: auto; /* Ancho automático basado en altura */
+        max-height: 60px; /* Mantenemos tamaño pequeño en Chat móvil */
+        width: auto;
      }
 
 
-    /* Propiedades de flex y overflow para la caja de chat */
+    /* Propiedades de flex y overflow para la caja de chat - Mantenemos flex grow/basis */
     .chat-box {
-        flex-grow: 1; /* La caja de chat toma todo el espacio vertical disponible */
-        flex-shrink: 1; /* Puede encoger si es necesario */
-        flex-basis: auto; /* Tamaño base basado en contenido (o 0 si auto no funciona) */
-        overflow-y: auto; /* Permite scroll DENTRO de la caja de chat */
+        flex-grow: 1; /* Sigue creciendo para llenar espacio */
+        flex-shrink: 1; /* Puede encoger */
+        flex-basis: auto; /* Tamaño base automático */
+        overflow-y: auto;
         width: 100%;
         max-width: 100%;
         padding: 1rem;
-        /* Añadir padding inferior para que el último mensaje no quede escondido por la barra de input */
-        padding-bottom: 70px; /* Ajusta este valor */
+        padding-bottom: 70px; /* Espacio para barra de input */
         background-color: rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(8px);
         border-radius: 12px;
-        /* margin-bottom: 0; *//* Quitamos margin-bottom si el input bar tiene margin-top o altura definida */
+        /* margin-bottom: 0; *//* Quitamos si input bar tiene padding */
         min-width: 0;
-        min-height: 0; /* Importante para flex-grow */
+        min-height: 0;
     }
 
-    /* Propiedades de tamaño para la barra de input - DARLE UNA ALTURA FIJA O CONTROLADA */
-    /* Usaremos una altura fija o basada en padding */
+    /* Propiedades de tamaño para la barra de input - Mantenemos ajustes de tamaño móvil */
     .input-bar {
-        flex-shrink: 0; /* La barra de input no se encoge */
-        flex-grow: 0; /* No crece */
-        flex-basis: auto; /* Tamaño base basado en contenido */
+        flex-shrink: 0;
+        flex-grow: 0;
+        flex-basis: auto;
         width: 100%;
         max-width: 100%;
         display: flex;
         gap: 0.4rem;
-        padding: 0.6rem; /* Padding interno */
+        padding: 0.6rem;
         align-items: center;
-        /* margin-top: 0.5rem;*//* Quitamos margin-top si definimos height o padding */
-        height: auto; /* Altura automática basada en contenido + padding */
+        /* margin-top: 0.5rem;*//* Quitamos si definimos padding superior */
+        height: auto;
         padding-top: 0.8rem; /* Padding para separar del chat-box */
         padding-bottom: 0.8rem; /* Padding para la parte inferior */
         align-self: stretch;
-         background-color: rgba(0, 0, 0, 0.9); /* Fondo para que se vea */
-         border-radius: 0; /* Bordes rectos abajo */
+         background-color: rgba(0, 0, 0, 0.9);
+         border-radius: 0;
     }
 
     /* Ajustes para los elementos dentro de la barra de input */
@@ -326,14 +321,14 @@ body {
     /* AJUSTES PARA LA PÁGINA PRINCIPAL/HOME EN MÓVILES */
 
     /* Ajustar tamaño del logo en móviles */
-    /* Ya definimos el title-container y title-image genérico, ajustamos max-height en móvil */
+    /* Revertimos a un max-height más grande para el Home si rompió */
     .title-image {
-      max-height: 100px; /* Ajustar tamaño en Home si es diferente al de Chat */
+      max-height: 150px; /* RESTAURADO al tamaño que funcionaba con Home */
     }
 
     /* Ajustar margen inferior del contenedor del título */
     .title-container {
-      margin-bottom: 1.5rem; /* Usar 1.5rem consistentemente */
+      margin-bottom: 1.5rem;
     }
 
     /* Ajustar padding del contenedor del selector de idioma */
@@ -357,24 +352,22 @@ body {
     .app.homepage-container {
         width: 100%;
         max-width: 100%;
-        padding: 1rem; /* Padding interno */
-        /* MARGIN-TOP AQUI ES CLAVE PARA BAJAR EL BLOQUE EN EL HOME */
-        margin-top: -150px; /* Valor que encontraste que funcionó para bajar el home */
-        /* Propiedades de centrado si .app.homepage-container es flex */
-        justify-content: center; /* Centrar contenido verticalmente */
-        align-items: center; /* Centrar contenido horizontalmente */
-        /* Asegurarse de que no interfieren otras propiedades de altura aquí */
-        height: auto; /* Dejar en auto para que el contenido defina la altura */
-        min-height: auto; /* Asegurarse de que no forza altura mínima */
+        padding: 1rem;
+        /* MARGIN-TOP ES CLAVE AQUI Y DEBE INTERACTUAR CON EL body justify-content: center */
+        margin-top: -150px; /* Valor que funcionaba para bajar el home */
+        /* Asegurarse de que no rompe el layout flex del body centrado */
+        justify-content: center;
+        align-items: center;
+        height: auto;
+        min-height: auto;
     }
 
      /* --- ESTILOS PARA EL ÍCONO DE HOME (DENTRO DE MEDIA QUERY) --- */
-     /* Si quieres ajustar su posición en móvil, hazlo aquí */
      .home-link {
-         top: 0.5rem; /* Ejemplo: Ajusta la posición top */
-         left: 0.5rem; /* Ejemplo: Ajusta la posición left */
-         width: 20px; /* Ejemplo: Ajusta el tamaño si es necesario */
-         height: 20px; /* Ejemplo: Ajusta el tamaño si es necesario */
+         top: 0.5rem;
+         left: 0.5rem;
+         width: 20px;
+         height: 20px;
      }
 
 
@@ -406,7 +399,7 @@ body {
     height: auto;
     max-height: none;
     overflow-y: visible;
-    justify-content: flex-start; /* Puede ser anulado en la media query */
+    justify-content: flex-start;
 }
 
 /* Contenedor de selector de idioma */
@@ -422,7 +415,6 @@ body {
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   width: 100%;
   max-width: 540px;
-  /* box-sizing ya heredado */
 }
 
 .language-selector h2 {
@@ -471,7 +463,6 @@ color: #00ff88;
 cursor: pointer;
 transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 z-index: 1000;
-/* box-sizing ya heredado */
 }
 
 .home-link:hover {
