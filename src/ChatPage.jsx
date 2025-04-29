@@ -27,9 +27,12 @@ function ChatPage() {
       });
 
       const data = await res.json();
-      setMessages(prev => [...prev, { role: 'assistant', content: data.message }]);
+      setMessages(prev => [...prev, data.choices[0].message]); // ← FIX ACÁ
     } catch (err) {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Oops! Something went wrong.' }]);
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: 'Oops! Something went wrong.'
+      }]);
     }
   };
 
