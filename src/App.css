@@ -168,94 +168,92 @@ body {
   color: #00e07a;
 }
 
-/* Ajustes de Chat Page en móvil */
-.app.chat-page-container {
-  /* ... otras reglas ... */
-  background-color: blue !important; /* TEMPORAL: Fondo azul muy visible */
-  /* ... otras reglas ... */
+/* --- Media Query para Teléfonos --- */
+@media (max-width: 768px) {
+  /* Ajustes de Chat Page en móvil */
+  .app.chat-page-container {
+      position: relative; /* Posicionamiento relativo en móvil */
+      top: auto;
+      left: auto;
+      transform: none;
+      /* CLAVE: Asegurar altura completa de la ventana para que el chat-box y el input-bar distribuyan el espacio */
+      height: 100vh; /* Contenedor toma la altura completa de la ventana */
+      min-height: 100vh; /* Asegurar altura mínima también */
+      max-height: unset; /* Anular cualquier max-height fijo del desktop */
+      overflow-y: auto; /* Permite scroll en el contenedor principal si el contenido (chat-box + input-bar) excede 100vh */
+      /* Asegurar que sea un contenedor flex para que chat-box crezca y input-bar se quede abajo */
+      display: flex;
+      flex-direction: column; /* Los elementos hijos (.chat-box, .input-bar) se apilan verticalmente */
+      align-items: center; /* Centra horizontalmente a los hijos si no son full width */
+      /* Ajustes de padding, width, max-width si es necesario anular los del desktop */
+      width: 100%;
+      max-width: none;
+      padding: 0.5rem; /* Usar padding general de .app en móvil */
+  }
 
-  position: relative; /* Posicionamiento relativo en móvil */
-  top: auto;
-  left: auto;
-  transform: none;
-  /* CLAVE: Asegurar altura completa de la ventana para que el chat-box y el input-bar distribuyan el espacio */
-  height: 100vh; /* Contenedor toma la altura completa de la ventana */
-  min-height: 100vh; /* Asegurar altura mínima también */
-  max-height: unset; /* Anular cualquier max-height fijo del desktop */
-  overflow-y: auto; /* Permite scroll en el contenedor principal si el contenido (chat-box + input-bar) excede 100vh */
-  /* Asegurar que sea un contenedor flex para que chat-box crezca y input-bar se quede abajo */
-  display: flex;
-  flex-direction: column; /* Los elementos hijos (.chat-box, .input-bar) se apilan verticalmente */
-  align-items: center; /* Centra horizontalmente a los hijos si no son full width */
-  /* Ajustes de padding, width, max-width si es necesario anular los del desktop */
-  width: 100%;
-  max-width: none;
-  padding: 0.5rem; /* Usar padding general de .app en móvil */
-}
+  /* Asegurar que chat-box e input-bar sean ancho completo en móvil */
+  .input-bar,
+  .chat-box {
+    width: 100%;
+    max-width: none;
+  }
 
-/* Asegurar que chat-box e input-bar sean ancho completo en móvil */
-.input-bar,
-.chat-box {
-width: 100%;
-max-width: none;
-}
+  /* Propiedades de flex y overflow para la caja de chat */
+  .chat-box {
+      flex-grow: 1; /* La caja de chat toma todo el espacio vertical disponible que deja la barra de input */
+      overflow-y: auto; /* Permite scroll dentro de la caja de chat si los mensajes son muchos */
+      /* Otras propiedades que ya tenías o son útiles */
+      background-color: rgba(0, 0, 0, 0.5); /* Fondo */
+      backdrop-filter: blur(8px); /* Desenfoque */
+      padding: 1rem; /* Padding interno */
+      border-radius: 12px; /* Bordes redondeados */
+      margin-bottom: 0.8rem; /* Margen inferior */
+      box-sizing: border-box; /* Incluir padding/border en el ancho */
+      min-width: 0; /* Permitir encoger en flex si es necesario */
+  }
 
-/* Propiedades de flex y overflow para la caja de chat */
-.chat-box {
-  flex-grow: 1; /* La caja de chat toma todo el espacio vertical disponible que deja la barra de input */
-  overflow-y: auto; /* Permite scroll dentro de la caja de chat si los mensajes son muchos */
-  /* Otras propiedades que ya tenías o son útiles */
-  background-color: rgba(0, 0, 0, 0.5); /* Fondo */
-  backdrop-filter: blur(8px); /* Desenfoque */
-  padding: 1rem; /* Padding interno */
-  border-radius: 12px; /* Bordes redondeados */
-  margin-bottom: 0.8rem; /* Margen inferior */
-  box-sizing: border-box; /* Incluir padding/border en el ancho */
-  min-width: 0; /* Permitir encoger en flex si es necesario */
-}
+  /* Propiedades de flex y tamaño para la barra de input */
+  .input-bar {
+      flex-shrink: 0; /* La barra de input no se encoge, mantiene su tamaño */
+      /* Otras propiedades que ya tenías o son útiles */
+      gap: 0.1rem; /* Espacio entre input y botón */
+      padding: 0.4rem; /* Padding interno */
+      border-radius: 12px; /* Bordes redondeados */
+      align-items: center; /* Alinear elementos internos (input, button) verticalmente */
+      box-sizing: border-box; /* Incluir padding/border en el ancho */
+      /* margin-top: 0.8rem; -- Ya en desktop, verificar si necesitas anular con 0 en móvil */
+      height: auto; /* Altura automática según contenido */
+      align-self: center; /* Centrar si el padre no es full width, pero con width:100% es menos relevante */
+  }
 
-/* Propiedades de flex y tamaño para la barra de input */
-.input-bar {
-  flex-shrink: 0; /* La barra de input no se encoge, mantiene su tamaño */
-  /* Otras propiedades que ya tenías o son útiles */
-  gap: 0.1rem; /* Espacio entre input y botón */
-  padding: 0.4rem; /* Padding interno */
-  border-radius: 12px; /* Bordes redondeados */
-  align-items: center; /* Alinear elementos internos (input, button) verticalmente */
-  box-sizing: border-box; /* Incluir padding/border en el ancho */
-  /* margin-top: 0.8rem; -- Ya en desktop, verificar si necesitas anular con 0 en móvil */
-  height: auto; /* Altura automática según contenido */
-  align-self: center; /* Centrar si el padre no es full width, pero con width:100% es menos relevante */
-}
+  /* Ajustes para los elementos dentro de la barra de input */
+  .input-bar input {
+    min-width: 80px; /* Asegurar un ancho mínimo para el input */
+    flex: 1; /* El input toma el espacio disponible en la barra */
+    /* Otras propiedades del input */
+    padding: 0.8rem; /* Padding interno */
+    border: none; /* Sin borde */
+    border-radius: 25px; /* Bordes redondeados */
+    font-size: 1rem; /* Tamaño de fuente */
+    background-color: #1e1e1e; /* Fondo */
+    color: #fff; /* Color de texto */
+    padding-right: 1.5rem; /* Espacio a la derecha */
+  }
 
-/* Ajustes para los elementos dentro de la barra de input */
-.input-bar input {
-min-width: 80px; /* Asegurar un ancho mínimo para el input */
-flex: 1; /* El input toma el espacio disponible en la barra */
-/* Otras propiedades del input */
-padding: 0.8rem; /* Padding interno */
-border: none; /* Sin borde */
-border-radius: 25px; /* Bordes redondeados */
-font-size: 1rem; /* Tamaño de fuente */
-background-color: #1e1e1e; /* Fondo */
-color: #fff; /* Color de texto */
-padding-right: 1.5rem; /* Espacio a la derecha */
-}
-
-.input-bar button {
-width: 95px; /* Ancho fijo del botón */
-flex-shrink: 0; /* El botón no se encoge */
-padding: 0.8rem 0; /* Padding interno */
-text-align: center; /* Texto centrado */
-/* Otras propiedades del botón */
-background-color: #00ff88; /* Fondo */
-color: #000; /* Color de texto */
-border: none; /* Sin borde */
-border-radius: 10px; /* Bordes redondeados */
-font-weight: bold; /* Negrita */
-cursor: pointer; /* Cursor */
-transition: background-color 0.2s ease-in-out; /* Transición */
-}
+  .input-bar button {
+    width: 95px; /* Ancho fijo del botón */
+    flex-shrink: 0; /* El botón no se encoge */
+    padding: 0.8rem 0; /* Padding interno */
+    text-align: center; /* Texto centrado */
+    /* Otras propiedades del botón */
+    background-color: #00ff88; /* Fondo */
+    color: #000; /* Color de texto */
+    border: none; /* Sin borde */
+    border-radius: 10px; /* Bordes redondeados */
+    font-weight: bold; /* Negrita */
+    cursor: pointer; /* Cursor */
+    transition: background-color 0.2s ease-in-out; /* Transición */
+  }
 
   /* AJUSTES PARA LA PÁGINA PRINCIPAL/HOME EN MÓVILES */
 
@@ -320,7 +318,7 @@ transition: background-color 0.2s ease-in-out; /* Transición */
    }
 
 
-/* Fin Media Query */
+} /* Fin Media Query */
 
 
 /* Scroll personalizado */
