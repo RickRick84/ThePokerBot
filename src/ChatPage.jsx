@@ -30,13 +30,12 @@ const translations = {
     welcome: 'Hello! I am your expert poker assistant. How can I help you today?',
     placeholder: 'Type your poker question...',
     sendButton: 'Send',
-    writing: 'Typing...',
+  	 writing: 'Typing...',
     openaiError: (code, message) => `OpenAI Error: ${code || 'Unknown Code'} - ${message || 'Unknown Error'}`,
     fetchError: 'An error occurred while connecting to the API.',
     invalidOpenAIResponse: 'Could not get a valid response from OpenAI.',
   },
 };
-
 
 function ChatPage() { // Nombre del componente
   const { lang } = useParams();
@@ -45,16 +44,14 @@ function ChatPage() { // Nombre del componente
   // Obtenemos las traducciones para el idioma actual, o español si no se encuentra
   const t = translations[currentLang] || translations['es'];
 
-
+  // Inicializamos con solo el mensaje del sistema
   const [messages, setMessages] = useState([
-    { role: 'system', content: t.system },
-    { role: 'assistant', content: t.welcome }
+    { role: 'system', content: t.system }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
   const chatBoxRef = useRef(null);
-
 
   // Creamos una referencia a un objeto de Audio para el sonido del botón Enviar
   const sendAudioRef = useRef(new Audio('/sounds/button-click.mp3')); // <-- Asegúrate que esta ruta y nombre de archivo sean correctos
@@ -67,27 +64,34 @@ function ChatPage() { // Nombre del componente
     sendAudioRef.current.play().catch(error => console.error("Error playing send sound:", error));
   };
 
-
   // Efecto para scrollear al final del chat cuando los mensajes cambian o carga termina
   useEffect(() => {
-    const chatBox = chatBoxRef.current;
+    const chatBox = chatBoxRef.current;
     if (chatBox) {
         // Usamos un pequeño timeout para asegurarnos de que el DOM se actualizó
         const timeoutId = setTimeout(() => {
-            chatBox.scrollTop = chatBox.scrollHeight;
-            console.log("Attempting to scroll to bottom. ScrollHeight:", chatBox.scrollHeight);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            console.log("Attempting to scroll to bottom. ScrollHeight:", chatBox.scrollHeight);
         }, 50); // Un delay corto, 50ms suele ser suficiente
         return () => clearTimeout(timeoutId);
     }
   }, [messages, loading]); // Depende de los mensajes y el estado de carga
 
-
-  // Efecto para actualizar el idioma si cambia el parámetro de la URL
+  // Efecto para actualizar el idioma Y AÑADIR EL MENSAJE DE BIENVENIDA cuando el idioma esté listo
   useEffect(() => {
       setCurrentLang(lang || 'es');
-      // Si quieres reiniciar la conversación al cambiar de idioma en la URL, descomenta lo siguiente:
+      // Añadir el mensaje de bienvenida solo si no está ya presente y el idioma ha sido establecido
+      // Verificamos si messages tiene solo el mensaje del sistema
+      if (messages.length === 1 && messages[0].role === 'system') {
+          setMessages(currentMessages => [
+              ...currentMessages,
+              { role: 'assistant', content: translations[lang]?.welcome || translations['es'].welcome }
+          ]);
+      }
+      // Si quieres reiniciar la conversación COMPLETAMENTE al cambiar de idioma en la URL, descomenta lo siguiente y modifica el de arriba:
       // setMessages([ { role: 'system', content: translations[lang]?.system || translations['es'].system }, { role: 'assistant', content: translations[lang]?.welcome || translations['es'].welcome } ]);
-  }, [lang]);
+
+  }, [lang, messages.length]); // Depende del idioma y la cantidad de mensajes (para no añadir múltiples bienvenidas)
 
 
   // Lógica principal para enviar el mensaje (AHORA MANEJA STREAMING Y NO-STREAMING)
@@ -96,11 +100,11 @@ function ChatPage() { // Nombre del componente
 
     const userMessage = { role: 'user', content: input };
     let messageIndexToUpdate = -1;
-    setMessages(currentMessages => {
-        const updatedMessages = [...currentMessages, userMessage, { role: 'assistant', content: '' }];
-        messageIndexToUpdate = updatedMessages.length - 1;
-        return updatedMessages;
-    });
+    setMessages(currentMessages => {
+        const updatedMessages = [...currentMessages, userMessage, { role: 'assistant', content: '' }];
+        messageIndexToUpdate = updatedMessages.length - 1;
+        return updatedMessages;
+    });
 
     setInput('');
     setLoading(true);
@@ -111,7 +115,8 @@ function ChatPage() { // Nombre del componente
 
       const payload = {
         model: 'gpt-4-turbo',
-        messages: [...messages, userMessage, { role: 'assistant', content: '' }],
+        // Pasamos todos los mensajes actuales, incluyendo el del sistema
+        messages: [...messages, userMessage], // No añadir el mensaje del asistente vacío aquí, se crea en setMessages
         temperature: 0.7,
       };
 
@@ -131,144 +136,144 @@ function ChatPage() { // Nombre del componente
             console.error('❌ Error en la respuesta del backend:', response.status, errorData);
             setMessages(currentMessages => {
               const updatedMessages = [...currentMessages];
-               if (updatedMessages[messageIndexToUpdate]) {
-                   updatedMessages[messageIndexToUpdate] = {
-                      role: 'assistant',
-                      content: errorData.error || `HTTP error! status: ${response.status}`
-                   };
-               } else { updatedMessages.push({ role: 'assistant', content: errorData.error || `HTTP error! status: ${response.status}` }); }
+               if (updatedMessages[messageIndexToUpdate]) {
+                   updatedMessages[messageIndexToUpdate] = {
+                      role: 'assistant',
+                      content: errorData.error || `HTTP error! status: ${response.status}`
+                   };
+               } else { updatedMessages.push({ role: 'assistant', content: errorData.error || `HTTP error! status: ${response.status}` }); }
               return updatedMessages;
             });
           } catch (jsonError) {
             console.error('❌ Error HTTP no-JSON en la respuesta del backend:', response.status, jsonError);
             setMessages(currentMessages => {
               const updatedMessages = [...currentMessages];
-                if (updatedMessages[messageIndexToUpdate]) {
-                  updatedMessages[messageIndexToUpdate] = { role: 'assistant', content: `HTTP error! status: ${response.status}` };
-                } else { updatedMessages.push({ role: 'assistant', content: `HTTP error! status: ${response.status}` }); }
+                if (updatedMessages[messageIndexToUpdate]) {
+                  updatedMessages[messageIndexToUpdate] = { role: 'assistant', content: `HTTP error! status: ${response.status}` };
+                } else { updatedMessages.push({ role: 'assistant', content: `HTTP error! status: ${response.status}` }); }
               return updatedMessages;
             });
           }
           return;
       }
 
-        const contentType = response.headers.get('Content-Type');
-        const isStreaming = contentType && contentType.includes('text/event-stream');
+        const contentType = response.headers.get('Content-Type');
+        const isStreaming = contentType && contentType.includes('text/event-stream');
 
-        if (isStreaming) {
-            console.log("✅ Recibiendo respuesta streaming (SSE).");
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            let buffer = '';
-            let assistantResponse = '';
+        if (isStreaming) {
+            console.log("✅ Recibiendo respuesta streaming (SSE).");
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
+            let assistantResponse = '';
 
-            while (true) {
-                const { value, done } = await reader.read();
-                if (done) {
-                    console.log("Stream terminado.");
-                    break;
-                }
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) {
+                    console.log("Stream terminado.");
+                    break;
+                }
 
-                buffer += decoder.decode(value, { stream: true });
-                const lines = buffer.split('\n\n');
-                buffer = lines.pop();
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split('\n\n');
+                buffer = lines.pop();
 
-                for (const line of lines) {
-                    if (line.startsWith('data: ')) {
-                        const jsonStr = line.substring(6);
-                        if (jsonStr === '[DONE]') {
-                            console.log("Recibido [DONE], stream completo.");
-                            continue;
-                        }
-                        if (jsonStr) {
-                            try {
-                                const chunk = JSON.parse(jsonStr);
-                                const deltaContent = chunk.choices?.[0]?.delta?.content;
-                                if (deltaContent) {
-                                    assistantResponse += deltaContent;
-                                    // >>> AJUSTE CLAVE AQUÍ: Crear una copia inmutable del array y objeto, y actualizar contenido <<<
-                                    setMessages(currentMessages => {
-                                        const updatedMessages = [...currentMessages];
-                                        if (updatedMessages[messageIndexToUpdate]) {
-                                            updatedMessages[messageIndexToUpdate] = {
-                                                ...updatedMessages[messageIndexToUpdate],
-                                                content: assistantResponse
-                                            };
-                                        } else { console.warn("Streaming: Índice no encontrado, añadiendo nuevo mensaje."); return [...currentMessages, { role: 'assistant', content: assistantResponse }]; }
-                                        return updatedMessages;
-                                    });
-                                }
-                            } catch (e) {
-                                console.error("❌ Error parsing stream chunk JSON:", jsonStr, e);
-                                setMessages(currentMessages => [...currentMessages, { role: 'assistant', content: t.fetchError + ' (Error de parseo en stream: ' + e.message + ')' }]);
-                                reader.cancel(); break;
-                            }
-                        }
-                    } else if (line) {
-                         try {
-                            const chunk = JSON.parse(line);
-                            const deltaContent = chunk.choices?.[0]?.delta?.content;
-                            if (deltaContent) {
-                                assistantResponse += deltaContent;
-                                setMessages(currentMessages => {
-                                    const updatedMessages = [...currentMessages];
-                                     if (updatedMessages[messageIndexToUpdate]) {
-                                        updatedMessages[messageIndexToUpdate] = {
-                                            ...updatedMessages[messageIndexToUpdate],
-                                            content: assistantResponse
-                                        };
-                                     } else { console.warn("Streaming: Índice (raw) no encontrado, añadiendo nuevo mensaje."); return [...currentMessages, { role: 'assistant', content: assistantResponse }]; }
-                                    return updatedMessages;
-                                });
-                            }
-                         } catch (e) {
-                            console.error("❌ Error parsing raw JSON line:", line, e);
-                             setMessages(currentMessages => [...currentMessages, { role: 'assistant', content: t.fetchError + ' (Error de parseo de línea raw: ' + e.message + ')' }]);
-                            reader.cancel(); break;
-                         }
-                    }
-                }
-            }
-            console.log("Fin del procesamiento del stream.");
+                for (const line of lines) {
+                    if (line.startsWith('data: ')) {
+                        const jsonStr = line.substring(6);
+                        if (jsonStr === '[DONE]') {
+                            console.log("Recibido [DONE], stream completo.");
+                            continue;
+                        }
+                        if (jsonStr) {
+                            try {
+                                const chunk = JSON.parse(jsonStr);
+                                const deltaContent = chunk.choices?.[0]?.delta?.content;
+                                if (deltaContent) {
+                                    assistantResponse += deltaContent;
+                                    // >>> AJUSTE CLAVE AQUÍ: Crear una copia inmutable del array y objeto, y actualizar contenido <<<
+                                    setMessages(currentMessages => {
+                                        const updatedMessages = [...currentMessages];
+                                        if (updatedMessages[messageIndexToUpdate]) {
+                                            updatedMessages[messageIndexToUpdate] = {
+                                                ...updatedMessages[messageIndexToUpdate],
+                                                content: assistantResponse
+                                            };
+                                        } else { console.warn("Streaming: Índice no encontrado, añadiendo nuevo mensaje."); return [...currentMessages, { role: 'assistant', content: assistantResponse }]; }
+                                        return updatedMessages;
+                                    });
+                                }
+                            } catch (e) {
+                                console.error("❌ Error parsing stream chunk JSON:", jsonStr, e);
+                                setMessages(currentMessages => [...currentMessages, { role: 'assistant', content: t.fetchError + ' (Error de parseo en stream: ' + e.message + ')' }]);
+                                reader.cancel(); break;
+                            }
+                        }
+                    } else if (line) {
+                         try {
+                            const chunk = JSON.parse(line);
+                            const deltaContent = chunk.choices?.[0]?.delta?.content;
+                            if (deltaContent) {
+                                assistantResponse += deltaContent;
+                                setMessages(currentMessages => {
+                                    const updatedMessages = [...currentMessages];
+                                     if (updatedMessages[messageIndexToUpdate]) {
+                                        updatedMessages[messageIndexToUpdate] = {
+                                            ...updatedMessages[messageIndexToUpdate],
+                                            content: assistantResponse
+                                        };
+                                     } else { console.warn("Streaming: Índice (raw) no encontrado, añadiendo nuevo mensaje."); return [...currentMessages, { role: 'assistant', content: assistantResponse }]; }
+                                    return updatedMessages;
+                                });
+                            }
+                         } catch (e) {
+                            console.error("❌ Error parsing raw JSON line:", line, e);
+                             setMessages(currentMessages => [...currentMessages, { role: 'assistant', content: t.fetchError + ' (Error de parseo de línea raw: ' + e.message + ')' }]);
+                            reader.cancel(); break;
+                         }
+                    }
+                }
+            }
+            console.log("Fin del procesamiento del stream.");
 
 
-        } else {
-            console.log("📦 Recibiendo respuesta JSON completa (no streaming).");
-            const data = await response.json();
+        } else {
+            console.log("📦 Recibiendo respuesta JSON completa (no streaming).");
+            const data = await response.json();
 
-            if (data.choices && data.choices.length > 0 && data.choices[0].message) {
-                setMessages(currentMessages => {
-                     const updatedMessages = [...currentMessages];
-                     if (updatedMessages[messageIndexToUpdate]) { updatedMessages[messageIndexToUpdate] = data.choices[0].message; }
-                     else { updatedMessages.push(data.choices[0].message); }
-                     return updatedMessages;
-                });
-            } else if (data.error) {
-                 setMessages(currentMessages => {
-                    const updatedMessages = [...currentMessages];
-                    if (updatedMessages[messageIndexToUpdate]) { updatedMessages[messageIndexToUpdate] = { role: 'assistant', content: t.openaiError(data.error.code, data.error.message) }; }
-                    else { updatedMessages.push({ role: 'assistant', content: t.openaiError(data.error.code, data.error.message) }); }
-                    return updatedMessages;
-                 });
-            } else {
-                 setMessages(currentMessages => {
-                    const updatedMessages = [...currentMessages];
-                    if (updatedMessages[messageIndexToUpdate]) { updatedMessages[messageIndexToUpdate] = { role: 'assistant', content: t.invalidOpenAIResponse }; }
-                    else { updatedMessages.push({ role: 'assistant', content: t.invalidOpenAIResponse }); }
-                    return updatedMessages;
-                 });
-            }
-        }
+            if (data.choices && data.choices.length > 0 && data.choices[0].message) {
+                setMessages(currentMessages => {
+                     const updatedMessages = [...currentMessages];
+                     if (updatedMessages[messageIndexToUpdate]) { updatedMessages[messageIndexToUpdate] = data.choices[0].message; }
+                     else { updatedMessages.push(data.choices[0].message); }
+                     return updatedMessages;
+                });
+            } else if (data.error) {
+                 setMessages(currentMessages => {
+                    const updatedMessages = [...currentMessages];
+                    if (updatedMessages[messageIndexToUpdate]) { updatedMessages[messageIndexToUpdate] = { role: 'assistant', content: t.openaiError(data.error.code, data.error.message) }; }
+                    else { updatedMessages.push({ role: 'assistant', content: t.openaiError(data.error.code, data.error.message) }); }
+                    return updatedMessages;
+                 });
+            } else {
+                 setMessages(currentMessages => {
+                    const updatedMessages = [...currentMessages];
+                    if (updatedMessages[messageIndexToUpdate]) { updatedMessages[messageIndexToUpdate] = { role: 'assistant', content: t.invalidOpenAIResponse }; }
+                    else { updatedMessages.push({ role: 'assistant', content: t.invalidOpenAIResponse }); }
+                    return updatedMessages;
+                 });
+            }
+        }
 
 
     } catch (error) {
       console.error("❌ Error general en fetch:", error);
        setMessages(currentMessages => {
-             const updatedMessages = [...currentMessages];
-             if (updatedMessages[messageIndexToUpdate]) { updatedMessages[messageIndexToUpdate] = { role: 'assistant', content: t.fetchError + ' (' + error.message + ')' }; }
-             else { updatedMessages.push({ role: 'assistant', content: t.fetchError + ' (' + error.message + ')' }); }
-             return updatedMessages;
-         });
+             const updatedMessages = [...currentMessages];
+             if (updatedMessages[messageIndexToUpdate]) { updatedMessages[messageIndexToUpdate] = { role: 'assistant', content: t.fetchError + ' (' + error.message + ')' }; }
+             else { updatedMessages.push({ role: 'assistant', content: t.fetchError + ' (' + error.message + ')' }); }
+             return updatedMessages;
+         });
 
     } finally {
       setLoading(false);
