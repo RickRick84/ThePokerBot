@@ -236,9 +236,9 @@ body {
     .app.chat-page-container .title-container {
         width: 100%;
         max-width: 100%;
-        flex-shrink: 0;
-        flex-basis: auto;
-        height: auto;
+        flex-shrink: 0; /* Asegurar que no encoge */
+        flex-basis: auto; /* Tamaño base basado en contenido */
+        height: auto; /* Altura automática basada en contenido */
         padding-top: 0.5rem;
         padding-bottom: 0.5rem; /* Espacio debajo del título */
         display: flex;
@@ -246,18 +246,18 @@ body {
         align-items: center;
     }
 
-    /* Imagen del título dentro del chat */
+    /* Imagen del título dentro del chat - AJUSTADO AL TAMAÑO DE HOME */
      .app.chat-page-container .title-image {
-        max-height: 60px; /* Tamaño pequeño en Chat móvil */
+        max-height: 150px; /* AJUSTADO: Tamaño para que sea igual que en Home móvil */
         width: auto;
      }
 
 
-    /* Propiedades de flex y overflow para la caja de chat - EL FOCO ES AQUÍ */
+    /* Propiedades de flex y overflow para la caja de chat - Ajustando Flexbox para estabilidad */
     .chat-box {
         flex-grow: 1; /* Sigue creciendo para llenar espacio DENTRO del chat-page-container */
-        flex-shrink: 1;
-        flex-basis: auto; /* o 0 */
+        flex-shrink: 1; /* Permitir encoger si es necesario */
+        flex-basis: 0; /* <-- Probamos 0 de nuevo, a ver si evita que empiece pequeño */
         overflow-y: auto; /* Permite scroll */
         width: 100%;
         max-width: 100%;
@@ -268,13 +268,14 @@ body {
         border-radius: 12px;
         margin-bottom: 0;
         min-width: 0;
-        min-height: 0;
+        min-height: 0; /* Importante para flex-grow */
+        /*min-height: 1px;*/ /* A veces, un min-height muy pequeño ayuda a la distribución flex */
     }
 
     /* Propiedades de tamaño para la barra de input - Ahora es un flex item normal DENTRO del chat-page-container */
     .input-bar {
-        flex-shrink: 0; /* NO encoger */
-        flex-grow: 0; /* NO crecer */
+        flex-shrink: 0; /* NO debe encoger */
+        flex-grow: 0; /* NO debe crecer */
         flex-basis: auto; /* Tamaño base automático */
         width: 100%;
         max-width: 100%;
