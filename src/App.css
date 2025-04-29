@@ -266,7 +266,7 @@ body {
         top: auto; bottom: auto; left: auto; right: auto; /* Eliminamos posicionamiento absoluto */
         flex-grow: 1; /* Sigue creciendo para llenar espacio DENTRO del chat-page-container */
         flex-shrink: 1;
-        flex-basis: auto; /* o 0 */
+        flex-basis: auto; /* <-- Mantenemos auto, a ver si es más estable */
         overflow-y: auto; /* Permite scroll */
         width: 100%;
         max-width: 100%;
@@ -277,7 +277,7 @@ body {
         border-radius: 12px;
         margin-bottom: 0;
         min-width: 0;
-        min-height: 0; /* Importante para flex-grow */
+        min-height: 1px; /* <-- Probamos con un min-height muy pequeño para evitar que colapse por completo */
         display: flex; /* Sigue siendo flex para apilar mensajes */
         flex-direction: column;
     }
