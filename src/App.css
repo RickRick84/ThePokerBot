@@ -87,6 +87,7 @@ body {
   padding: 1rem;
   width: 540px;
   max-width: 540px;
+  max-height: 280px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   display: flex;
