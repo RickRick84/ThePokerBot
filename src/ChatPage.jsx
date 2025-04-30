@@ -108,21 +108,22 @@ function ChatPage() {
       </Link>
 
       <div className="chat-box">
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`message ${msg.role === 'user' ? 'user' : 'assistant'}`}
-          >
-            <span>{msg.content}</span>
-          </div>
-        ))} 
-      </div>
-      
-      {isLoading && (
-  <div className="message assistant">
-    <span className="loading-dots"></span>
-  </div>
-)}
+  {messages.map((msg, index) => (
+    <div
+      key={index}
+      className={`message ${msg.role === 'user' ? 'user' : 'assistant'}`}
+    >
+      <span>{msg.content}</span>
+    </div>
+  ))}
+
+  {isLoading && (
+    <div className="message assistant">
+      <span className="loading-dots"></span>
+    </div>
+  )}
+</div>
+
       <div className="input-bar">
         <input
           type="text"
