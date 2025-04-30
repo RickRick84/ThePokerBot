@@ -196,9 +196,9 @@ body {
 }
 @media (max-width: 768px) {
   body {
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
-    background-position: center top;
+    background-position: center;
     background-color: black; /* Por si hay espacios vacíos */
   }
 
@@ -208,12 +208,22 @@ body {
   }
 
   .chat-box {
-    width: 90%;
-    margin-top: 0;
-  }
-
-  .input-bar {
-    width: 90%;
+    width: 90vw;
+    max-width: 90vw;
+    margin: 0 auto;
     margin-bottom: 1rem;
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 12px;
+  }
+  .input-bar {
+    width: 90vw;
+    margin: 0 auto;
+    margin-bottom: 1rem;
+  }
+  .language-selector {
+    width: 90vw;
+    margin: 0 auto;
+    margin-top: 2rem;
   }
 }
