@@ -218,5 +218,16 @@ body {
   .input-box {
     margin-top: 8px;
   }
-}
+} /* ← CIERRE DEL MEDIA QUERY */
 
+.loading-dots::after {
+  content: '.';
+  animation: dots 1s steps(4, end) infinite;
+} 
+
+@keyframes dots {
+  0%   { content: '.'; }
+  33%  { content: '..'; }
+  66%  { content: '...'; }
+  100% { content: '.'; }
+}

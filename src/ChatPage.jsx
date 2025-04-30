@@ -27,6 +27,7 @@ function ChatPage() {
   };
 
   const [messages, setMessages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [input, setInput] = useState('');
 
   // Mensaje de bienvenida + scroll inicial
@@ -50,26 +51,27 @@ function ChatPage() {
 
   const handleSend = async () => {
     if (!input.trim()) return;
-
+  
     const newMessage = { role: 'user', content: input };
     const updatedMessages = [...messages, newMessage];
     setMessages(updatedMessages);
     setInput('');
-
+    setIsLoading(true); // MOSTRAR LOS PUNTOS SUSPENSIVOS
+  
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: updatedMessages, lang }),
       });
-
+  
       const data = await res.json();
       const fullMessage = data.choices[0].message;
       let index = 0;
       let current = '';
-
+  
       setMessages(prev => [...prev, { ...fullMessage, content: '' }]);
-
+  
       const typeInterval = setInterval(() => {
         if (index < fullMessage.content.length) {
           current += fullMessage.content[index];
@@ -80,6 +82,7 @@ function ChatPage() {
           index++;
         } else {
           clearInterval(typeInterval);
+          setIsLoading(false); // OCULTAR LOS PUNTOS SUSPENSIVOS
         }
       }, 15);
     } catch (err) {
@@ -87,8 +90,10 @@ function ChatPage() {
         role: 'assistant',
         content: 'Oops! Algo falló al responder.'
       }]);
+      setIsLoading(false); // OCULTAR LOS PUNTOS TAMBIÉN EN ERROR
     }
   };
+  
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') handleSend();
@@ -110,9 +115,14 @@ function ChatPage() {
           >
             <span>{msg.content}</span>
           </div>
-        ))}
+        ))} 
       </div>
-
+      
+      {isLoading && (
+  <div className="message assistant">
+    <span className="loading-dots"></span>
+  </div>
+)}
       <div className="input-bar">
         <input
           type="text"
