@@ -194,37 +194,27 @@ body {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
 }
-@media (max-width: 768px) {
+@media only screen and (max-width: 768px) {
   body {
-    background-size: cover;
+    background-image: url('/bg.jpg');
     background-repeat: no-repeat;
-    background-position: center;
-    background-color: black; /* Por si hay espacios vacíos */
+    background-size: cover;
+    background-position: center top;
+    height: 100vh;
+    overflow: hidden;
   }
 
-  .chat-page-container {
-    justify-content: flex-end;
-    padding-bottom: 20px;
+  .language-selector {
+    margin-top: 40px;
   }
 
   .chat-box {
-    width: 90vw;
-    max-width: 90vw;
-    margin: 0 auto;
-    margin-bottom: 1rem;
-    margin-top: -70px;
-    padding: 1rem;
-    border-radius: 12px;
+    margin-top: -30px;
+    height: 250px;
   }
-  .input-bar {
-    width: 90vw;
-    margin: 0 auto;
-    margin-bottom: 1rem;
-  }
-  .language-selector {
-    width: 90vw;
-    margin: 0 auto;
-    margin-top: 150px;
-    top: -40px;
+
+  .input-box {
+    margin-top: 8px;
   }
 }
+
