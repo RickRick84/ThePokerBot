@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+const clickSound = new Audio('/sounds/button-click.mp3');
+
+function playClickSound() {
+  clickSound.currentTime = 0;
+  clickSound.play();
+}
 
 function ChatPage() {
   const location = useLocation();
@@ -90,7 +96,7 @@ function ChatPage() {
 
   return (
     <div className="chat-page-container">
-      <Link to="/" className="home-link">
+      <Link to="/" className="home-link" onClick={playClickSound}>
         <svg xmlns="http://www.w3.org/2000/svg" fill="#00ff88" viewBox="0 0 24 24" width="20" height="20">
           <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
         </svg>
@@ -115,7 +121,7 @@ function ChatPage() {
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
         />
-        <button onClick={handleSend}>
+        <button onClick={() => { playClickSound(); handleSend(); }}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="20"
