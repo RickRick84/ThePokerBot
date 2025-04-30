@@ -1,71 +1,23 @@
-/* === GLOBAL === */
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
   background-image: url('/bg.jpg');
   background-size: cover;
-  background-position: top center;
+  background-position: center top;
   background-attachment: fixed;
   background-repeat: no-repeat;
   color: #fff;
   min-height: 100vh;
   overflow-x: hidden;
-}
-
-/* === RESET === */
-*,
-*::before,
-*::after {
   box-sizing: border-box;
 }
 
-/* === ROOT WRAPPER === */
-.app {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: 100vh;
-  padding: 1rem;
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
 }
 
-/* === HOME === */
-.homepage-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 600px;
-  padding: 1rem;
-}
-
-.language-selector {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(6px);
-  padding: 2rem 1rem;
-  border-radius: 12px;
-  gap: 1rem;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-  width: 100%;
-  max-width: 360px;
-}
-
-.language-selector button {
-  width: 260px;
-  min-width: 260px;
-  text-align: center;
-}
-
-.language-selector button:hover {
-  background-color: #00e07a;
-}
-
-/* === CHAT === */
 .chat-page-container {
   display: flex;
   flex-direction: column;
@@ -89,18 +41,24 @@ body {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  max-height: 45vh;
-  margin-top: 12vh; /* 🔥 Esto sí baja sin destruir layout */
+  flex-grow: 1;
+  max-height: 48vh;
+  margin-top: 12vh;
 }
 
 .message {
-  max-width: 75%;
-  padding: 0.5rem 0.9rem;
-  border-radius: 16px;
-  margin: 0.25rem 0;
-  font-size: 0.95rem;
-  line-height: 1.35;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: fit-content;
+  max-width: 80%;
+  padding: 0.7rem 1.2rem;
+  border-radius: 20px;
+  margin: 0.4rem 0;
   word-break: break-word;
+  white-space: pre-wrap;
+  font-size: 1rem;
+  line-height: 1.4;
 }
 
 .message.user {
@@ -115,7 +73,6 @@ body {
   color: #000;
 }
 
-/* === INPUT BAR === */
 .input-bar {
   display: flex;
   align-items: center;
@@ -129,31 +86,74 @@ body {
 
 .input-bar input {
   flex: 1;
-  padding: 0.6rem 1rem;
-  font-size: 0.95rem;
+  padding: 0.8rem;
   border: none;
-  border-radius: 20px;
+  border-radius: 25px;
+  font-size: 1em;
   background-color: #1e1e1e;
   color: #fff;
+  padding-right: 1.5rem;
 }
 
 .input-bar button {
   background-color: #00ff88;
   border: none;
   border-radius: 50%;
-  padding: 0.6rem;
+  width: 40px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out;
+}
 
-    .input-bar button:hover {
-      background-color: #00e07a;
-    }
-  }
+.input-bar button:hover {
+  transform: scale(1.1);
+}
 
-/* === HOME ICON === */
+.language-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 540px;
+}
+
+.language-selector h2 {
+  margin-top: 0;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+.language-selector button {
+  background-color: #00ff88;
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  padding: 0.9rem 2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  margin-bottom: 1rem;
+  width: 240px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.language-selector button:hover {
+  color: #00e07a;
+}
+
 .home-link {
   position: fixed;
   top: 0.8rem;
@@ -162,21 +162,21 @@ body {
   backdrop-filter: blur(8px);
   width: 36px;
   height: 36px;
-  border-radius: 50%;
+  border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   color: #00ff88;
   cursor: pointer;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
   z-index: 1000;
-  transition: all 0.2s ease-in-out;
 }
 
 .home-link:hover {
-  background-color: rgba(0, 0, 0, 0.8);
+  color: #00e07a;
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
-/* === SCROLL PERSONALIZADO === */
 .chat-box::-webkit-scrollbar {
   width: 8px;
 }
