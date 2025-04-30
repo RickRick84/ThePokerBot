@@ -49,7 +49,7 @@ body {
   min-height: 0;
   min-width: 0;
   position: relative;
-  top: -80px; /* <-- Nuevo ajuste */
+  top: -50px; /* <-- Nuevo ajuste */
 }
 
 .language-selector h2 {
