@@ -27,6 +27,13 @@ function ChatPage() {
     setMessages([{ role: 'assistant', content: translations[lang].welcome }]);
   }, [lang]);
 
+  useEffect(() => {
+    const chatBox = document.querySelector('.chat-box');
+    if (chatBox) {
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+  }, [messages]);  
+
   const handleSend = async () => {
     if (!input.trim()) return;
 
@@ -58,7 +65,11 @@ function ChatPage() {
 
   return (
     <div className="chat-page-container">
-      <Link to="/" className="home-link">🏠</Link>
+      <Link to="/" className="home-link">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="#00ff88" viewBox="0 0 24 24" width="20" height="20">
+    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+  </svg>
+</Link>
 
       <div className="chat-box">
         {messages.map((msg, index) => (
