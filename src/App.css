@@ -37,14 +37,18 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 2rem;
   padding: 1.5rem;
-  margin-top: 180px; /* ← AJUSTADO CON PRECISIÓN */
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   width: 100%;
   max-width: 540px;
+  min-height: 0;
+  min-width: 0;
+  position: relative;
+  top: 100px; /* <-- Nuevo ajuste */
 }
 
 .language-selector h2 {
@@ -80,14 +84,19 @@ body {
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
   padding: 1rem;
-  margin-top: 180px; /* ← AJUSTADO CON PRECISIÓN */
   width: 540px;
   max-width: 540px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
+  margin-bottom: 1rem;
+  margin-top: 100px; /* <-- Nuevo ajuste */
+  min-width: 0;
+  min-height: 0;
+  flex-grow: 1;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .message {
