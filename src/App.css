@@ -205,12 +205,13 @@ body {
   }
 
   .language-selector {
-    margin-top: 40px;
+    margin-top: 20px;
   }
 
   .chat-box {
     margin-top: -30px;
-    height: 250px;
+    height: 400px;
+    width: 300px;
   }
 
   .input-box {
