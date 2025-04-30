@@ -88,7 +88,7 @@ body {
   flex-direction: column;
   overflow-y: auto;
   flex-grow: 1;
-  max-height: 65vh;
+  max-height: 55vh;
 }
 
 .message {
@@ -121,6 +121,7 @@ body {
   max-width: 540px;
   gap: 0.4rem;
   padding: 0.4rem 0;
+  margin-bottom: 2rem; /* <- se separa del borde inferior */
 }
 
 .input-bar input {

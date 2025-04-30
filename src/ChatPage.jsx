@@ -25,8 +25,14 @@ function ChatPage() {
 
   useEffect(() => {
     setMessages([{ role: 'assistant', content: translations[lang].welcome }]);
+    setTimeout(() => {
+      const chatBox = document.querySelector('.chat-box');
+      if (chatBox) {
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+    }, 100);
   }, [lang]);
-
+  
   useEffect(() => {
     const chatBox = document.querySelector('.chat-box');
     if (chatBox) {
