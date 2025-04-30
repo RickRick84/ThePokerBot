@@ -37,7 +37,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 40px;
+  margin-top: -150px;
   padding: 1.5rem;
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
