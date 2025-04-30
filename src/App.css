@@ -7,53 +7,32 @@ body {
   background-attachment: fixed;
   background-repeat: no-repeat;
   color: #fff;
-  min-height: 100vh;
-  overflow-x: hidden;
-  box-sizing: border-box;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-}
-
-.app,
-.chat-page-container {
-  position: relative;
+  height: 100vh;
+  overflow: hidden;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-content: flex-end;
-  min-height: 100vh;
-  padding-top: 150px; /* 👈 Baja todo el bloque */
-  padding-bottom: 20px; /* Espacio entre el input y el borde inferior */
-  width: 100%;
-  max-width: 700px;
-  margin: 0 auto;
+  flex-direction: column;
 }
 
+/* HOME PAGE */
 .language-selector {
+  position: relative;
+  top: 100px; /* 🔧 Ajuste para que no tape el logo */
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 1.5rem;
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 2rem;
-  padding: 1.5rem;
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(8px);
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  gap: 1rem;
   width: 100%;
   max-width: 540px;
-  min-height: 0;
-  min-width: 0;
-  position: relative;
-  top: 100px; /* <-- Nuevo ajuste */
 }
 
 .language-selector h2 {
   font-size: 1.8rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .language-selector p {
@@ -69,34 +48,42 @@ body {
   font-size: 1.2rem;
   font-weight: bold;
   width: 240px;
-  margin: 0.4rem 0;
-  text-align: center;
   text-transform: uppercase;
-  transition: all 0.2s ease-in-out;
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
 }
 
 .language-selector button:hover {
   color: #00e07a;
 }
 
+/* CHAT PAGE */
+.chat-page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  height: 100vh;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+}
+
 .chat-box {
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
   padding: 1rem;
-  width: 540px;
+  width: 100%;
   max-width: 540px;
   border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
-  margin-bottom: 1rem;
-  margin-top: 100px; /* <-- Nuevo ajuste */
-  min-width: 0;
-  min-height: 0;
-  flex-grow: 1;
   overflow-y: auto;
-  overflow-x: hidden;
+  max-height: 45vh;
+  margin-top: 90px; /* 🔧 baja para dejar ver el logo */
+  margin-bottom: 0.8rem;
 }
 
 .message {
@@ -129,40 +116,50 @@ body {
 .input-bar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
   max-width: 540px;
-  gap: 0.5rem;
-  padding: 0.8rem;
-  background-color: transparent;
-  margin-bottom: 1.2rem;
+  padding: 0.6rem;
+  border-radius: 12px;
+  margin-top: -0.5rem; /* 🔧 sube para acercarse al chat box */
+  margin-bottom: 1.5rem;
+  background-color: rgba(30, 30, 30, 0.9);
 }
 
 .input-bar input {
   flex: 1;
-  padding: 0.9rem 1rem;
-  background-color: #1e1e1e;
+  padding: 0.8rem 1rem;
   border: none;
   border-radius: 25px;
-  font-size: 1rem;
-  color: white;
+  font-size: 1em;
+  background-color: #1e1e1e;
+  color: #fff;
 }
 
 .input-bar button {
   background-color: #00ff88;
+  color: #000;
   border: none;
   border-radius: 50%;
   width: 40px;
   height: 40px;
+  margin-left: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
 }
 
+.input-bar button:hover {
+  background-color: #00e07a;
+}
+
+/* HOME ICON */
 .home-link {
   position: fixed;
-  top: 0.8rem;
-  left: 0.8rem;
+  top: 10px;
+  left: 10px;
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
   width: 36px;
@@ -173,8 +170,8 @@ body {
   align-items: center;
   color: #00ff88;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
   z-index: 1000;
+  transition: all 0.2s ease-in-out;
 }
 
 .home-link:hover {
@@ -182,6 +179,7 @@ body {
   background-color: rgba(0, 0, 0, 0.7);
 }
 
+/* SCROLL PERSONALIZADO */
 .chat-box::-webkit-scrollbar {
   width: 8px;
 }
