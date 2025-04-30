@@ -205,7 +205,8 @@ body {
   }
 
   .language-selector {
-    margin-top: -70px;
+    position: relative;
+    top: -50px;
   }
 
   .chat-box {
