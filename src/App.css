@@ -92,14 +92,11 @@ body {
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
-  margin-top: -70px; /* <-- Nuevo ajuste */
+  margin-top: -70px;
+  height: 220px;         /* 🔥 El tamaño exacto que vos querés */
   min-width: 0;
-  min-height: 220px;
-  max-width: 540px;
-  flex-grow: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  top: -70px
 }
 
 .message {
