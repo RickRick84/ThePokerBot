@@ -194,3 +194,26 @@ body {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
 }
+@media (max-width: 768px) {
+  body {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-color: black; /* Por si hay espacios vacíos */
+  }
+
+  .chat-page-container {
+    justify-content: flex-end;
+    padding-bottom: 20px;
+  }
+
+  .chat-box {
+    width: 90%;
+    margin-top: 0;
+  }
+
+  .input-bar {
+    width: 90%;
+    margin-bottom: 1rem;
+  }
+}
