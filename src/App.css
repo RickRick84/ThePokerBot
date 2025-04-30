@@ -88,8 +88,9 @@ body {
   flex-direction: column;
   overflow-y: auto;
   flex-grow: 1;
-  max-height: 55vh;
-}
+  max-height: 48vh;
+  margin-top: 10vh; /* 🔥 baja el rectángulo para no tapar el logo del fondo */
+} 
 
 .message {
   max-width: 75%;

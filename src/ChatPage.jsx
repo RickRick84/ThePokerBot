@@ -23,6 +23,7 @@ function ChatPage() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
+  // Mensaje de bienvenida + scroll inicial
   useEffect(() => {
     setMessages([{ role: 'assistant', content: translations[lang].welcome }]);
     setTimeout(() => {
@@ -30,15 +31,16 @@ function ChatPage() {
       if (chatBox) {
         chatBox.scrollTop = chatBox.scrollHeight;
       }
-    }, 100);
+    }, 300);
   }, [lang]);
-  
+
+  // Scroll automático en cada actualización
   useEffect(() => {
     const chatBox = document.querySelector('.chat-box');
     if (chatBox) {
       chatBox.scrollTop = chatBox.scrollHeight;
     }
-  }, [messages]);  
+  }, [messages]);
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -56,7 +58,24 @@ function ChatPage() {
       });
 
       const data = await res.json();
-      setMessages(prev => [...prev, data.choices[0].message]);
+      const fullMessage = data.choices[0].message;
+      let index = 0;
+      let current = '';
+
+      setMessages(prev => [...prev, { ...fullMessage, content: '' }]);
+
+      const typeInterval = setInterval(() => {
+        if (index < fullMessage.content.length) {
+          current += fullMessage.content[index];
+          setMessages(prev => [
+            ...prev.slice(0, -1),
+            { ...fullMessage, content: current }
+          ]);
+          index++;
+        } else {
+          clearInterval(typeInterval);
+        }
+      }, 15);
     } catch (err) {
       setMessages(prev => [...prev, {
         role: 'assistant',
@@ -72,10 +91,10 @@ function ChatPage() {
   return (
     <div className="chat-page-container">
       <Link to="/" className="home-link">
-  <svg xmlns="http://www.w3.org/2000/svg" fill="#00ff88" viewBox="0 0 24 24" width="20" height="20">
-    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-  </svg>
-</Link>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="#00ff88" viewBox="0 0 24 24" width="20" height="20">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+        </svg>
+      </Link>
 
       <div className="chat-box">
         {messages.map((msg, index) => (
@@ -104,8 +123,8 @@ function ChatPage() {
             width="20"
             fill="#000"
           >
-            <path d="M0 0h24v24H0z" fill="none"/>
-            <path d="M3.4 20.4l1.6-5.6 12.6-12.6 4.6 4.6-12.6 12.6z"/>
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3.4 20.4l1.6-5.6 12.6-12.6 4.6 4.6-12.6 12.6z" />
           </svg>
         </button>
       </div>
