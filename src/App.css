@@ -37,7 +37,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 2rem;
+  margin-top: 140px;
   padding: 1.5rem;
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
@@ -91,9 +91,10 @@ body {
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
-  margin-top: 100px; /* <-- Nuevo ajuste */
+  margin-top: 150px; /* <-- Nuevo ajuste */
   min-width: 0;
   min-height: 0;
+  max-width: 300px;
   flex-grow: 1;
   overflow-y: auto;
   overflow-x: hidden;
