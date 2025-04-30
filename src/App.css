@@ -48,7 +48,7 @@ body {
   min-height: 0;
   min-width: 0;
   position: relative;
-  top: -100px; /* <-- Nuevo ajuste */
+  top: -40px; /* <-- Nuevo ajuste */
 }
 
 .language-selector h2 {
