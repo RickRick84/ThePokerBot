@@ -87,10 +87,10 @@ body {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  flex-grow: 1;
   max-height: 48vh;
-  margin-top: 10vh; /* 🔥 baja el rectángulo para no tapar el logo del fondo */
-} 
+  position: relative;
+  top: 5vh; /* en lugar de margin-top, para no empujar la barra */
+}
 
 .message {
   max-width: 75%;
@@ -122,7 +122,8 @@ body {
   max-width: 540px;
   gap: 0.4rem;
   padding: 0.4rem 0;
-  margin-bottom: 2rem; /* <- se separa del borde inferior */
+  margin-top: -2vh; /* sube hacia el chat */
+  margin-bottom: 2vh; /* deja aire con el borde inferior */
 }
 
 .input-bar input {
