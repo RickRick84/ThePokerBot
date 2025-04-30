@@ -69,12 +69,14 @@ body {
 .chat-page-container {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
+  justify-content: flex-end;
   width: 100%;
   max-width: 600px;
   height: 100vh;
-  padding: 1rem;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .chat-box {
@@ -87,9 +89,8 @@ body {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  max-height: 48vh;
-  position: relative;
-  top: 5vh; /* en lugar de margin-top, para no empujar la barra */
+  max-height: 45vh;
+  margin-top: 12vh; /* 🔥 Esto sí baja sin destruir layout */
 }
 
 .message {
@@ -122,8 +123,8 @@ body {
   max-width: 540px;
   gap: 0.4rem;
   padding: 0.4rem 0;
-  margin-top: -2vh; /* sube hacia el chat */
-  margin-bottom: 2vh; /* deja aire con el borde inferior */
+  margin-top: -1.5vh;
+  margin-bottom: 2vh;
 }
 
 .input-bar input {
