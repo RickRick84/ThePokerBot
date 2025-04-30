@@ -94,7 +94,7 @@ body {
   margin-bottom: 1rem;
   margin-top: -70px; /* <-- Nuevo ajuste */
   min-width: 0;
-  min-height: 0;
+  min-height: 220px;
   max-width: 540px;
   flex-grow: 1;
   overflow-y: auto;
