@@ -37,9 +37,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  margin-top: 3rem;
   padding: 1.5rem;
+  margin-top: 180px; /* ← AJUSTADO CON PRECISIÓN */
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
   border-radius: 12px;
@@ -81,14 +80,14 @@ body {
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
   padding: 1rem;
-  width: 100%;
+  margin-top: 180px; /* ← AJUSTADO CON PRECISIÓN */
+  width: 540px;
   max-width: 540px;
-  height: 45vh;
-  overflow-y: auto;
   border-radius: 12px;
-  margin-bottom: 1.2rem;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 }
 
 .message {
